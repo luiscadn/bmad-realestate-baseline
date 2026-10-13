@@ -14,6 +14,8 @@ export interface FeaturedListing {
   bathrooms: number;
   area_m2: number | null;
   neighborhood: string;
+  latitude?: number | null;
+  longitude?: number | null;
   images: ListingImage[];
 }
 

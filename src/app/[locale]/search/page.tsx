@@ -1,9 +1,11 @@
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import SearchFilters, { type SearchFilterValues } from "@/components/SearchFilters";
+import ViewToggle from "@/components/ViewToggle";
 import SearchResults from "@/components/SearchResults";
 import type { FeaturedListing } from "@/lib/featured-listings";
 import { fetchListings } from "@/lib/listings";
 import { parseListingsQuery } from "@/lib/listings-query";
+import { parseView } from "@/lib/map-view";
 import { createPublicClient } from "@/lib/supabase-public";
 
 export const dynamic = "force-dynamic";
@@ -52,6 +54,8 @@ export default async function SearchPage({
     }
   }
 
+  const view = parseView(cleaned.get("view"));
+
   let listings: FeaturedListing[] = [];
   let total = 0;
   let page = 1;
@@ -81,10 +85,13 @@ export default async function SearchPage({
       ) : null}
       <div className="mt-8 grid gap-8 lg:grid-cols-[18rem_1fr]">
         <aside>
-          <SearchFilters key={JSON.stringify(values)} values={values} />
+          <SearchFilters key={JSON.stringify({ values, view })} values={values} view={view} />
         </aside>
         <section>
-          <SearchResults listings={listings} total={total} page={page} totalPages={totalPages} query={linkQuery} failed={failed} />
+          <div className="mb-4 flex justify-end">
+            <ViewToggle view={view} query={linkQuery} />
+          </div>
+          <SearchResults listings={listings} total={total} page={page} totalPages={totalPages} query={linkQuery} failed={failed} view={view} />
         </section>
       </div>
     </div>

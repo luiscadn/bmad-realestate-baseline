@@ -77,4 +77,32 @@ describe("SearchPage", () => {
     expect(screen.getByRole("alert").textContent).toContain("No pudimos cargar");
     expect(screen.getByRole("search")).toBeTruthy();
   });
+
+  it("defaults to the grid and offers the view toggle", async () => {
+    fetchListings.mockResolvedValue({ data: [row], total: 1, page: 1, limit: 12, total_pages: 1 });
+    await renderPage();
+    expect(screen.queryByTestId("map-pane")).toBeNull();
+    expect(screen.getByRole("link", { name: "Mapa" }).getAttribute("href")).toBe("/search?view=map");
+  });
+
+  it("renders the split map view for view=map and keeps it across filters", async () => {
+    fetchListings.mockResolvedValue({
+      data: [{ ...row, latitude: 3.4, longitude: -76.5 }],
+      total: 1,
+      page: 1,
+      limit: 12,
+      total_pages: 1,
+    });
+    await renderPage({ view: "map", operation: "rent" });
+    expect(fetchListings.mock.calls[0][1]).toMatchObject({ operation: "rent" });
+    expect(screen.getAllByTestId("map-pin")).toHaveLength(1);
+    expect((document.querySelector("input[name=view]") as HTMLInputElement).value).toBe("map");
+    expect(screen.getByRole("link", { name: "Cuadrícula" }).getAttribute("href")).toBe("/search?operation=rent");
+  });
+
+  it("treats an unknown view as the grid", async () => {
+    fetchListings.mockResolvedValue({ data: [row], total: 1, page: 1, limit: 12, total_pages: 1 });
+    await renderPage({ view: "foo" });
+    expect(screen.queryByTestId("map-pane")).toBeNull();
+  });
 });
