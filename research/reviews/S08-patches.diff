@@ -1,0 +1,156 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index 90a8d12..81d8a9f 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -17,3 +17,8 @@
+ - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpublish.md`
+   summary: Re-publishing an already-published listing resets `published_at`.
+   evidence: PATCH `published: true` always writes now(); preserving the original date needs a read-before-write or a DB-side coalesce.
++
++## Deferred from: code review of spec-1-8-s08 (2026-10-13)
++- Featured images use raw `<img>` with full-size originals; move to `next/image` + `remotePatterns` for the Supabase host (with S09 ListingCard).
++- Home "Sell" card (`/contact`) and "View all" (`/search`) 404 until S09/contact page exist.
++- `revalidate = 300` caches the empty fallback for 5 minutes after a transient fetch failure.
+diff --git a/_bmad-output/implementation-artifacts/spec-1-8-s08-home-hero-with-search-bar-featured-listings-services-cards.md b/_bmad-output/implementation-artifacts/spec-1-8-s08-home-hero-with-search-bar-featured-listings-services-cards.md
+index ca2fd57..239cf96 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-8-s08-home-hero-with-search-bar-featured-listings-services-cards.md
++++ b/_bmad-output/implementation-artifacts/spec-1-8-s08-home-hero-with-search-bar-featured-listings-services-cards.md
+@@ -2,7 +2,7 @@
+ title: 'S08 - Home hero with search bar, featured listings, services cards'
+ type: 'feature'
+ created: '2026-10-13'
+-status: 'in-review'
++status: 'done'
+ route: 'dispatch'
+ review_loop_iteration: 0
+ context: ['{project-root}/docs/design-reference.md']
+@@ -61,3 +61,15 @@ context: ['{project-root}/docs/design-reference.md']
+ 
+ **Commands:**
+ - `npm test`, `npx tsc --noEmit`, `npm run lint`, `npm run build`
++
++### Review Findings
++
++- [x] [Review][Patch] Search form submitted empty fields (`/search?operation=&neighborhood=&property_type=`), violating "empty fields are omitted" / "Empty search → `/search`" [src/components/HeroSearch.tsx] — fixed: client `onSubmit` builds params from non-empty values and pushes via the locale-aware router; plain GET form kept as no-JS fallback; tests added for empty and partial submit.
++- [x] [Review][Defer] Featured images use raw `<img>` with full-size originals (up to 10 MB), no `sizes`/srcset [src/components/FeaturedListings.tsx] — deferred: needs `next/image` plus `remotePatterns` config for the Supabase host; best done with S09 `ListingCard`.
++- [x] [Review][Defer] "Sell" service card and "View all" link target `/contact` and `/search`, which 404 until S09 [src/components/HomeSections.tsx] — deferred: spec forbids building those pages in S08.
++- [x] [Review][Defer] `revalidate = 300` caches the empty fallback for 5 minutes if the fetch fails once [src/app/[locale]/page.tsx] — deferred: low impact, fix would need cache-aware error handling.
++
++#### Rejected
++- Catalog es/en parity: false — en.json and es.json have identical `Home` keys and the existing i18n parity test passes.
++- Neighborhood accent matching ("El Peñón"): false — `/api/listings` uses `ilike` with `escapeLike`, and the options come from the same `footerNeighborhoods` list.
++- `Number(price_cop)` / `Number(area_m2)` on string numerics: false — conversion handles both number and numeric-string values.
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index ced8a54..009a67e 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -43,7 +43,7 @@ development_status:
+   1-5-s05-post-api-leads-contact-the-agent-form: done
+   1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpubl: review
+   1-7-s07-app-layout-header-footer-language-switch-responsive-nav: review
+-  1-8-s08-home-hero-with-search-bar-featured-listings-services-car: review
++  1-8-s08-home-hero-with-search-bar-featured-listings-services-car: done
+   1-9-s09-listingcard-and-results-grid-with-filters-panel: backlog
+   1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: backlog
+   1-11-s11-map-list-toggle-on-search: backlog
+diff --git a/src/components/HeroSearch.tsx b/src/components/HeroSearch.tsx
+index 3412061..4b3f1ec 100644
+--- a/src/components/HeroSearch.tsx
++++ b/src/components/HeroSearch.tsx
+@@ -1,20 +1,36 @@
++"use client";
++
++import type { FormEvent } from "react";
+ import { useLocale, useTranslations } from "next-intl";
++import { useRouter } from "@/i18n/navigation";
+ import { PROPERTY_TYPES } from "@/lib/listings-query";
+ import { footerNeighborhoods } from "@/lib/site";
+ 
+ const fieldClass =
+   "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-700/30";
+ 
+-/** Plain GET form: works without JS and keeps the current locale prefix. */
++/** GET form that works without JS; with JS it drops empty fields so "no filter" never lands in the URL. */
+ export default function HeroSearch() {
+   const t = useTranslations("Home");
+   const locale = useLocale();
++  const router = useRouter();
+   const action = locale === "es" ? "/search" : `/${locale}/search`;
+ 
++  function onSubmit(event: FormEvent<HTMLFormElement>) {
++    event.preventDefault();
++    const params = new URLSearchParams();
++    for (const [key, value] of new FormData(event.currentTarget)) {
++      if (typeof value === "string" && value) params.set(key, value);
++    }
++    const qs = params.toString();
++    router.push(qs ? `/search?${qs}` : "/search");
++  }
++
+   return (
+     <form
+       method="get"
+       action={action}
++      onSubmit={onSubmit}
+       role="search"
+       aria-label={t("search.label")}
+       className="grid gap-3 rounded-2xl bg-white p-4 shadow-xl sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end"
+diff --git a/src/components/Home.test.tsx b/src/components/Home.test.tsx
+index 67adb13..c96b812 100644
+--- a/src/components/Home.test.tsx
++++ b/src/components/Home.test.tsx
+@@ -1,5 +1,6 @@
+-import { screen, within } from "@testing-library/react";
+-import { describe, expect, it } from "vitest";
++import { fireEvent, screen, within } from "@testing-library/react";
++import { beforeEach, describe, expect, it } from "vitest";
++import { routerPush } from "@/test/setup";
+ import { renderWithIntl } from "@/test/render";
+ import type { FeaturedListing } from "@/lib/featured-listings";
+ import FeaturedListings from "./FeaturedListings";
+@@ -21,6 +22,8 @@ const listing: FeaturedListing = {
+ };
+ 
+ describe("HeroSearch", () => {
++  beforeEach(() => routerPush.mockClear());
++
+   it("is a GET form to the locale's /search with the listing query param names", () => {
+     const { container, unmount } = renderWithIntl(<HeroSearch />, "es");
+     const form = container.querySelector("form")!;
+@@ -39,6 +42,21 @@ describe("HeroSearch", () => {
+     expect([...data.values()].every((v) => v === "")).toBe(true);
+     expect(screen.getByRole("button", { name: "Buscar" })).toBeTruthy();
+   });
++
++  it("pushes /search with no params when nothing is selected", () => {
++    const { container } = renderWithIntl(<HeroSearch />);
++    fireEvent.submit(container.querySelector("form")!);
++    expect(routerPush).toHaveBeenCalledWith("/search");
++  });
++
++  it("pushes only the chosen params", () => {
++    const { container } = renderWithIntl(<HeroSearch />);
++    const form = container.querySelector("form")!;
++    fireEvent.change(form.querySelector("select[name=operation]")!, { target: { value: "sale" } });
++    fireEvent.change(form.querySelector("select[name=neighborhood]")!, { target: { value: "Granada" } });
++    fireEvent.submit(form);
++    expect(routerPush).toHaveBeenCalledWith("/search?operation=sale&neighborhood=Granada");
++  });
+ });
+ 
+ describe("FeaturedListings", () => {
+diff --git a/src/test/setup.tsx b/src/test/setup.tsx
+index 4cb4e39..bb0b804 100644
+--- a/src/test/setup.tsx
++++ b/src/test/setup.tsx
+@@ -14,7 +14,10 @@ vi.mock("next/navigation", () => ({
+   usePathname: () => mockPathname,
+ }));
+ 
++export const routerPush = vi.fn();
++
+ vi.mock("@/i18n/navigation", () => ({
++  useRouter: () => ({ push: routerPush }),
+   usePathname: () => mockPathname,
+   Link: ({
+     href,

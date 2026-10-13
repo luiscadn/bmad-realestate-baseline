@@ -17,3 +17,8 @@
 - source_spec: `_bmad-output/implementation-artifacts/spec-1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpublish.md`
   summary: Re-publishing an already-published listing resets `published_at`.
   evidence: PATCH `published: true` always writes now(); preserving the original date needs a read-before-write or a DB-side coalesce.
+
+## Deferred from: code review of spec-1-8-s08 (2026-10-13)
+- Featured images use raw `<img>` with full-size originals; move to `next/image` + `remotePatterns` for the Supabase host (with S09 ListingCard).
+- Home "Sell" card (`/contact`) and "View all" (`/search`) 404 until S09/contact page exist.
+- `revalidate = 300` caches the empty fallback for 5 minutes after a transient fetch failure.

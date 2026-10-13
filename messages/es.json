@@ -48,5 +48,75 @@
     "privacy": "Política de privacidad",
     "terms": "Términos de servicio",
     "legalNotice": "Los precios y la disponibilidad pueden cambiar sin previo aviso. Protegemos tus datos conforme a la Ley 1581 de 2012 y los derechos del consumidor en Colombia."
+  },
+  "Home": {
+    "heroTitle": "Encuentra el espacio que te mueve",
+    "heroSubtitle": "Propiedades exclusivas y asesoría inmobiliaria personalizada en los mejores sectores de Cali.",
+    "search": {
+      "label": "Búsqueda rápida de propiedades",
+      "operation": "Operación",
+      "operationAny": "Comprar o arrendar",
+      "sale": "Comprar",
+      "rent": "Arrendar",
+      "neighborhood": "Sector",
+      "neighborhoodAny": "Todos los sectores",
+      "propertyType": "Tipo de inmueble",
+      "propertyTypeAny": "Todos los tipos",
+      "submit": "Buscar"
+    },
+    "propertyTypes": {
+      "apartment": "Apartamento",
+      "house": "Casa",
+      "penthouse": "Penthouse",
+      "townhouse": "Casa en conjunto",
+      "land": "Lote",
+      "office": "Oficina",
+      "commercial": "Local comercial"
+    },
+    "featured": {
+      "title": "Propiedades destacadas",
+      "viewAll": "Ver todas las propiedades",
+      "empty": "Pronto publicaremos nuevas propiedades. Mientras tanto, escríbenos y te ayudamos a encontrar la tuya.",
+      "forSale": "En venta",
+      "forRent": "En arriendo",
+      "noImage": "Sin foto",
+      "beds": "{count, plural, one {# habitación} other {# habitaciones}}",
+      "baths": "{count, plural, one {# baño} other {# baños}}",
+      "area": "{count} m²",
+      "perMonth": "/mes"
+    },
+    "process": {
+      "title": "Nuestro proceso",
+      "steps": {
+        "talk": {
+          "title": "Habla con tu asesora",
+          "description": "Escuchamos tus aspiraciones, presupuesto y estilo de vida."
+        },
+        "clarify": {
+          "title": "Aclara lo que necesitas",
+          "description": "Filtramos las opciones idóneas y organizamos visitas privadas."
+        },
+        "move": {
+          "title": "Avanza con confianza",
+          "description": "Te acompañamos en la negociación, los trámites y la entrega de llaves."
+        }
+      }
+    },
+    "services": {
+      "title": "Servicios especializados",
+      "learnMore": "Conocer más",
+      "buy": {
+        "title": "Comprar",
+        "description": "Asesoría experta para encontrar tu hogar ideal o una inversión de alta rentabilidad."
+      },
+      "sell": {
+        "title": "Vender",
+        "description": "Valoración, promoción y negociación para vender tu propiedad al mejor precio."
+      },
+      "rent": {
+        "title": "Arrendar",
+        "description": "Encuentra o publica un arriendo con procesos claros y seguros para ambas partes."
+      }
+    }
   }
 }

@@ -14,7 +14,10 @@ vi.mock("next/navigation", () => ({
   usePathname: () => mockPathname,
 }));
 
+export const routerPush = vi.fn();
+
 vi.mock("@/i18n/navigation", () => ({
+  useRouter: () => ({ push: routerPush }),
   usePathname: () => mockPathname,
   Link: ({
     href,
