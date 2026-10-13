@@ -32,3 +32,13 @@
 - Contact form gives the same generic error for 400 and 500; field-level server errors are not mapped back to inputs.
 - Open-house countdown and "no photo" states have no e2e/browser coverage; only jsdom tests.
 - Seed data has no `stratum` / `admin_fee_cop` values; apply migration `20261013000200` locally before checking the facts grid.
+
+## Deferred from: code review of spec-1-11-s11 (2026-10-13)
+- Pins at identical coordinates stack, so only the top one is clickable.
+- The preview card can cover pins near the bottom of the map.
+- Rent and sale pins share styling (no "/month" on rent pins).
+- On mobile the default tab is "map", so the selected-card ring in the list is hidden. Selecting a pin doesn't scroll to its card, and clicking a card doesn't select its pin.
+- After the preview closes, focus doesn't return to the pin.
+- A stale `selectedId` can survive a page change.
+- The map only covers the current page of results.
+

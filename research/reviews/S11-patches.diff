@@ -1,0 +1,203 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index f1ffc07..3f9ef50 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -32,3 +32,13 @@
+ - Contact form gives the same generic error for 400 and 500; field-level server errors are not mapped back to inputs.
+ - Open-house countdown and "no photo" states have no e2e/browser coverage; only jsdom tests.
+ - Seed data has no `stratum` / `admin_fee_cop` values; apply migration `20261013000200` locally before checking the facts grid.
++
++## Deferred from: code review of spec-1-11-s11 (2026-10-13)
++- Pins at identical coordinates stack, so only the top one is clickable.
++- The preview card can cover pins near the bottom of the map.
++- Rent and sale pins share styling (no "/month" on rent pins).
++- On mobile the default tab is "map", so the selected-card ring in the list is hidden. Selecting a pin doesn't scroll to its card, and clicking a card doesn't select its pin.
++- After the preview closes, focus doesn't return to the pin.
++- A stale `selectedId` can survive a page change.
++- The map only covers the current page of results.
++
+diff --git a/_bmad-output/implementation-artifacts/spec-1-11-s11-map-list-toggle-on-search.md b/_bmad-output/implementation-artifacts/spec-1-11-s11-map-list-toggle-on-search.md
+index 028922d..a2060a5 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-11-s11-map-list-toggle-on-search.md
++++ b/_bmad-output/implementation-artifacts/spec-1-11-s11-map-list-toggle-on-search.md
+@@ -2,7 +2,7 @@
+ title: 'S11 Map/list toggle on /search'
+ type: 'feature'
+ created: '2026-10-13'
+-status: 'in-review'
++status: 'done'
+ route: 'dispatch'
+ review_loop_iteration: 0
+ ---
+@@ -46,7 +46,7 @@ review_loop_iteration: 0
+ ## Tasks & Acceptance
+ 
+ **Execution:**
+-- [ ] lib + components + page wiring + messages + Vitest tests for each
++- [x] lib + components + page wiring + messages + Vitest tests for each
+ 
+ **Acceptance Criteria:**
+ - Given `view=map`, when the page renders, then pins match listings with coordinates and selecting one shows the preview card with a link to the listing.
+@@ -59,3 +59,19 @@ review_loop_iteration: 0
+ **Commands:**
+ - `npm test` -- all pass
+ - `npm run build` -- succeeds
++
++### Review Findings
++
++- [x] [Review][Patch] Reset links dropped `view=map` in SearchResults and SearchFilters; fixed to preserve view
++- [x] [Review][Patch] Map distortion due to independent axis scaling in map-view.ts; fixed to share one span
++- [x] [Review][Patch] Blank strings and booleans accepted as valid coordinates; tightened isCoordinate
++- [x] [Review][Patch] Weak class substring match in SearchMapView.test.tsx; changed to exact class token match
++- [x] [Review][Patch] Verified filters preserve view in URL rewrites via FormData hidden input
++- [x] [Review][Defer] Identical coordinates stack pins so only top is clickable
++- [x] [Review][Defer] Preview card can cover pins near map bottom
++- [x] [Review][Defer] Rent and sale pins share styling (no /month suffix on rent pin)
++- [x] [Review][Defer] Mobile default tab is map; selected card does not auto-scroll list
++- [x] [Review][Defer] Focus does not return to pin when preview card closes
++- [x] [Review][Defer] Stale selectedId survives page changes
++- [x] [Review][Defer] Map covers only current page of paginated results
++
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index c78cf6a..d4cb7f4 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -46,7 +46,7 @@ development_status:
+   1-8-s08-home-hero-with-search-bar-featured-listings-services-car: done
+   1-9-s09-listingcard-and-results-grid-with-filters-panel: done
+   1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: done
+-  1-11-s11-map-list-toggle-on-search: review
++  1-11-s11-map-list-toggle-on-search: done
+   1-12-s12-newsletter-signup-testimonials-and-resources-sections: backlog
+   1-13-s13-newsletter-subscribers-table-and-policies: backlog
+   1-14-s14-agent-dashboard-listings-table-and-create-edit-form: backlog
+diff --git a/src/components/SearchFilters.tsx b/src/components/SearchFilters.tsx
+index b3ca053..4e27ec8 100644
+--- a/src/components/SearchFilters.tsx
++++ b/src/components/SearchFilters.tsx
+@@ -145,7 +145,7 @@ export default function SearchFilters({ values, view = "grid" }: { values: Searc
+         >
+           {t("filters.apply")}
+         </button>
+-        <Link href="/search" className="text-sm font-medium text-emerald-800 hover:underline">
++        <Link href={{ pathname: "/search", query: view === "map" ? { view } : {} }} className="text-sm font-medium text-emerald-800 hover:underline">
+           {t("filters.reset")}
+         </Link>
+       </div>
+diff --git a/src/components/SearchMapView.test.tsx b/src/components/SearchMapView.test.tsx
+index 6b787cb..a4aa633 100644
+--- a/src/components/SearchMapView.test.tsx
++++ b/src/components/SearchMapView.test.tsx
+@@ -76,11 +76,14 @@ describe("SearchMapView", () => {
+ 
+   it("switches the mobile pane between list and map", () => {
+     renderWithIntl(<SearchMapView listings={[make("1")]} />, "en");
+-    expect(screen.getByTestId("map-pane").className).toContain("block");
+-    expect(screen.getByTestId("map-list").className).toContain("hidden");
++    const tokens = (id: string) => screen.getByTestId(id).className.split(/\s+/);
++    expect(tokens("map-pane")).toContain("block");
++    expect(tokens("map-list")).toContain("hidden");
+     fireEvent.click(screen.getByRole("button", { name: "List" }));
+-    expect(screen.getByTestId("map-list").className).not.toContain("hidden lg:grid");
+-    expect(screen.getByTestId("map-pane").className).toContain("hidden");
++    expect(tokens("map-list")).toContain("grid");
++    expect(tokens("map-list")).not.toContain("hidden");
++    expect(tokens("map-pane")).toContain("hidden");
++    expect(tokens("map-pane")).not.toContain("block");
+     expect(screen.getByRole("button", { name: "List" }).getAttribute("aria-pressed")).toBe("true");
+   });
+ });
+diff --git a/src/components/SearchResults.test.tsx b/src/components/SearchResults.test.tsx
+index 1beae97..34723d1 100644
+--- a/src/components/SearchResults.test.tsx
++++ b/src/components/SearchResults.test.tsx
+@@ -60,3 +60,10 @@ describe("SearchResults map view", () => {
+     expect(screen.getByRole("link", { name: /Siguiente/ }).getAttribute("href")).toBe("/search?operation=sale&view=map&page=2");
+   });
+ });
++
++describe("SearchResults reset link", () => {
++  it("keeps view=map when clearing an empty map result", () => {
++    renderWithIntl(<SearchResults listings={[]} total={0} page={1} totalPages={0} query={{ operation: "sale" }} view="map" />);
++    expect(screen.getByRole("link", { name: /Limpiar|filtros/i }).getAttribute("href")).toBe("/search?view=map");
++  });
++});
+diff --git a/src/components/SearchResults.tsx b/src/components/SearchResults.tsx
+index ce982d0..7c55f24 100644
+--- a/src/components/SearchResults.tsx
++++ b/src/components/SearchResults.tsx
+@@ -20,7 +20,7 @@ export default function SearchResults({ listings, total, page, totalPages, query
+   const tFilters = useTranslations("Search.filters");
+   const reset = (
+     <Link
+-      href="/search"
++      href={{ pathname: "/search", query: view === "map" ? { view } : {} }}
+       className="mt-4 inline-block rounded-lg bg-emerald-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800"
+     >
+       {tFilters("reset")}
+diff --git a/src/lib/map-view.test.ts b/src/lib/map-view.test.ts
+index 4e748ab..f9fc2ec 100644
+--- a/src/lib/map-view.test.ts
++++ b/src/lib/map-view.test.ts
+@@ -60,6 +60,20 @@ describe("projectPins", () => {
+     expect(pins).toHaveLength(1);
+   });
+ 
++  it("rejects blank and boolean coordinates instead of pinning them at 0,0", () => {
++    const { pins, missing } = projectPins([make("b", " " as unknown as number, 0), make("t", true as unknown as number, 0)]);
++    expect(pins).toHaveLength(0);
++    expect(missing).toBe(2);
++  });
++
++  it("keeps the aspect ratio: equal longitude and latitude spans give equal pixel spans", () => {
++    const { pins } = projectPins([make("a", 3.4, -76.5), make("b", 3.4, -76.4), make("c", 3.5, -76.5)]);
++    const [a, b, c] = pins;
++    expect(b.x - a.x).toBeGreaterThan(0);
++    expect(a.y - c.y).toBeGreaterThan(0);
++    expect(Math.abs(b.x - a.x - (a.y - c.y))).toBeLessThan(2);
++  });
++
+   it("returns no pins for an empty list", () => {
+     expect(projectPins([])).toEqual({ pins: [], missing: 0 });
+   });
+diff --git a/src/lib/map-view.ts b/src/lib/map-view.ts
+index 4edcbbf..bf7be3c 100644
+--- a/src/lib/map-view.ts
++++ b/src/lib/map-view.ts
+@@ -20,15 +20,17 @@ const PADDING = 10;
+ const MIN_SPAN = 0.02;
+ 
+ const isCoordinate = (value: unknown, limit: number): value is number =>
+-  value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value)) && Math.abs(Number(value)) <= limit;
++  (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) &&
++  Number.isFinite(Number(value)) &&
++  Math.abs(Number(value)) <= limit;
+ 
+ const mercatorY = (latitude: number) => {
+   const rad = (Math.min(Math.max(latitude, -85), 85) * Math.PI) / 180;
+   return (Math.log(Math.tan(Math.PI / 4 + rad / 2)) * 180) / Math.PI;
+ };
+ 
+-function scale(value: number, min: number, max: number): number {
+-  const span = Math.max(max - min, MIN_SPAN);
++/** `span` is shared by both axes so the projection keeps its aspect ratio instead of stretching each axis to fit. */
++function scale(value: number, min: number, max: number, span: number): number {
+   const center = (min + max) / 2;
+   return PADDING + ((value - (center - span / 2)) / span) * (100 - 2 * PADDING);
+ }
+@@ -42,11 +44,13 @@ export function projectPins(listings: FeaturedListing[]): { pins: MapPin[]; miss
+   const ys = located.map((l) => mercatorY(Number(l.latitude)));
+   const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
+ 
++  const span = Math.max(maxX - minX, maxY - minY, MIN_SPAN);
++
+   const pins = located.map((listing, i) => ({
+     listing,
+-    x: scale(xs[i], minX, maxX),
++    x: scale(xs[i], minX, maxX, span),
+     // Screen y grows downward while latitude grows upward.
+-    y: 100 - scale(ys[i], minY, maxY),
++    y: 100 - scale(ys[i], minY, maxY, span),
+   }));
+   return { pins, missing: listings.length - located.length };
+ }

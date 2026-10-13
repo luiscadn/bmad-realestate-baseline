@@ -5,6 +5,7 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { routing } from "@/i18n/routing";
 import { PROPERTY_TYPES, SORTS } from "@/lib/listings-query";
+import type { SearchView } from "@/lib/map-view";
 import { footerNeighborhoods } from "@/lib/site";
 
 /** Raw URL values (strings) of the active filters; missing key means "no filter". */
@@ -19,7 +20,7 @@ const COUNTS = [1, 2, 3, 4, 5] as const;
 const SORT_KEYS = { newest: "sortNewest", price_asc: "sortPriceAsc", price_desc: "sortPriceDesc" } as const;
 
 /** GET form that works without JS; with JS every change rewrites the URL (empty fields dropped, page reset). */
-export default function SearchFilters({ values }: { values: SearchFilterValues }) {
+export default function SearchFilters({ values, view = "grid" }: { values: SearchFilterValues; view?: SearchView }) {
   const t = useTranslations("Search");
   const router = useRouter();
   const locale = useLocale();
@@ -66,6 +67,7 @@ export default function SearchFilters({ values }: { values: SearchFilterValues }
       className="grid gap-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm"
     >
       <h2 className="text-base font-semibold text-emerald-950">{t("filters.title")}</h2>
+      {view === "map" ? <input type="hidden" name="view" value="map" /> : null}
       <label className={labelClass}>
         {t("filters.operation")}
         <select name="operation" defaultValue={values.operation ?? ""} className={fieldClass}>
@@ -143,7 +145,7 @@ export default function SearchFilters({ values }: { values: SearchFilterValues }
         >
           {t("filters.apply")}
         </button>
-        <Link href="/search" className="text-sm font-medium text-emerald-800 hover:underline">
+        <Link href={{ pathname: "/search", query: view === "map" ? { view } : {} }} className="text-sm font-medium text-emerald-800 hover:underline">
           {t("filters.reset")}
         </Link>
       </div>

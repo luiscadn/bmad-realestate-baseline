@@ -50,3 +50,20 @@ describe("SearchResults", () => {
     expect(screen.getByText("Página 2 de 3")).toBeTruthy();
   });
 });
+
+describe("SearchResults map view", () => {
+  it("renders the split map view and keeps view=map in pagination links", () => {
+    renderWithIntl(
+      <SearchResults listings={[{ ...make("1"), latitude: 3.4, longitude: -76.5 }]} total={30} page={1} totalPages={3} query={{ operation: "sale" }} view="map" />,
+    );
+    expect(screen.getAllByTestId("map-pin")).toHaveLength(1);
+    expect(screen.getByRole("link", { name: /Siguiente/ }).getAttribute("href")).toBe("/search?operation=sale&view=map&page=2");
+  });
+});
+
+describe("SearchResults reset link", () => {
+  it("keeps view=map when clearing an empty map result", () => {
+    renderWithIntl(<SearchResults listings={[]} total={0} page={1} totalPages={0} query={{ operation: "sale" }} view="map" />);
+    expect(screen.getByRole("link", { name: /Limpiar|filtros/i }).getAttribute("href")).toBe("/search?view=map");
+  });
+});
