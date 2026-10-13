@@ -1,8 +1,9 @@
 "use client";
 
 import type { FocusEvent, FormEvent } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
+import { routing } from "@/i18n/routing";
 import { PROPERTY_TYPES, SORTS } from "@/lib/listings-query";
 import { footerNeighborhoods } from "@/lib/site";
 
@@ -21,6 +22,9 @@ const SORT_KEYS = { newest: "sortNewest", price_asc: "sortPriceAsc", price_desc:
 export default function SearchFilters({ values }: { values: SearchFilterValues }) {
   const t = useTranslations("Search");
   const router = useRouter();
+  const locale = useLocale();
+  // Plain GET (no JS) bypasses the locale-aware router, so the action must carry the locale prefix itself.
+  const action = locale === routing.defaultLocale ? "/search" : `/${locale}/search`;
 
   const neighborhoods: string[] = [...footerNeighborhoods];
   if (values.neighborhood && !neighborhoods.includes(values.neighborhood)) neighborhoods.push(values.neighborhood);
@@ -50,7 +54,7 @@ export default function SearchFilters({ values }: { values: SearchFilterValues }
   return (
     <form
       method="get"
-      action="/search"
+      action={action}
       role="search"
       aria-label={t("filters.label")}
       onChange={onChange}

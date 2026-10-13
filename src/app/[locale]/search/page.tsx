@@ -83,7 +83,7 @@ export default async function SearchPage({
         <aside>
           <SearchFilters key={JSON.stringify(values)} values={values} />
         </aside>
-        <section aria-live="polite">
+        <section>
           <SearchResults listings={listings} total={total} page={page} totalPages={totalPages} query={linkQuery} failed={failed} />
         </section>
       </div>

@@ -17,6 +17,11 @@ describe("SearchFilters", () => {
     expect(names).toEqual(["operation", "neighborhood", "property_type", "min_price", "max_price", "bedrooms", "bathrooms", "sort"]);
   });
 
+  it("keeps the locale in the no-JS form action", () => {
+    expect(form(renderWithIntl(<SearchFilters values={{}} />, "en").container).getAttribute("action")).toBe("/en/search");
+    expect(form(renderWithIntl(<SearchFilters values={{}} />, "es").container).getAttribute("action")).toBe("/search");
+  });
+
   it("preselects the active values, including a neighborhood outside the default list", () => {
     const { container } = renderWithIntl(
       <SearchFilters values={{ operation: "rent", neighborhood: "Menga", bedrooms: "2", min_price: "500000", sort: "price_asc" }} />,

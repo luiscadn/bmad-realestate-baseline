@@ -2,7 +2,7 @@
 title: 'S09 - ListingCard and results grid with filters panel'
 type: 'feature'
 created: '2026-10-13'
-status: 'in-review'
+status: 'done'
 baseline_commit: '846c20ca2e7814d9c67412b9a1131fcb25e36612'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -76,3 +76,12 @@ context: []
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Review Findings
+
+- [x] [Review][Patch] No-JS GET form posted to `/search` and dropped the `en` locale [src/components/SearchFilters.tsx] — fixed: action carries the locale prefix; test added
+- [x] [Review][Patch] Nested `aria-live` (section + count) announced the whole results region [src/app/[locale]/search/page.tsx] — fixed: removed from the section
+- [x] [Review][Defer] Page past the last page shows "no properties match" although total > 0 [src/components/SearchResults.tsx:36] — deferred: only reachable through stale links; fix needs new copy and a branch
+- [x] [Review][Defer] `remotePatterns` is read at build time; images from any other host are not optimized [next.config.ts:10] — deferred: matches the spec; revisit if non-Supabase image URLs appear
+
+**Rejected:** `number` inputs accept `1e5` (server drops it and shows the notice; harmless). Blur-then-Enter double push (the second push is identical, and the form remounts on the new URL).
