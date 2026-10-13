@@ -2,6 +2,9 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import FeaturedListings from "@/components/FeaturedListings";
 import HeroSearch from "@/components/HeroSearch";
 import { ProcessSteps, ServiceCards } from "@/components/HomeSections";
+import NewsletterForm from "@/components/NewsletterForm";
+import ResourceCards from "@/components/ResourceCards";
+import Testimonials from "@/components/Testimonials";
 import { fetchFeaturedListings, type FeaturedListing } from "@/lib/featured-listings";
 import { createPublicClient } from "@/lib/supabase-public";
 
@@ -36,6 +39,9 @@ export default async function Home({ params }: { params: Promise<{ locale: strin
       <FeaturedListings listings={featured} />
       <ProcessSteps />
       <ServiceCards />
+      <Testimonials />
+      <ResourceCards />
+      <NewsletterForm />
     </>
   );
 }

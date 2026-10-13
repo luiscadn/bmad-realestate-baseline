@@ -117,6 +117,72 @@
         "title": "Arrendar",
         "description": "Encuentra o publica un arriendo con procesos claros y seguros para ambas partes."
       }
+    },
+    "testimonials": {
+      "title": "Lo que dicen nuestros clientes",
+      "items": {
+        "first": {
+          "quote": "Nos acompañaron en cada paso y encontramos nuestro apartamento en Granada en tres semanas.",
+          "name": "Camila R.",
+          "role": "Compradora, Granada"
+        },
+        "second": {
+          "quote": "Marketing profesional y asesoría honesta: vendimos nuestra casa por encima del precio inicial.",
+          "name": "Andrés M.",
+          "role": "Vendedor, Ciudad Jardín"
+        },
+        "third": {
+          "quote": "Arrendar mi propiedad fue muy sencillo, con trámites claros y un inquilino confiable.",
+          "name": "Laura P.",
+          "role": "Arrendadora, San Antonio"
+        }
+      }
+    },
+    "resources": {
+      "title": "Guías y análisis de mercado",
+      "subtitle": "Consejos prácticos para comprar, vender e invertir en Cali.",
+      "items": {
+        "neighborhoods": {
+          "category": "Barrios",
+          "title": "Dónde vivir en Cali: guía de barrios",
+          "excerpt": "Compara Granada, El Peñón, Ciudad Jardín y más según estilo de vida, precio por m² y servicios."
+        },
+        "buying": {
+          "category": "Consejos de compra",
+          "title": "Lista para compradores primerizos en Colombia",
+          "excerpt": "Presupuesto, preaprobación de crédito, revisión legal y gastos de escrituración paso a paso."
+        },
+        "investing": {
+          "category": "Análisis de mercado",
+          "title": "¿Es Cali buena opción para invertir en finca raíz?",
+          "excerpt": "Tendencias de demanda, rentabilidad por arriendo y zonas con mayor valorización."
+        }
+      }
+    },
+    "newsletter": {
+      "title": "Recibe noticias del mercado en Cali",
+      "description": "Te enviamos nuevas propiedades, guías y análisis de mercado a tu correo.",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "consent": "Acepto recibir correos y la política de privacidad.",
+      "submit": "Suscribirme",
+      "sending": "Suscribiendo…",
+      "success": "¡Gracias! Ya estás suscrito.",
+      "error": "No pudimos completar tu suscripción. Inténtalo de nuevo.",
+      "errors": {
+        "name": {
+          "required": "Ingresa tu nombre.",
+          "tooLong": "El nombre es demasiado largo."
+        },
+        "email": {
+          "required": "Ingresa tu correo.",
+          "invalid": "Ingresa un correo válido.",
+          "tooLong": "El correo es demasiado largo."
+        },
+        "consent": {
+          "required": "Debes aceptar para suscribirte."
+        }
+      }
     }
   },
   "Search": {
