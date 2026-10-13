@@ -1,0 +1,137 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+new file mode 100644
+index 0000000..e4a2796
+--- /dev/null
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -0,0 +1,4 @@
++
++## Deferred from: code review of spec-1-2-s02 (2026-10-13)
++- Listing deletion cascades `listing_images` rows but orphans storage objects; needs cleanup trigger/job.
++- No per-listing image count cap in upload service.
+diff --git a/_bmad-output/implementation-artifacts/spec-1-2-s02-image-storage-bucket-and-policies.md b/_bmad-output/implementation-artifacts/spec-1-2-s02-image-storage-bucket-and-policies.md
+index 78be392..cfc62f0 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-2-s02-image-storage-bucket-and-policies.md
++++ b/_bmad-output/implementation-artifacts/spec-1-2-s02-image-storage-bucket-and-policies.md
+@@ -27,3 +27,20 @@ context: []
+ - Verified on local Supabase after `supabase db reset` (REST/Storage API as demo agent): bucket public, 10 MB / image mime limits; owner upload 200; upload to another listing's folder 403; anon upload 403; anon public GET 200; anon delete 403; owner delete 200; non-image mime 415.
+ - `npx vitest run`, `tsc --noEmit`, `next build` pass. Persisting functions (`uploadListingImage`, `reorderListingImages`, `deleteListingImage`) are not unit-tested against a live DB; covered only by the API checks above.
+ - Review subagents were not launched (not requested in this session); no review triage recorded.
++
++### Review Findings
++
++- [ ] [Review][Decision] Position writes are not atomic — concurrent `uploadListingImage` calls compute the same `nextPosition`, and `reorderListingImages` does N sequential UPDATEs, so a mid-loop failure leaves duplicate/partial positions (reads stay stable via created_at/id tie-break). Options: (a) accept as-is, (b) add a Postgres RPC that reorders/inserts in one transaction, (c) add a unique `(listing_id, position)` constraint (deferrable) plus retry. [listing-images.ts:uploadListingImage, reorderListingImages]
++- [ ] [Review][Decision] Storage SELECT policy exposes every object to `anon` via the list API, including images of unpublished (draft) listings that the `listing_images` RLS deliberately hides. Public GET by URL works without this policy on a public bucket. Options: (a) keep (matches "public-read"), (b) restrict anon select to objects whose listing is published, keeping owner select for upload/upsert. [20261013000100_storage_listing_images.sql:17-20]
++- [x] [Review][Patch] `pathFromPublicUrl` kept `?query`/`#hash` and threw on malformed percent-encoding, so a cache-busted URL would fail to delete the storage object [listing-images.ts:pathFromPublicUrl]
++- [x] [Review][Patch] `reorderListingImages` update and `deleteListingImage` delete ignored zero-row results (RLS filters silently), reporting success; update now also scoped by `listing_id` [listing-images.ts]
++- [x] [Review][Patch] `deleteListingImage` swallowed storage `remove` errors, leaving orphaned objects silently; now surfaced after the gap is closed [listing-images.ts:deleteListingImage]
++- [x] [Review][Patch] Persisting functions had no tests; added guard tests (orderedIds mismatch, zero-row delete) and URL edge cases [listing-images.test.ts]
++- [x] [Review][Defer] Deleting a listing cascades `listing_images` rows but leaves storage objects orphaned — deferred: needs a cleanup job/trigger, outside S02 scope
++- [x] [Review][Defer] No per-listing image count cap — deferred: not in the S02 spec; raise in a later story
++
++#### Rejected
++- Redundant index `listing_images_listing_position_created_idx` (S01 already has `(listing_id, position)`): low, harmless, deleting it is not worth a new migration; it does cover the `created_at` tie-break order.
++- `buildImagePath` does not validate `listingId` format: low, caller-controlled and storage RLS fails closed on non-owned folders.
++- Client-supplied `file.type` is spoofable: false, the bucket's `allowed_mime_types` enforces it server-side (spec notes 415 verified).
++- Non-idempotent `create policy` statements: low, migrations run once.
+diff --git a/src/lib/listing-images.test.ts b/src/lib/listing-images.test.ts
+index 976fdf4..4dc67dc 100644
+--- a/src/lib/listing-images.test.ts
++++ b/src/lib/listing-images.test.ts
+@@ -1,3 +1,4 @@
++import type { SupabaseClient } from "@supabase/supabase-js";
+ import { describe, expect, it } from "vitest";
+ import {
+   ListingImageError,
+@@ -5,7 +6,9 @@ import {
+   moveImage,
+   nextPosition,
+   orderImages,
++  deleteListingImage,
+   pathFromPublicUrl,
++  reorderListingImages,
+   validateImageFile,
+ } from "./listing-images";
+ 
+@@ -27,6 +30,33 @@ describe("buildImagePath / pathFromPublicUrl", () => {
+     expect(pathFromPublicUrl(`http://x/storage/v1/object/public/listing-images/${path}`)).toBe(path);
+     expect(pathFromPublicUrl("http://x/other.png")).toBeNull();
+   });
++  it("ignores query strings and survives malformed encoding", () => {
++    const base = "http://x/storage/v1/object/public/listing-images/";
++    expect(pathFromPublicUrl(`${base}abc/u1.webp?t=1`)).toBe("abc/u1.webp");
++    expect(pathFromPublicUrl(`${base}abc/%E0%A4%A.webp`)).toBeNull();
++    expect(pathFromPublicUrl(base)).toBeNull();
++  });
++});
++
++/** Minimal chainable fake: every query resolves to `result`. */
++function fakeClient(result: { data: unknown; error: { message: string } | null }) {
++  const chain: Record<string, unknown> = {};
++  for (const m of ["select", "eq", "order", "update", "delete"]) chain[m] = () => chain;
++  chain.then = (resolve: (v: unknown) => void) => resolve(result);
++  return { from: () => chain, storage: { from: () => ({ remove: async () => ({ error: null }) }) } } as unknown as SupabaseClient;
++}
++
++describe("persisting guards", () => {
++  it("rejects an orderedIds list that does not match the listing's images", async () => {
++    const client = fakeClient({ data: [{ id: "a", position: 0 }], error: null });
++    await expect(reorderListingImages(client, "l1", ["a", "b"])).rejects.toThrow(ListingImageError);
++    await expect(reorderListingImages(client, "l1", [])).rejects.toThrow(ListingImageError);
++  });
++  it("fails loudly when RLS filters the delete to zero rows", async () => {
++    const client = fakeClient({ data: [], error: null });
++    const image = { id: "a", listing_id: "l1", url: "http://x/other.png", alt_text: null, position: 0 };
++    await expect(deleteListingImage(client, image)).rejects.toThrow(ListingImageError);
++  });
+ });
+ 
+ describe("ordering", () => {
+diff --git a/src/lib/listing-images.ts b/src/lib/listing-images.ts
+index 8e6a390..7f75001 100644
+--- a/src/lib/listing-images.ts
++++ b/src/lib/listing-images.ts
+@@ -66,7 +66,13 @@ export function moveImage(orderedIds: string[], id: string, toIndex: number): st
+ export function pathFromPublicUrl(url: string): string | null {
+   const marker = `/object/public/${LISTING_IMAGES_BUCKET}/`;
+   const i = url.indexOf(marker);
+-  return i === -1 ? null : decodeURIComponent(url.slice(i + marker.length));
++  if (i === -1) return null;
++  const raw = url.slice(i + marker.length).split(/[?#]/)[0];
++  try {
++    return raw ? decodeURIComponent(raw) : null;
++  } catch {
++    return null;
++  }
+ }
+ 
+ export async function listListingImages(supabase: SupabaseClient, listingId: string): Promise<ListingImage[]> {
+@@ -125,17 +131,26 @@ export async function reorderListingImages(
+   }
+   for (const [position, id] of orderedIds.entries()) {
+     if (byId.get(id)!.position === position) continue;
+-    const { error } = await supabase.from("listing_images").update({ position }).eq("id", id);
++    const { data, error } = await supabase
++      .from("listing_images")
++      .update({ position })
++      .eq("id", id)
++      .eq("listing_id", listingId)
++      .select("id");
+     if (error) throw new ListingImageError(error.message);
++    // RLS filters rows silently: zero rows updated means not found or not permitted.
++    if (!data?.length) throw new ListingImageError(`Image ${id} could not be updated`);
+   }
+ }
+ 
+ export async function deleteListingImage(supabase: SupabaseClient, image: ListingImage): Promise<void> {
+-  const { error } = await supabase.from("listing_images").delete().eq("id", image.id);
++  const { data, error } = await supabase.from("listing_images").delete().eq("id", image.id).select("id");
+   if (error) throw new ListingImageError(error.message);
++  if (!data?.length) throw new ListingImageError(`Image ${image.id} could not be deleted`);
+   const path = pathFromPublicUrl(image.url);
+-  if (path) await supabase.storage.from(LISTING_IMAGES_BUCKET).remove([path]);
++  const removal = path ? await supabase.storage.from(LISTING_IMAGES_BUCKET).remove([path]) : null;
+   // Close the gap so positions stay dense.
+   const remaining = await listListingImages(supabase, image.listing_id);
+   await reorderListingImages(supabase, image.listing_id, remaining.map((i) => i.id));
++  if (removal?.error) throw new ListingImageError(`Image row deleted but storage object remains: ${removal.error.message}`);
+ }
