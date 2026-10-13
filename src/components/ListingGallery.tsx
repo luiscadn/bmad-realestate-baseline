@@ -27,7 +27,7 @@ export default function ListingGallery({ images, title }: { images: ListingImage
       <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100">
         <Image
           src={current.url}
-          alt={current.alt_text ?? title}
+          alt={current.alt_text?.trim() || title}
           fill
           priority
           sizes="(min-width: 1024px) 66vw, 100vw"

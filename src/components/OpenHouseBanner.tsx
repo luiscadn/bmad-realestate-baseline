@@ -12,9 +12,13 @@ export default function OpenHouseBanner({ openHouseAt }: { openHouseAt: string }
 
   useEffect(() => {
     setNow(Date.now());
-    const id = setInterval(() => setNow(Date.now()), 1000);
+    const id = setInterval(() => {
+      const tick = Date.now();
+      setNow(tick);
+      if (!getCountdown(openHouseAt, tick)) clearInterval(id);
+    }, 1000);
     return () => clearInterval(id);
-  }, []);
+  }, [openHouseAt]);
 
   const countdown = now === null ? null : getCountdown(openHouseAt, now);
   if (!countdown) return null;
@@ -32,8 +36,7 @@ export default function OpenHouseBanner({ openHouseAt }: { openHouseAt: string }
   ] as const;
 
   return (
-    <aside
-      role="region"
+    <section
       aria-label={t("label")}
       className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950"
     >
@@ -42,12 +45,12 @@ export default function OpenHouseBanner({ openHouseAt }: { openHouseAt: string }
       <p className="mt-3 text-sm">{t("startsIn")}</p>
       <dl data-testid="countdown" className="mt-1 flex gap-4">
         {units.map(([unit, value]) => (
-          <div key={unit} className="text-center">
-            <dd className="text-2xl font-semibold tabular-nums">{String(value).padStart(2, "0")}</dd>
+          <div key={unit} className="flex flex-col-reverse text-center">
             <dt className="text-xs">{t(unit)}</dt>
+            <dd className="text-2xl font-semibold tabular-nums">{String(value).padStart(2, "0")}</dd>
           </div>
         ))}
       </dl>
-    </aside>
+    </section>
   );
 }

@@ -48,7 +48,8 @@ export default async function ListingPage({ params }: Props) {
     [t("facts.bathrooms"), String(listing.bathrooms)],
     [t("facts.parking"), String(listing.parking_spots)],
   ];
-  if (listing.area_m2) facts.push([t("facts.area"), t("facts.areaValue", { count: Number(listing.area_m2) })]);
+  const area = Number(listing.area_m2);
+  if (area > 0) facts.push([t("facts.area"), t("facts.areaValue", { count: area })]);
   if (listing.stratum) facts.push([t("facts.stratum"), String(listing.stratum)]);
   if (listing.admin_fee_cop != null) facts.push([t("facts.adminFee"), cop(listing.admin_fee_cop)]);
 

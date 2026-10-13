@@ -2,7 +2,7 @@
 title: 'S10 Listing detail page: gallery, facts, open-house countdown, contact form'
 type: 'feature'
 created: '2026-10-13'
-status: 'in-review'
+status: 'done'
 baseline_commit: '0dcbaac81794c8c5242c18a9339a25bfdc6075ca'
 route: 'dispatch'
 review_loop_iteration: 0
@@ -88,3 +88,15 @@ context: []
 - `npm test` -- expected: all pass
 - `npm run build` -- expected: success
 - `npm run lint` -- expected: no errors
+
+### Review Findings
+
+- [x] [Review][Patch] Open-house interval kept running after the event started [src/components/OpenHouseBanner.tsx]
+- [x] [Review][Patch] Countdown `<dd>` rendered before its `<dt>` (invalid `dl`); fixed with `flex-col-reverse` [src/components/OpenHouseBanner.tsx]
+- [x] [Review][Patch] `<aside role="region">` overrode the complementary landmark; now a `<section>` [src/components/OpenHouseBanner.tsx]
+- [x] [Review][Patch] Empty-string `alt_text` left the main photo without alt (`??` to `||`) [src/components/ListingGallery.tsx]
+- [x] [Review][Patch] `area_m2` of `"0.00"` rendered "0 m²"; now a numeric `> 0` guard [src/app/[locale]/listings/[slug]/page.tsx]
+- [x] [Review][Patch] No test that the page's form posts the fetched listing's id [page.test.tsx]
+- [x] [Review][Patch] No test for the Bogota-time open-house date text [OpenHouseBanner.test.tsx]
+
+Rejected: client phone regex stricter than server (intended; spec lists "bad phone" as invalid); `email.tooLong` unused (server limit equals the 254 check, shown as invalid); `aria-current="false"` (valid); focus on invalid submit (spec: focus not stolen); fetch timeout / 429 branch / honeypot (new behaviour, out of scope); `property_type` missing from messages (DB check constraint matches the catalog); `select("*")` already returns the new columns; "Logged" on fetch errors (Next logs unhandled errors); OG/JSON-LD/hreflang metadata, lightbox, swipe (out of scope); "Asesora" gendered label (cosmetic).

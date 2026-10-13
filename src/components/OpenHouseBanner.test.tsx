@@ -40,4 +40,17 @@ describe("OpenHouseBanner", () => {
     });
     expect(container.innerHTML).toBe("");
   });
+
+  it("shows the event time in Bogota time regardless of the runtime zone", () => {
+    renderWithIntl(<OpenHouseBanner openHouseAt="2026-10-14T13:00:10Z" />);
+    expect(screen.getByText("miércoles, 14 de octubre de 2026, 8:00")).toBeTruthy();
+  });
+
+  it("stops ticking once the event has started", () => {
+    renderWithIntl(<OpenHouseBanner openHouseAt="2026-10-13T12:00:02Z" />);
+    act(() => {
+      vi.advanceTimersByTime(3000);
+    });
+    expect(vi.getTimerCount()).toBe(0);
+  });
 });

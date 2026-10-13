@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { NextIntlClientProvider } from "next-intl";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import es from "../../../../../messages/es.json";
@@ -87,6 +87,20 @@ describe("ListingPage", () => {
     expect(screen.getByAltText("Fachada").getAttribute("src")).toBe("https://x.test/1.jpg");
     expect(screen.getByRole("form", { name: "Contactar a la asesora" })).toBeTruthy();
     expect(screen.queryByLabelText("Casa abierta")).toBeNull();
+  });
+
+  it("sends the listing id with the contact form submission", async () => {
+    fetchListingBySlug.mockResolvedValue(listing);
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
+    vi.stubGlobal("fetch", fetchMock);
+    await renderPage();
+    fireEvent.change(screen.getByLabelText(/Nombre/), { target: { value: "Ana" } });
+    fireEvent.change(screen.getByLabelText(/Correo/), { target: { value: "ana@example.com" } });
+    fireEvent.change(screen.getByLabelText(/Mensaje/), { target: { value: "Hola" } });
+    fireEvent.submit(screen.getByRole("form", { name: "Contactar a la asesora" }));
+    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body).listing_id).toBe(listing.id);
+    vi.unstubAllGlobals();
   });
 
   it("omits optional fields and shows rent pricing in English", async () => {
