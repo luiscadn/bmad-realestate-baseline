@@ -64,3 +64,17 @@ export async function fetchListings(supabase: SupabaseClient, q: ListingsQuery):
     total_pages: Math.ceil(total / q.limit),
   };
 }
+
+/** Fetches one published listing by slug with ordered images and its agent, or null if absent/unpublished. */
+export async function fetchListingBySlug(supabase: SupabaseClient, slug: string): Promise<Record<string, unknown> | null> {
+  const { data, error } = await supabase
+    .from("listings")
+    .select("*, images:listing_images(*), agent:agents(*)")
+    .eq("slug", slug)
+    .not("published_at", "is", null)
+    .lte("published_at", new Date().toISOString())
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  if (!data) return null;
+  return { ...data, images: orderImages((data.images ?? []) as ListingImage[]) };
+}
