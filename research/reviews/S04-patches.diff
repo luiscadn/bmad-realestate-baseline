@@ -1,0 +1,64 @@
+diff --git a/src/lib/listing-by-slug.test.ts b/src/lib/listing-by-slug.test.ts
+index 7d50436..427d57d 100644
+--- a/src/lib/listing-by-slug.test.ts
++++ b/src/lib/listing-by-slug.test.ts
+@@ -1,5 +1,5 @@
+ import type { SupabaseClient } from "@supabase/supabase-js";
+-import { describe, expect, it } from "vitest";
++import { afterEach, describe, expect, it, vi } from "vitest";
+ import { fetchListingBySlug } from "./listings";
+ 
+ type Call = [string, ...unknown[]];
+@@ -18,6 +18,8 @@ function fakeClient(result: { data?: unknown; error?: { message: string } | null
+ }
+ 
+ describe("fetchListingBySlug", () => {
++  afterEach(() => vi.useRealTimers());
++
+   it("queries by slug, published only, with images and agent embedded", async () => {
+     const { client, calls } = fakeClient({ data: { id: "1", images: [] } });
+     await fetchListingBySlug(client, "casa-1");
+@@ -25,9 +27,25 @@ describe("fetchListingBySlug", () => {
+     expect(calls).toContainEqual(["select", "*, images:listing_images(*), agent:agents(*)"]);
+     expect(calls).toContainEqual(["eq", "slug", "casa-1"]);
+     expect(calls).toContainEqual(["not", "published_at", "is", null]);
+-    expect(calls.some((c) => c[0] === "lte" && c[1] === "published_at")).toBe(true);
+   });
+ 
++  it("cuts off unpublished rows at the current time", async () => {
++    vi.useFakeTimers();
++    vi.setSystemTime(new Date("2026-10-13T12:00:00.000Z"));
++    const { client, calls } = fakeClient({ data: { id: "1", images: [] } });
++    await fetchListingBySlug(client, "casa-1");
++    expect(calls).toContainEqual(["lte", "published_at", "2026-10-13T12:00:00.000Z"]);
++  });
++
++  it.each(["", "Casa-1", "casa_1", "casa--1", "-casa", "casa\u0000", "a/b"])(
++    "returns null without querying for malformed slug %j",
++    async (slug) => {
++      const { client, calls } = fakeClient({ data: { id: "1", images: [] } });
++      expect(await fetchListingBySlug(client, slug)).toBeNull();
++      expect(calls).toEqual([]);
++    },
++  );
++
+   it("orders images by position and keeps the agent", async () => {
+     const { client } = fakeClient({
+       data: {
+diff --git a/src/lib/listings.ts b/src/lib/listings.ts
+index 1387083..73d1f8c 100644
+--- a/src/lib/listings.ts
++++ b/src/lib/listings.ts
+@@ -65,8 +65,12 @@ export async function fetchListings(supabase: SupabaseClient, q: ListingsQuery):
+   };
+ }
+ 
++/** Mirrors the `listings.slug` CHECK constraint, so malformed input is a miss rather than a DB error. */
++const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
++
+ /** Fetches one published listing by slug with ordered images and its agent, or null if absent/unpublished. */
+ export async function fetchListingBySlug(supabase: SupabaseClient, slug: string): Promise<Record<string, unknown> | null> {
++  if (!SLUG_PATTERN.test(slug)) return null;
+   const { data, error } = await supabase
+     .from("listings")
+     .select("*, images:listing_images(*), agent:agents(*)")
