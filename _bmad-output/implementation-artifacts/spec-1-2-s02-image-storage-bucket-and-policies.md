@@ -27,3 +27,20 @@ context: []
 - Verified on local Supabase after `supabase db reset` (REST/Storage API as demo agent): bucket public, 10 MB / image mime limits; owner upload 200; upload to another listing's folder 403; anon upload 403; anon public GET 200; anon delete 403; owner delete 200; non-image mime 415.
 - `npx vitest run`, `tsc --noEmit`, `next build` pass. Persisting functions (`uploadListingImage`, `reorderListingImages`, `deleteListingImage`) are not unit-tested against a live DB; covered only by the API checks above.
 - Review subagents were not launched (not requested in this session); no review triage recorded.
+
+### Review Findings
+
+- [ ] [Review][Decision] Position writes are not atomic — concurrent `uploadListingImage` calls compute the same `nextPosition`, and `reorderListingImages` does N sequential UPDATEs, so a mid-loop failure leaves duplicate/partial positions (reads stay stable via created_at/id tie-break). Options: (a) accept as-is, (b) add a Postgres RPC that reorders/inserts in one transaction, (c) add a unique `(listing_id, position)` constraint (deferrable) plus retry. [listing-images.ts:uploadListingImage, reorderListingImages]
+- [ ] [Review][Decision] Storage SELECT policy exposes every object to `anon` via the list API, including images of unpublished (draft) listings that the `listing_images` RLS deliberately hides. Public GET by URL works without this policy on a public bucket. Options: (a) keep (matches "public-read"), (b) restrict anon select to objects whose listing is published, keeping owner select for upload/upsert. [20261013000100_storage_listing_images.sql:17-20]
+- [x] [Review][Patch] `pathFromPublicUrl` kept `?query`/`#hash` and threw on malformed percent-encoding, so a cache-busted URL would fail to delete the storage object [listing-images.ts:pathFromPublicUrl]
+- [x] [Review][Patch] `reorderListingImages` update and `deleteListingImage` delete ignored zero-row results (RLS filters silently), reporting success; update now also scoped by `listing_id` [listing-images.ts]
+- [x] [Review][Patch] `deleteListingImage` swallowed storage `remove` errors, leaving orphaned objects silently; now surfaced after the gap is closed [listing-images.ts:deleteListingImage]
+- [x] [Review][Patch] Persisting functions had no tests; added guard tests (orderedIds mismatch, zero-row delete) and URL edge cases [listing-images.test.ts]
+- [x] [Review][Defer] Deleting a listing cascades `listing_images` rows but leaves storage objects orphaned — deferred: needs a cleanup job/trigger, outside S02 scope
+- [x] [Review][Defer] No per-listing image count cap — deferred: not in the S02 spec; raise in a later story
+
+#### Rejected
+- Redundant index `listing_images_listing_position_created_idx` (S01 already has `(listing_id, position)`): low, harmless, deleting it is not worth a new migration; it does cover the `created_at` tie-break order.
+- `buildImagePath` does not validate `listingId` format: low, caller-controlled and storage RLS fails closed on non-owned folders.
+- Client-supplied `file.type` is spoofable: false, the bucket's `allowed_mime_types` enforces it server-side (spec notes 415 verified).
+- Non-idempotent `create policy` statements: low, migrations run once.

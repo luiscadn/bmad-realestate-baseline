@@ -66,7 +66,13 @@ export function moveImage(orderedIds: string[], id: string, toIndex: number): st
 export function pathFromPublicUrl(url: string): string | null {
   const marker = `/object/public/${LISTING_IMAGES_BUCKET}/`;
   const i = url.indexOf(marker);
-  return i === -1 ? null : decodeURIComponent(url.slice(i + marker.length));
+  if (i === -1) return null;
+  const raw = url.slice(i + marker.length).split(/[?#]/)[0];
+  try {
+    return raw ? decodeURIComponent(raw) : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function listListingImages(supabase: SupabaseClient, listingId: string): Promise<ListingImage[]> {
@@ -125,17 +131,26 @@ export async function reorderListingImages(
   }
   for (const [position, id] of orderedIds.entries()) {
     if (byId.get(id)!.position === position) continue;
-    const { error } = await supabase.from("listing_images").update({ position }).eq("id", id);
+    const { data, error } = await supabase
+      .from("listing_images")
+      .update({ position })
+      .eq("id", id)
+      .eq("listing_id", listingId)
+      .select("id");
     if (error) throw new ListingImageError(error.message);
+    // RLS filters rows silently: zero rows updated means not found or not permitted.
+    if (!data?.length) throw new ListingImageError(`Image ${id} could not be updated`);
   }
 }
 
 export async function deleteListingImage(supabase: SupabaseClient, image: ListingImage): Promise<void> {
-  const { error } = await supabase.from("listing_images").delete().eq("id", image.id);
+  const { data, error } = await supabase.from("listing_images").delete().eq("id", image.id).select("id");
   if (error) throw new ListingImageError(error.message);
+  if (!data?.length) throw new ListingImageError(`Image ${image.id} could not be deleted`);
   const path = pathFromPublicUrl(image.url);
-  if (path) await supabase.storage.from(LISTING_IMAGES_BUCKET).remove([path]);
+  const removal = path ? await supabase.storage.from(LISTING_IMAGES_BUCKET).remove([path]) : null;
   // Close the gap so positions stay dense.
   const remaining = await listListingImages(supabase, image.listing_id);
   await reorderListingImages(supabase, image.listing_id, remaining.map((i) => i.id));
+  if (removal?.error) throw new ListingImageError(`Image row deleted but storage object remains: ${removal.error.message}`);
 }
