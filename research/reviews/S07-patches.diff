@@ -1,0 +1,152 @@
+diff --git a/src/app/[locale]/layout.tsx b/src/app/[locale]/layout.tsx
+index 8ee2b88..0327ad0 100644
+--- a/src/app/[locale]/layout.tsx
++++ b/src/app/[locale]/layout.tsx
+@@ -40,7 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
+             {t("skipToContent")}
+           </a>
+           <Header />
+-          <main id="main-content" className="flex-1">
++          <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
+             {children}
+           </main>
+           <Footer />
+diff --git a/src/components/Header.test.tsx b/src/components/Header.test.tsx
+index 9cd5f0f..35cb8a8 100644
+--- a/src/components/Header.test.tsx
++++ b/src/components/Header.test.tsx
+@@ -14,6 +14,13 @@ describe("Header", () => {
+     expect(screen.getByRole("group", { name: "Idioma" })).toBeTruthy();
+   });
+ 
++  it("marks the current section link with aria-current", () => {
++    setMockLocation("/search/results");
++    renderWithIntl(<Header />);
++    expect(screen.getByRole("link", { name: "Propiedades" }).getAttribute("aria-current")).toBe("page");
++    expect(screen.getByRole("link", { name: "Contacto" }).getAttribute("aria-current")).toBeNull();
++  });
++
+   it("renders English strings", () => {
+     setMockLocation("/");
+     renderWithIntl(<Header />, "en");
+diff --git a/src/components/Header.tsx b/src/components/Header.tsx
+index 66fd7fd..ff16f6a 100644
+--- a/src/components/Header.tsx
++++ b/src/components/Header.tsx
+@@ -24,9 +24,10 @@ export default function Header() {
+     return () => document.removeEventListener("keydown", onKeyDown);
+   }, [open]);
+ 
++  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
+   const linkClass = (href: string) =>
+     `text-sm font-medium transition-colors hover:text-emerald-950 ${
+-      pathname === href ? "text-emerald-950" : "text-slate-600"
++      isActive(href) ? "text-emerald-950" : "text-slate-600"
+     }`;
+ 
+   return (
+@@ -41,7 +42,7 @@ export default function Header() {
+ 
+         <nav aria-label={t("mainNav")} className="hidden items-center gap-6 md:flex">
+           {navItems.map(({ key, href }) => (
+-            <Link key={key} href={href} className={linkClass(href)}>
++            <Link key={key} href={href} aria-current={isActive(href) ? "page" : undefined} className={linkClass(href)}>
+               {t(`nav.${key}`)}
+             </Link>
+           ))}
+diff --git a/src/components/LanguageSwitch.test.tsx b/src/components/LanguageSwitch.test.tsx
+index 2724dcb..1e3cb97 100644
+--- a/src/components/LanguageSwitch.test.tsx
++++ b/src/components/LanguageSwitch.test.tsx
+@@ -14,6 +14,14 @@ describe("LanguageSwitch", () => {
+     expect(en.getAttribute("href")).toBe("/en/search?operation=rent");
+   });
+ 
++  it("preserves repeated query parameters", () => {
++    setMockLocation("/search", "neighborhood=Granada&neighborhood=Pance");
++    renderWithIntl(<LanguageSwitch />, "es");
++    expect(screen.getByRole("link", { name: "English" }).getAttribute("href")).toBe(
++      "/en/search?neighborhood=Granada&neighborhood=Pance",
++    );
++  });
++
+   it("links back to the default locale without a prefix", () => {
+     setMockLocation("/search");
+     renderWithIntl(<LanguageSwitch />, "en");
+diff --git a/src/components/LanguageSwitch.tsx b/src/components/LanguageSwitch.tsx
+index 9f4badc..7be1eb6 100644
+--- a/src/components/LanguageSwitch.tsx
++++ b/src/components/LanguageSwitch.tsx
+@@ -10,7 +10,11 @@ export default function LanguageSwitch() {
+   const current = useLocale();
+   const pathname = usePathname();
+   const searchParams = useSearchParams();
+-  const query = Object.fromEntries(searchParams.entries());
++  const query: Record<string, string | string[]> = {};
++  for (const key of new Set(searchParams.keys())) {
++    const values = searchParams.getAll(key);
++    query[key] = values.length > 1 ? values : values[0];
++  }
+ 
+   return (
+     <div
+diff --git a/src/middleware.test.ts b/src/middleware.test.ts
+new file mode 100644
+index 0000000..10f5f19
+--- /dev/null
++++ b/src/middleware.test.ts
+@@ -0,0 +1,18 @@
++import { describe, expect, it } from "vitest";
++import { config } from "./middleware";
++
++describe("middleware matcher", () => {
++  const re = new RegExp(`^${config.matcher[0]}$`);
++
++  it("skips api, _next and files", () => {
++    for (const p of ["/api/listings", "/api", "/_next/static/x.js", "/favicon.ico"]) {
++      expect(re.test(p), p).toBe(false);
++    }
++  });
++
++  it("handles page routes, including ones that merely start with api", () => {
++    for (const p of ["/", "/en", "/search", "/api-docs", "/apartments"]) {
++      expect(re.test(p), p).toBe(true);
++    }
++  });
++});
+diff --git a/src/middleware.ts b/src/middleware.ts
+index fcf488a..6487497 100644
+--- a/src/middleware.ts
++++ b/src/middleware.ts
+@@ -4,5 +4,5 @@ import { routing } from "./i18n/routing";
+ export default createMiddleware(routing);
+ 
+ export const config = {
+-  matcher: ["/((?!api|_next|_vercel|.*\\..*).*)"],
++  matcher: ["/((?!api(?:/|$)|_next|_vercel|.*\\..*).*)"],
+ };
+diff --git a/src/test/setup.tsx b/src/test/setup.tsx
+index 75f441a..4cb4e39 100644
+--- a/src/test/setup.tsx
++++ b/src/test/setup.tsx
+@@ -21,14 +21,18 @@ vi.mock("@/i18n/navigation", () => ({
+     locale,
+     ...rest
+   }: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
+-    href: string | { pathname: string; query?: Record<string, string> };
++    href: string | { pathname: string; query?: Record<string, string | string[]> };
+     locale?: string;
+   }) => {
+     const path = typeof href === "string" ? href : href.pathname;
+     const qs =
+       typeof href === "string" || !href.query
+         ? ""
+-        : new URLSearchParams(href.query).toString();
++        : new URLSearchParams(
++            Object.entries(href.query).flatMap(([k, v]) =>
++              (Array.isArray(v) ? v : [v]).map((item): [string, string] => [k, item]),
++            ),
++          ).toString();
+     const query = qs ? `?${qs}` : "";
+     const prefix = locale && locale !== "es" ? `/${locale}` : "";
+     return <a href={`${prefix}${path === "/" && prefix ? "" : path}${query}`} {...rest} />;
