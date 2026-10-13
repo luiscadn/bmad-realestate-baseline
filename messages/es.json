@@ -1,0 +1,52 @@
+{
+  "Metadata": {
+    "title": "Victoria Ordoñez | Bienes Raíces en Cali",
+    "description": "Propiedades exclusivas y asesoría inmobiliaria personalizada en los mejores sectores de Cali."
+  },
+  "Common": {
+    "skipToContent": "Saltar al contenido"
+  },
+  "Header": {
+    "brand": "Victoria Ordoñez",
+    "tagline": "Bienes Raíces • Cali",
+    "homeLabel": "Victoria Ordoñez, inicio",
+    "mainNav": "Navegación principal",
+    "mobileNav": "Navegación móvil",
+    "nav": {
+      "search": "Propiedades",
+      "neighborhoods": "Sectores",
+      "about": "Sobre Victoria",
+      "contact": "Contacto"
+    },
+    "agentSignIn": "Ingreso Agente",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú"
+  },
+  "Language": {
+    "label": "Idioma",
+    "es": "ES",
+    "en": "EN",
+    "esName": "Español",
+    "enName": "English"
+  },
+  "Footer": {
+    "identityTitle": "Victoria Ordoñez",
+    "identityBlurb": "Asesora inmobiliaria en Cali, enfocada en los barrios del oeste y sur de la ciudad.",
+    "license": "Asesoría inmobiliaria independiente • Cali, Colombia",
+    "sectorsTitle": "Propiedades y sectores",
+    "sale": "En venta",
+    "rent": "En arriendo",
+    "navTitle": "Navegación",
+    "contactTitle": "Contacto directo",
+    "phoneLabel": "Teléfono",
+    "emailLabel": "Correo",
+    "addressLabel": "Oficina",
+    "address": "Av. 4A Norte, Granada, Cali, Valle del Cauca",
+    "whatsapp": "Escríbenos por WhatsApp",
+    "whatsappMessage": "Hola Victoria, quiero más información sobre sus propiedades.",
+    "copyright": "© {year} Victoria Ordoñez Bienes Raíces. Todos los derechos reservados.",
+    "privacy": "Política de privacidad",
+    "terms": "Términos de servicio",
+    "legalNotice": "Los precios y la disponibilidad pueden cambiar sin previo aviso. Protegemos tus datos conforme a la Ley 1581 de 2012 y los derechos del consumidor en Colombia."
+  }
+}

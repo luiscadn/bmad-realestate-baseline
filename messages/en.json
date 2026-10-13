@@ -1,0 +1,52 @@
+{
+  "Metadata": {
+    "title": "Victoria Ordoñez | Real Estate in Cali",
+    "description": "Exclusive properties and personalized real estate advice in the best neighborhoods of Cali."
+  },
+  "Common": {
+    "skipToContent": "Skip to content"
+  },
+  "Header": {
+    "brand": "Victoria Ordoñez",
+    "tagline": "Real Estate • Cali",
+    "homeLabel": "Victoria Ordoñez, home",
+    "mainNav": "Main navigation",
+    "mobileNav": "Mobile navigation",
+    "nav": {
+      "search": "Properties",
+      "neighborhoods": "Neighborhoods",
+      "about": "About Victoria",
+      "contact": "Contact"
+    },
+    "agentSignIn": "Agent Sign In",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
+  },
+  "Language": {
+    "label": "Language",
+    "es": "ES",
+    "en": "EN",
+    "esName": "Español",
+    "enName": "English"
+  },
+  "Footer": {
+    "identityTitle": "Victoria Ordoñez",
+    "identityBlurb": "Real estate advisor in Cali, focused on the western and southern neighborhoods of the city.",
+    "license": "Independent real estate advisory • Cali, Colombia",
+    "sectorsTitle": "Properties and neighborhoods",
+    "sale": "For sale",
+    "rent": "For rent",
+    "navTitle": "Navigation",
+    "contactTitle": "Direct contact",
+    "phoneLabel": "Phone",
+    "emailLabel": "Email",
+    "addressLabel": "Office",
+    "address": "Av. 4A Norte, Granada, Cali, Valle del Cauca",
+    "whatsapp": "Chat with us on WhatsApp",
+    "whatsappMessage": "Hello Victoria, I would like more information about your properties.",
+    "copyright": "© {year} Victoria Ordoñez Real Estate. All rights reserved.",
+    "privacy": "Privacy policy",
+    "terms": "Terms of service",
+    "legalNotice": "Prices and availability may change without notice. We protect your data in line with Colombian Law 1581 of 2012 and consumer protection rights."
+  }
+}
