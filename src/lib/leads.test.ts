@@ -42,7 +42,7 @@ describe("validateLead", () => {
     if (!r.ok) expect(Object.keys(r.errors).sort()).toEqual(["message", "name"]);
   });
 
-  it.each(["nope", "a@b", "a b@c.com", "@c.com", "a@@c.com"])("rejects invalid email %s", (email) => {
+  it.each(["nope", "a@b", "a b@c.com", "@c.com", "a@@c.com", "a@b..c", "a@.b.c", "a@b.c."])("rejects invalid email %s", (email) => {
     const r = validateLead({ ...valid, email });
     expect(r.ok).toBe(false);
     if (!r.ok) expect(r.errors.email).toMatch(/valid/);
@@ -56,5 +56,33 @@ describe("validateLead", () => {
   it("rejects a non-string phone", () => {
     const r = validateLead({ ...valid, phone: 123 });
     expect(r).toEqual({ ok: false, errors: { phone: expect.any(String) } });
+  });
+
+  it("normalizes blank optional strings to null", () => {
+    expect(validateLead({ ...valid, phone: "  ", listing_id: "   " })).toEqual({
+      ok: true,
+      value: { ...valid, phone: null, listing_id: null },
+    });
+  });
+
+  it("rejects a non-string listing_id", () => {
+    expect(validateLead({ ...valid, listing_id: 123 })).toEqual({ ok: false, errors: { listing_id: expect.any(String) } });
+  });
+
+  it("enforces the email length cap at 254 characters", () => {
+    const at = (n: number) => "a".repeat(n - "@b.co".length) + "@b.co";
+    expect(validateLead({ ...valid, email: at(254) }).ok).toBe(true);
+    const r = validateLead({ ...valid, email: at(255) });
+    expect(r.ok).toBe(false);
+    if (!r.ok) expect(r.errors.email).toMatch(/valid/);
+  });
+
+  it("enforces name, phone and message length caps", () => {
+    expect(validateLead({ ...valid, name: "n".repeat(200), phone: "1".repeat(40), message: "m".repeat(5000) }).ok).toBe(true);
+    const r = validateLead({ ...valid, name: "n".repeat(201), phone: "1".repeat(41), message: "m".repeat(5001) });
+    expect(r).toEqual({
+      ok: false,
+      errors: { name: expect.any(String), phone: expect.any(String), message: expect.any(String) },
+    });
   });
 });

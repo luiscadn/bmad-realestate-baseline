@@ -23,7 +23,9 @@ export async function POST(request: Request) {
     if (error) throw error;
     return NextResponse.json({ data: { received: true } }, { status: 201 });
   } catch (err) {
-    console.error("POST /api/leads failed", err);
+    // Log only code/message: PostgREST `details` can echo the rejected row (PII).
+    const { code, message } = (err ?? {}) as { code?: string; message?: string };
+    console.error("POST /api/leads failed", { code, message });
     return NextResponse.json({ error: "Failed to save lead" }, { status: 500 });
   }
 }

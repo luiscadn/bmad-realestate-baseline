@@ -70,6 +70,19 @@ describe("POST /api/leads", () => {
     expect(insert).not.toHaveBeenCalled();
   });
 
+  it("returns 400 for a JSON body that is not an object", async () => {
+    const res = await post([valid]);
+    expect(res.status).toBe(400);
+    expect((await res.json()).errors.body).toBeDefined();
+    expect(insert).not.toHaveBeenCalled();
+  });
+
+  it("does not log the rejected row details", async () => {
+    insert.mockResolvedValue({ error: { message: "boom", code: "23514", details: "Failing row contains (ana@example.com)" } });
+    await post(valid);
+    expect(JSON.stringify(vi.mocked(console.error).mock.calls)).not.toContain("ana@example.com");
+  });
+
   it("returns 500 when the database returns an error", async () => {
     insert.mockResolvedValue({ error: { message: "boom", code: "23503" } });
     const res = await post(valid);
