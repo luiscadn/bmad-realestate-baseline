@@ -40,7 +40,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             {t("skipToContent")}
           </a>
           <Header />
-          <main id="main-content" className="flex-1">
+          <main id="main-content" tabIndex={-1} className="flex-1 focus:outline-none">
             {children}
           </main>
           <Footer />

@@ -14,6 +14,13 @@ describe("Header", () => {
     expect(screen.getByRole("group", { name: "Idioma" })).toBeTruthy();
   });
 
+  it("marks the current section link with aria-current", () => {
+    setMockLocation("/search/results");
+    renderWithIntl(<Header />);
+    expect(screen.getByRole("link", { name: "Propiedades" }).getAttribute("aria-current")).toBe("page");
+    expect(screen.getByRole("link", { name: "Contacto" }).getAttribute("aria-current")).toBeNull();
+  });
+
   it("renders English strings", () => {
     setMockLocation("/");
     renderWithIntl(<Header />, "en");

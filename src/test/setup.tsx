@@ -21,14 +21,18 @@ vi.mock("@/i18n/navigation", () => ({
     locale,
     ...rest
   }: Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href"> & {
-    href: string | { pathname: string; query?: Record<string, string> };
+    href: string | { pathname: string; query?: Record<string, string | string[]> };
     locale?: string;
   }) => {
     const path = typeof href === "string" ? href : href.pathname;
     const qs =
       typeof href === "string" || !href.query
         ? ""
-        : new URLSearchParams(href.query).toString();
+        : new URLSearchParams(
+            Object.entries(href.query).flatMap(([k, v]) =>
+              (Array.isArray(v) ? v : [v]).map((item): [string, string] => [k, item]),
+            ),
+          ).toString();
     const query = qs ? `?${qs}` : "";
     const prefix = locale && locale !== "es" ? `/${locale}` : "";
     return <a href={`${prefix}${path === "/" && prefix ? "" : path}${query}`} {...rest} />;

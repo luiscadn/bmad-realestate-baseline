@@ -10,7 +10,11 @@ export default function LanguageSwitch() {
   const current = useLocale();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const query = Object.fromEntries(searchParams.entries());
+  const query: Record<string, string | string[]> = {};
+  for (const key of new Set(searchParams.keys())) {
+    const values = searchParams.getAll(key);
+    query[key] = values.length > 1 ? values : values[0];
+  }
 
   return (
     <div

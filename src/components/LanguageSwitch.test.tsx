@@ -14,6 +14,14 @@ describe("LanguageSwitch", () => {
     expect(en.getAttribute("href")).toBe("/en/search?operation=rent");
   });
 
+  it("preserves repeated query parameters", () => {
+    setMockLocation("/search", "neighborhood=Granada&neighborhood=Pance");
+    renderWithIntl(<LanguageSwitch />, "es");
+    expect(screen.getByRole("link", { name: "English" }).getAttribute("href")).toBe(
+      "/en/search?neighborhood=Granada&neighborhood=Pance",
+    );
+  });
+
   it("links back to the default locale without a prefix", () => {
     setMockLocation("/search");
     renderWithIntl(<LanguageSwitch />, "en");

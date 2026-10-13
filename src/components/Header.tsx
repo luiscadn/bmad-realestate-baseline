@@ -24,9 +24,10 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [open]);
 
+  const isActive = (href: string) => pathname === href || pathname.startsWith(`${href}/`);
   const linkClass = (href: string) =>
     `text-sm font-medium transition-colors hover:text-emerald-950 ${
-      pathname === href ? "text-emerald-950" : "text-slate-600"
+      isActive(href) ? "text-emerald-950" : "text-slate-600"
     }`;
 
   return (
@@ -41,7 +42,7 @@ export default function Header() {
 
         <nav aria-label={t("mainNav")} className="hidden items-center gap-6 md:flex">
           {navItems.map(({ key, href }) => (
-            <Link key={key} href={href} className={linkClass(href)}>
+            <Link key={key} href={href} aria-current={isActive(href) ? "page" : undefined} className={linkClass(href)}>
               {t(`nav.${key}`)}
             </Link>
           ))}
