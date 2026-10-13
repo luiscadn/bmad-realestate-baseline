@@ -1,0 +1,71 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index e4a2796..26418ff 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -2,3 +2,7 @@
+ ## Deferred from: code review of spec-1-2-s02 (2026-10-13)
+ - Listing deletion cascades `listing_images` rows but orphans storage objects; needs cleanup trigger/job.
+ - No per-listing image count cap in upload service.
++
++## Deferred from: code review of spec-1-3-s03 (2026-10-13)
++
++- `GET /api/listings` `neighborhood` filter: PostgREST maps `*` in `ilike` values to `%`, so `Gran*` acts as a wildcard rather than an exact match. Low severity; verify against a live PostgREST, then substitute or reject `*`.
+diff --git a/_bmad-output/implementation-artifacts/spec-1-3-s03-get-api-listings-with-filters-sorting-and-pagination.md b/_bmad-output/implementation-artifacts/spec-1-3-s03-get-api-listings-with-filters-sorting-and-pagination.md
+index b62ccc4..8d0d83e 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-3-s03-get-api-listings-with-filters-sorting-and-pagination.md
++++ b/_bmad-output/implementation-artifacts/spec-1-3-s03-get-api-listings-with-filters-sorting-and-pagination.md
+@@ -31,3 +31,10 @@ context: []
+ - low (rejected): neighborhood is exact case-insensitive match — decided in Implementation Notes; accent-insensitive/partial search is a future enhancement.
+ - low (rejected): `select("*")` — every `listings` column is public by RLS design; no internal fields exist in the schema.
+ - low (rejected): cache headers, rate limiting, unknown-param rejection, repeated params, per-request client, loose `data` typing — hardening/ideas outside S03 scope; typing arrives with the UI stories.
++
++### Review Findings
++
++- [x] [Review][Patch] `bedrooms`/`bathrooms` accepted any safe integer; values above 32767 overflow the `smallint` columns and would surface as a 500 instead of a 400 [src/lib/listings-query.ts:55] — fixed: capped at `MAX_SMALLINT`, tests added
++- [x] [Review][Defer] ilike on `neighborhood` — PostgREST treats `*` in `ilike` values as `%`, so "Gran*" is a wildcard rather than a literal [src/lib/listings.ts:30] — deferred: low severity, unverified without a live DB; confirm against PostgREST and decide whether to substitute or reject `*`
++
++**Rejected:** duplicate query params use the first value (already rejected in triage log); unbounded `neighborhood` length (URL length limits bound it); client-side `published_at <= now()` clock skew (RLS enforces the real bound); exact `count` cost per request (acceptable at current scale).
+diff --git a/src/lib/listings-query.test.ts b/src/lib/listings-query.test.ts
+index 70d86f2..edde942 100644
+--- a/src/lib/listings-query.test.ts
++++ b/src/lib/listings-query.test.ts
+@@ -1,5 +1,5 @@
+ import { describe, expect, it } from "vitest";
+-import { DEFAULT_LIMIT, MAX_LIMIT, MAX_PAGE, parseListingsQuery } from "./listings-query";
++import { DEFAULT_LIMIT, MAX_LIMIT, MAX_PAGE, MAX_SMALLINT, parseListingsQuery } from "./listings-query";
+ 
+ const parse = (qs: string) => parseListingsQuery(new URLSearchParams(qs));
+ 
+@@ -45,6 +45,8 @@ describe("parseListingsQuery", () => {
+     ["max_price=1.5", "max_price"],
+     ["bedrooms=-1", "bedrooms"],
+     ["bathrooms=x", "bathrooms"],
++    [`bedrooms=${MAX_SMALLINT + 1}`, "bedrooms"],
++    [`bathrooms=${MAX_SMALLINT + 1}`, "bathrooms"],
+     ["page=0", "page"],
+     ["page=1e3", "page"],
+     [`page=${MAX_PAGE + 1}`, "page"],
+diff --git a/src/lib/listings-query.ts b/src/lib/listings-query.ts
+index 43bc2cd..9c7be3a 100644
+--- a/src/lib/listings-query.ts
++++ b/src/lib/listings-query.ts
+@@ -5,6 +5,8 @@ export const SORTS = ["price_asc", "price_desc", "newest"] as const;
+ export const DEFAULT_LIMIT = 12;
+ export const MAX_LIMIT = 50;
+ export const MAX_PAGE = 100_000;
++/** `bedrooms`/`bathrooms` are smallint columns; larger values make Postgres raise "out of range". */
++export const MAX_SMALLINT = 32_767;
+ 
+ export type Operation = (typeof OPERATIONS)[number];
+ export type PropertyType = (typeof PROPERTY_TYPES)[number];
+@@ -60,8 +62,8 @@ export function parseListingsQuery(params: URLSearchParams): ParseResult {
+   const sort = oneOf("sort", SORTS) ?? "newest";
+   const minPrice = int("min_price", 0);
+   const maxPrice = int("max_price", 0);
+-  const bedrooms = int("bedrooms", 0);
+-  const bathrooms = int("bathrooms", 0);
++  const bedrooms = int("bedrooms", 0, MAX_SMALLINT);
++  const bathrooms = int("bathrooms", 0, MAX_SMALLINT);
+   const page = int("page", 1, MAX_PAGE) ?? 1;
+   const limit = int("limit", 1, MAX_LIMIT) ?? DEFAULT_LIMIT;
+   const neighborhood = read(params, "neighborhood");
