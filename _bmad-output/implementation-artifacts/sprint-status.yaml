@@ -1,0 +1,53 @@
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created, ready for development
+#   - in-progress: Developer actively working on implementation
+#   - review: Implementation complete, ready for review
+#   - done: Story completed
+
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+
+# Action Item Status:
+#   - open: Committed during a retrospective, not yet addressed
+#   - in-progress: Actively being worked on
+#   - done: Completed
+
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when its first story starts (via build's sprint sync)
+# - Stories can be worked in parallel if team capacity allows
+# - Developer typically creates the next story after the previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+# - Retrospective appends its action items to action_items; the status view surfaces open ones
+generated: 10-13-2026 12:37
+last_updated: 10-13-2026 12:37
+project: Bmad-RealEstate
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+development_status:
+  epic-1: backlog
+  1-1-s01-schema-and-migrations-for-agents-listings-listing_images: backlog
+  1-2-s02-image-storage-bucket-and-policies-with-listing-image-upl: backlog
+  1-3-s03-get-api-listings-with-filters-sorting-and-pagination: backlog
+  1-4-s04-get-api-listings-slug: backlog
+  1-5-s05-post-api-leads-contact-the-agent-form: backlog
+  1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpubl: backlog
+  1-7-s07-app-layout-header-footer-language-switch-responsive-nav: backlog
+  1-8-s08-home-hero-with-search-bar-featured-listings-services-car: backlog
+  1-9-s09-listingcard-and-results-grid-with-filters-panel: backlog
+  1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: backlog
+  1-11-s11-map-list-toggle-on-search: backlog
+  1-12-s12-newsletter-signup-testimonials-and-resources-sections: backlog
+  1-13-s13-newsletter-subscribers-table-and-policies: backlog
+  1-14-s14-agent-dashboard-listings-table-and-create-edit-form: backlog
+  epic-1-retrospective: optional
