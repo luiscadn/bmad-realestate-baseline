@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_LIMIT, MAX_LIMIT, MAX_PAGE, parseListingsQuery } from "./listings-query";
+import { DEFAULT_LIMIT, MAX_LIMIT, MAX_PAGE, MAX_SMALLINT, parseListingsQuery } from "./listings-query";
 
 const parse = (qs: string) => parseListingsQuery(new URLSearchParams(qs));
 
@@ -45,6 +45,8 @@ describe("parseListingsQuery", () => {
     ["max_price=1.5", "max_price"],
     ["bedrooms=-1", "bedrooms"],
     ["bathrooms=x", "bathrooms"],
+    [`bedrooms=${MAX_SMALLINT + 1}`, "bedrooms"],
+    [`bathrooms=${MAX_SMALLINT + 1}`, "bathrooms"],
     ["page=0", "page"],
     ["page=1e3", "page"],
     [`page=${MAX_PAGE + 1}`, "page"],

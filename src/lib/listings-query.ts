@@ -5,6 +5,8 @@ export const SORTS = ["price_asc", "price_desc", "newest"] as const;
 export const DEFAULT_LIMIT = 12;
 export const MAX_LIMIT = 50;
 export const MAX_PAGE = 100_000;
+/** `bedrooms`/`bathrooms` are smallint columns; larger values make Postgres raise "out of range". */
+export const MAX_SMALLINT = 32_767;
 
 export type Operation = (typeof OPERATIONS)[number];
 export type PropertyType = (typeof PROPERTY_TYPES)[number];
@@ -60,8 +62,8 @@ export function parseListingsQuery(params: URLSearchParams): ParseResult {
   const sort = oneOf("sort", SORTS) ?? "newest";
   const minPrice = int("min_price", 0);
   const maxPrice = int("max_price", 0);
-  const bedrooms = int("bedrooms", 0);
-  const bathrooms = int("bathrooms", 0);
+  const bedrooms = int("bedrooms", 0, MAX_SMALLINT);
+  const bathrooms = int("bathrooms", 0, MAX_SMALLINT);
   const page = int("page", 1, MAX_PAGE) ?? 1;
   const limit = int("limit", 1, MAX_LIMIT) ?? DEFAULT_LIMIT;
   const neighborhood = read(params, "neighborhood");

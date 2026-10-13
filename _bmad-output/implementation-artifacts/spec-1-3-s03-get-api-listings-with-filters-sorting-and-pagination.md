@@ -31,3 +31,10 @@ context: []
 - low (rejected): neighborhood is exact case-insensitive match — decided in Implementation Notes; accent-insensitive/partial search is a future enhancement.
 - low (rejected): `select("*")` — every `listings` column is public by RLS design; no internal fields exist in the schema.
 - low (rejected): cache headers, rate limiting, unknown-param rejection, repeated params, per-request client, loose `data` typing — hardening/ideas outside S03 scope; typing arrives with the UI stories.
+
+### Review Findings
+
+- [x] [Review][Patch] `bedrooms`/`bathrooms` accepted any safe integer; values above 32767 overflow the `smallint` columns and would surface as a 500 instead of a 400 [src/lib/listings-query.ts:55] — fixed: capped at `MAX_SMALLINT`, tests added
+- [x] [Review][Defer] ilike on `neighborhood` — PostgREST treats `*` in `ilike` values as `%`, so "Gran*" is a wildcard rather than a literal [src/lib/listings.ts:30] — deferred: low severity, unverified without a live DB; confirm against PostgREST and decide whether to substitute or reject `*`
+
+**Rejected:** duplicate query params use the first value (already rejected in triage log); unbounded `neighborhood` length (URL length limits bound it); client-side `published_at <= now()` clock skew (RLS enforces the real bound); exact `count` cost per request (acceptable at current scale).
