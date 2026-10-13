@@ -60,3 +60,10 @@ describe("SearchResults map view", () => {
     expect(screen.getByRole("link", { name: /Siguiente/ }).getAttribute("href")).toBe("/search?operation=sale&view=map&page=2");
   });
 });
+
+describe("SearchResults reset link", () => {
+  it("keeps view=map when clearing an empty map result", () => {
+    renderWithIntl(<SearchResults listings={[]} total={0} page={1} totalPages={0} query={{ operation: "sale" }} view="map" />);
+    expect(screen.getByRole("link", { name: /Limpiar|filtros/i }).getAttribute("href")).toBe("/search?view=map");
+  });
+});

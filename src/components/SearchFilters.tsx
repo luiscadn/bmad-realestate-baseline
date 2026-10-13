@@ -145,7 +145,7 @@ export default function SearchFilters({ values, view = "grid" }: { values: Searc
         >
           {t("filters.apply")}
         </button>
-        <Link href="/search" className="text-sm font-medium text-emerald-800 hover:underline">
+        <Link href={{ pathname: "/search", query: view === "map" ? { view } : {} }} className="text-sm font-medium text-emerald-800 hover:underline">
           {t("filters.reset")}
         </Link>
       </div>

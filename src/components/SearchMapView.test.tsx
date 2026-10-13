@@ -76,11 +76,14 @@ describe("SearchMapView", () => {
 
   it("switches the mobile pane between list and map", () => {
     renderWithIntl(<SearchMapView listings={[make("1")]} />, "en");
-    expect(screen.getByTestId("map-pane").className).toContain("block");
-    expect(screen.getByTestId("map-list").className).toContain("hidden");
+    const tokens = (id: string) => screen.getByTestId(id).className.split(/\s+/);
+    expect(tokens("map-pane")).toContain("block");
+    expect(tokens("map-list")).toContain("hidden");
     fireEvent.click(screen.getByRole("button", { name: "List" }));
-    expect(screen.getByTestId("map-list").className).not.toContain("hidden lg:grid");
-    expect(screen.getByTestId("map-pane").className).toContain("hidden");
+    expect(tokens("map-list")).toContain("grid");
+    expect(tokens("map-list")).not.toContain("hidden");
+    expect(tokens("map-pane")).toContain("hidden");
+    expect(tokens("map-pane")).not.toContain("block");
     expect(screen.getByRole("button", { name: "List" }).getAttribute("aria-pressed")).toBe("true");
   });
 });

@@ -20,7 +20,7 @@ export default function SearchResults({ listings, total, page, totalPages, query
   const tFilters = useTranslations("Search.filters");
   const reset = (
     <Link
-      href="/search"
+      href={{ pathname: "/search", query: view === "map" ? { view } : {} }}
       className="mt-4 inline-block rounded-lg bg-emerald-900 px-5 py-2.5 text-sm font-semibold text-white hover:bg-emerald-800"
     >
       {tFilters("reset")}

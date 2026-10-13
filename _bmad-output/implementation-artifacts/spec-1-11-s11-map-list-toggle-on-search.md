@@ -2,7 +2,7 @@
 title: 'S11 Map/list toggle on /search'
 type: 'feature'
 created: '2026-10-13'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 ---
@@ -46,7 +46,7 @@ review_loop_iteration: 0
 ## Tasks & Acceptance
 
 **Execution:**
-- [ ] lib + components + page wiring + messages + Vitest tests for each
+- [x] lib + components + page wiring + messages + Vitest tests for each
 
 **Acceptance Criteria:**
 - Given `view=map`, when the page renders, then pins match listings with coordinates and selecting one shows the preview card with a link to the listing.
@@ -59,3 +59,19 @@ review_loop_iteration: 0
 **Commands:**
 - `npm test` -- all pass
 - `npm run build` -- succeeds
+
+### Review Findings
+
+- [x] [Review][Patch] Reset links dropped `view=map` in SearchResults and SearchFilters; fixed to preserve view
+- [x] [Review][Patch] Map distortion due to independent axis scaling in map-view.ts; fixed to share one span
+- [x] [Review][Patch] Blank strings and booleans accepted as valid coordinates; tightened isCoordinate
+- [x] [Review][Patch] Weak class substring match in SearchMapView.test.tsx; changed to exact class token match
+- [x] [Review][Patch] Verified filters preserve view in URL rewrites via FormData hidden input
+- [x] [Review][Defer] Identical coordinates stack pins so only top is clickable
+- [x] [Review][Defer] Preview card can cover pins near map bottom
+- [x] [Review][Defer] Rent and sale pins share styling (no /month suffix on rent pin)
+- [x] [Review][Defer] Mobile default tab is map; selected card does not auto-scroll list
+- [x] [Review][Defer] Focus does not return to pin when preview card closes
+- [x] [Review][Defer] Stale selectedId survives page changes
+- [x] [Review][Defer] Map covers only current page of paginated results
+

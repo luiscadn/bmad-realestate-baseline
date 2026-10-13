@@ -60,6 +60,20 @@ describe("projectPins", () => {
     expect(pins).toHaveLength(1);
   });
 
+  it("rejects blank and boolean coordinates instead of pinning them at 0,0", () => {
+    const { pins, missing } = projectPins([make("b", " " as unknown as number, 0), make("t", true as unknown as number, 0)]);
+    expect(pins).toHaveLength(0);
+    expect(missing).toBe(2);
+  });
+
+  it("keeps the aspect ratio: equal longitude and latitude spans give equal pixel spans", () => {
+    const { pins } = projectPins([make("a", 3.4, -76.5), make("b", 3.4, -76.4), make("c", 3.5, -76.5)]);
+    const [a, b, c] = pins;
+    expect(b.x - a.x).toBeGreaterThan(0);
+    expect(a.y - c.y).toBeGreaterThan(0);
+    expect(Math.abs(b.x - a.x - (a.y - c.y))).toBeLessThan(2);
+  });
+
   it("returns no pins for an empty list", () => {
     expect(projectPins([])).toEqual({ pins: [], missing: 0 });
   });

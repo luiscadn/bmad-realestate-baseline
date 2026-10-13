@@ -20,15 +20,17 @@ const PADDING = 10;
 const MIN_SPAN = 0.02;
 
 const isCoordinate = (value: unknown, limit: number): value is number =>
-  value !== null && value !== undefined && value !== "" && Number.isFinite(Number(value)) && Math.abs(Number(value)) <= limit;
+  (typeof value === "number" || (typeof value === "string" && value.trim() !== "")) &&
+  Number.isFinite(Number(value)) &&
+  Math.abs(Number(value)) <= limit;
 
 const mercatorY = (latitude: number) => {
   const rad = (Math.min(Math.max(latitude, -85), 85) * Math.PI) / 180;
   return (Math.log(Math.tan(Math.PI / 4 + rad / 2)) * 180) / Math.PI;
 };
 
-function scale(value: number, min: number, max: number): number {
-  const span = Math.max(max - min, MIN_SPAN);
+/** `span` is shared by both axes so the projection keeps its aspect ratio instead of stretching each axis to fit. */
+function scale(value: number, min: number, max: number, span: number): number {
   const center = (min + max) / 2;
   return PADDING + ((value - (center - span / 2)) / span) * (100 - 2 * PADDING);
 }
@@ -42,11 +44,13 @@ export function projectPins(listings: FeaturedListing[]): { pins: MapPin[]; miss
   const ys = located.map((l) => mercatorY(Number(l.latitude)));
   const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)];
 
+  const span = Math.max(maxX - minX, maxY - minY, MIN_SPAN);
+
   const pins = located.map((listing, i) => ({
     listing,
-    x: scale(xs[i], minX, maxX),
+    x: scale(xs[i], minX, maxX, span),
     // Screen y grows downward while latitude grows upward.
-    y: 100 - scale(ys[i], minY, maxY),
+    y: 100 - scale(ys[i], minY, maxY, span),
   }));
   return { pins, missing: listings.length - located.length };
 }
