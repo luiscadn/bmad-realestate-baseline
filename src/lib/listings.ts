@@ -65,8 +65,12 @@ export async function fetchListings(supabase: SupabaseClient, q: ListingsQuery):
   };
 }
 
+/** Mirrors the `listings.slug` CHECK constraint, so malformed input is a miss rather than a DB error. */
+const SLUG_PATTERN = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
 /** Fetches one published listing by slug with ordered images and its agent, or null if absent/unpublished. */
 export async function fetchListingBySlug(supabase: SupabaseClient, slug: string): Promise<Record<string, unknown> | null> {
+  if (!SLUG_PATTERN.test(slug)) return null;
   const { data, error } = await supabase
     .from("listings")
     .select("*, images:listing_images(*), agent:agents(*)")

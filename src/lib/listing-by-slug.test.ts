@@ -1,5 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { fetchListingBySlug } from "./listings";
 
 type Call = [string, ...unknown[]];
@@ -18,6 +18,8 @@ function fakeClient(result: { data?: unknown; error?: { message: string } | null
 }
 
 describe("fetchListingBySlug", () => {
+  afterEach(() => vi.useRealTimers());
+
   it("queries by slug, published only, with images and agent embedded", async () => {
     const { client, calls } = fakeClient({ data: { id: "1", images: [] } });
     await fetchListingBySlug(client, "casa-1");
@@ -25,8 +27,24 @@ describe("fetchListingBySlug", () => {
     expect(calls).toContainEqual(["select", "*, images:listing_images(*), agent:agents(*)"]);
     expect(calls).toContainEqual(["eq", "slug", "casa-1"]);
     expect(calls).toContainEqual(["not", "published_at", "is", null]);
-    expect(calls.some((c) => c[0] === "lte" && c[1] === "published_at")).toBe(true);
   });
+
+  it("cuts off unpublished rows at the current time", async () => {
+    vi.useFakeTimers();
+    vi.setSystemTime(new Date("2026-10-13T12:00:00.000Z"));
+    const { client, calls } = fakeClient({ data: { id: "1", images: [] } });
+    await fetchListingBySlug(client, "casa-1");
+    expect(calls).toContainEqual(["lte", "published_at", "2026-10-13T12:00:00.000Z"]);
+  });
+
+  it.each(["", "Casa-1", "casa_1", "casa--1", "-casa", "casa\u0000", "a/b"])(
+    "returns null without querying for malformed slug %j",
+    async (slug) => {
+      const { client, calls } = fakeClient({ data: { id: "1", images: [] } });
+      expect(await fetchListingBySlug(client, slug)).toBeNull();
+      expect(calls).toEqual([]);
+    },
+  );
 
   it("orders images by position and keeps the agent", async () => {
     const { client } = fakeClient({
