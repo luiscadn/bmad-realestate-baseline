@@ -1,20 +1,36 @@
+"use client";
+
+import type { FormEvent } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import { PROPERTY_TYPES } from "@/lib/listings-query";
 import { footerNeighborhoods } from "@/lib/site";
 
 const fieldClass =
   "w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-sm text-slate-800 focus:border-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-700/30";
 
-/** Plain GET form: works without JS and keeps the current locale prefix. */
+/** GET form that works without JS; with JS it drops empty fields so "no filter" never lands in the URL. */
 export default function HeroSearch() {
   const t = useTranslations("Home");
   const locale = useLocale();
+  const router = useRouter();
   const action = locale === "es" ? "/search" : `/${locale}/search`;
+
+  function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const params = new URLSearchParams();
+    for (const [key, value] of new FormData(event.currentTarget)) {
+      if (typeof value === "string" && value) params.set(key, value);
+    }
+    const qs = params.toString();
+    router.push(qs ? `/search?${qs}` : "/search");
+  }
 
   return (
     <form
       method="get"
       action={action}
+      onSubmit={onSubmit}
       role="search"
       aria-label={t("search.label")}
       className="grid gap-3 rounded-2xl bg-white p-4 shadow-xl sm:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr_auto] lg:items-end"

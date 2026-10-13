@@ -2,7 +2,7 @@
 title: 'S08 - Home hero with search bar, featured listings, services cards'
 type: 'feature'
 created: '2026-10-13'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 context: ['{project-root}/docs/design-reference.md']
@@ -61,3 +61,15 @@ context: ['{project-root}/docs/design-reference.md']
 
 **Commands:**
 - `npm test`, `npx tsc --noEmit`, `npm run lint`, `npm run build`
+
+### Review Findings
+
+- [x] [Review][Patch] Search form submitted empty fields (`/search?operation=&neighborhood=&property_type=`), violating "empty fields are omitted" / "Empty search → `/search`" [src/components/HeroSearch.tsx] — fixed: client `onSubmit` builds params from non-empty values and pushes via the locale-aware router; plain GET form kept as no-JS fallback; tests added for empty and partial submit.
+- [x] [Review][Defer] Featured images use raw `<img>` with full-size originals (up to 10 MB), no `sizes`/srcset [src/components/FeaturedListings.tsx] — deferred: needs `next/image` plus `remotePatterns` config for the Supabase host; best done with S09 `ListingCard`.
+- [x] [Review][Defer] "Sell" service card and "View all" link target `/contact` and `/search`, which 404 until S09 [src/components/HomeSections.tsx] — deferred: spec forbids building those pages in S08.
+- [x] [Review][Defer] `revalidate = 300` caches the empty fallback for 5 minutes if the fetch fails once [src/app/[locale]/page.tsx] — deferred: low impact, fix would need cache-aware error handling.
+
+#### Rejected
+- Catalog es/en parity: false — en.json and es.json have identical `Home` keys and the existing i18n parity test passes.
+- Neighborhood accent matching ("El Peñón"): false — `/api/listings` uses `ilike` with `escapeLike`, and the options come from the same `footerNeighborhoods` list.
+- `Number(price_cop)` / `Number(area_m2)` on string numerics: false — conversion handles both number and numeric-string values.

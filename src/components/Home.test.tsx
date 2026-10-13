@@ -1,5 +1,6 @@
-import { screen, within } from "@testing-library/react";
-import { describe, expect, it } from "vitest";
+import { fireEvent, screen, within } from "@testing-library/react";
+import { beforeEach, describe, expect, it } from "vitest";
+import { routerPush } from "@/test/setup";
 import { renderWithIntl } from "@/test/render";
 import type { FeaturedListing } from "@/lib/featured-listings";
 import FeaturedListings from "./FeaturedListings";
@@ -21,6 +22,8 @@ const listing: FeaturedListing = {
 };
 
 describe("HeroSearch", () => {
+  beforeEach(() => routerPush.mockClear());
+
   it("is a GET form to the locale's /search with the listing query param names", () => {
     const { container, unmount } = renderWithIntl(<HeroSearch />, "es");
     const form = container.querySelector("form")!;
@@ -38,6 +41,21 @@ describe("HeroSearch", () => {
     const data = new URLSearchParams(new FormData(container.querySelector("form")!) as unknown as Record<string, string>);
     expect([...data.values()].every((v) => v === "")).toBe(true);
     expect(screen.getByRole("button", { name: "Buscar" })).toBeTruthy();
+  });
+
+  it("pushes /search with no params when nothing is selected", () => {
+    const { container } = renderWithIntl(<HeroSearch />);
+    fireEvent.submit(container.querySelector("form")!);
+    expect(routerPush).toHaveBeenCalledWith("/search");
+  });
+
+  it("pushes only the chosen params", () => {
+    const { container } = renderWithIntl(<HeroSearch />);
+    const form = container.querySelector("form")!;
+    fireEvent.change(form.querySelector("select[name=operation]")!, { target: { value: "sale" } });
+    fireEvent.change(form.querySelector("select[name=neighborhood]")!, { target: { value: "Granada" } });
+    fireEvent.submit(form);
+    expect(routerPush).toHaveBeenCalledWith("/search?operation=sale&neighborhood=Granada");
   });
 });
 
