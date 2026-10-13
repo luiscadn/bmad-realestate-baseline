@@ -175,5 +175,74 @@
       "area": "{count} m²",
       "perMonth": "/mes"
     }
+  },
+  "Listing": {
+    "forSale": "En venta",
+    "forRent": "En arriendo",
+    "perMonth": "/mes",
+    "description": "Descripción",
+    "gallery": {
+      "label": "Galería de fotos",
+      "noImage": "Sin fotos",
+      "previous": "Foto anterior",
+      "next": "Foto siguiente",
+      "counter": "{current} de {total}",
+      "show": "Ver foto {number}"
+    },
+    "facts": {
+      "title": "Características",
+      "bedrooms": "Habitaciones",
+      "bathrooms": "Baños",
+      "parking": "Parqueaderos",
+      "area": "Área",
+      "areaValue": "{count, number} m²",
+      "stratum": "Estrato",
+      "adminFee": "Administración"
+    },
+    "openHouse": {
+      "label": "Casa abierta",
+      "title": "Casa abierta",
+      "startsIn": "Comienza en",
+      "days": "días",
+      "hours": "horas",
+      "minutes": "min",
+      "seconds": "seg"
+    },
+    "agent": {
+      "title": "Asesora"
+    },
+    "contact": {
+      "title": "Contactar a la asesora",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "phone": "Teléfono",
+      "message": "Mensaje",
+      "submit": "Enviar consulta",
+      "sending": "Enviando…",
+      "success": "¡Gracias! Recibimos tu consulta y te contactaremos pronto.",
+      "error": "No pudimos enviar tu consulta. Inténtalo de nuevo.",
+      "errors": {
+        "name": {
+          "required": "Ingresa tu nombre.",
+          "invalid": "Nombre no válido.",
+          "tooLong": "El nombre es demasiado largo."
+        },
+        "email": {
+          "required": "Ingresa tu correo.",
+          "invalid": "Ingresa un correo válido.",
+          "tooLong": "El correo es demasiado largo."
+        },
+        "phone": {
+          "required": "Ingresa tu teléfono.",
+          "invalid": "Ingresa un teléfono válido.",
+          "tooLong": "El teléfono es demasiado largo."
+        },
+        "message": {
+          "required": "Escribe un mensaje.",
+          "invalid": "Mensaje no válido.",
+          "tooLong": "El mensaje es demasiado largo."
+        }
+      }
+    }
   }
 }

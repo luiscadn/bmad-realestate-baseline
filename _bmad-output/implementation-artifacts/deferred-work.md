@@ -27,3 +27,8 @@
 - Page past the last page shows "no properties match" although total > 0 [src/components/SearchResults.tsx:36]; only reachable through stale links; fix needs new copy and a branch.
 - `remotePatterns` is read at build time; images from any other host are not optimized [next.config.ts:10]; matches spec; revisit if non-Supabase image URLs appear.
 
+
+## Deferred from: spec-1-10-s10
+- Contact form gives the same generic error for 400 and 500; field-level server errors are not mapped back to inputs.
+- Open-house countdown and "no photo" states have no e2e/browser coverage; only jsdom tests.
+- Seed data has no `stratum` / `admin_fee_cop` values; apply migration `20261013000200` locally before checking the facts grid.
