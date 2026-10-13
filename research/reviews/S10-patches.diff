@@ -1,0 +1,168 @@
+diff --git a/_bmad-output/implementation-artifacts/spec-1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-contact-form.md b/_bmad-output/implementation-artifacts/spec-1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-contact-form.md
+index 04bb6f1..2582f5b 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-contact-form.md
++++ b/_bmad-output/implementation-artifacts/spec-1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-contact-form.md
+@@ -2,7 +2,7 @@
+ title: 'S10 Listing detail page: gallery, facts, open-house countdown, contact form'
+ type: 'feature'
+ created: '2026-10-13'
+-status: 'in-review'
++status: 'done'
+ baseline_commit: '0dcbaac81794c8c5242c18a9339a25bfdc6075ca'
+ route: 'dispatch'
+ review_loop_iteration: 0
+@@ -88,3 +88,15 @@ context: []
+ - `npm test` -- expected: all pass
+ - `npm run build` -- expected: success
+ - `npm run lint` -- expected: no errors
++
++### Review Findings
++
++- [x] [Review][Patch] Open-house interval kept running after the event started [src/components/OpenHouseBanner.tsx]
++- [x] [Review][Patch] Countdown `<dd>` rendered before its `<dt>` (invalid `dl`); fixed with `flex-col-reverse` [src/components/OpenHouseBanner.tsx]
++- [x] [Review][Patch] `<aside role="region">` overrode the complementary landmark; now a `<section>` [src/components/OpenHouseBanner.tsx]
++- [x] [Review][Patch] Empty-string `alt_text` left the main photo without alt (`??` to `||`) [src/components/ListingGallery.tsx]
++- [x] [Review][Patch] `area_m2` of `"0.00"` rendered "0 m²"; now a numeric `> 0` guard [src/app/[locale]/listings/[slug]/page.tsx]
++- [x] [Review][Patch] No test that the page's form posts the fetched listing's id [page.test.tsx]
++- [x] [Review][Patch] No test for the Bogota-time open-house date text [OpenHouseBanner.test.tsx]
++
++Rejected: client phone regex stricter than server (intended; spec lists "bad phone" as invalid); `email.tooLong` unused (server limit equals the 254 check, shown as invalid); `aria-current="false"` (valid); focus on invalid submit (spec: focus not stolen); fetch timeout / 429 branch / honeypot (new behaviour, out of scope); `property_type` missing from messages (DB check constraint matches the catalog); `select("*")` already returns the new columns; "Logged" on fetch errors (Next logs unhandled errors); OG/JSON-LD/hreflang metadata, lightbox, swipe (out of scope); "Asesora" gendered label (cosmetic).
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index d4b618b..4991eb4 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -45,7 +45,7 @@ development_status:
+   1-7-s07-app-layout-header-footer-language-switch-responsive-nav: review
+   1-8-s08-home-hero-with-search-bar-featured-listings-services-car: done
+   1-9-s09-listingcard-and-results-grid-with-filters-panel: done
+-  1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: review
++  1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: done
+   1-11-s11-map-list-toggle-on-search: backlog
+   1-12-s12-newsletter-signup-testimonials-and-resources-sections: backlog
+   1-13-s13-newsletter-subscribers-table-and-policies: backlog
+diff --git a/src/app/[locale]/listings/[slug]/page.test.tsx b/src/app/[locale]/listings/[slug]/page.test.tsx
+index 326374e..32f7c04 100644
+--- a/src/app/[locale]/listings/[slug]/page.test.tsx
++++ b/src/app/[locale]/listings/[slug]/page.test.tsx
+@@ -1,4 +1,4 @@
+-import { render, screen } from "@testing-library/react";
++import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+ import { NextIntlClientProvider } from "next-intl";
+ import { beforeEach, describe, expect, it, vi } from "vitest";
+ import es from "../../../../../messages/es.json";
+@@ -89,6 +89,20 @@ describe("ListingPage", () => {
+     expect(screen.queryByLabelText("Casa abierta")).toBeNull();
+   });
+ 
++  it("sends the listing id with the contact form submission", async () => {
++    fetchListingBySlug.mockResolvedValue(listing);
++    const fetchMock = vi.fn().mockResolvedValue({ ok: true });
++    vi.stubGlobal("fetch", fetchMock);
++    await renderPage();
++    fireEvent.change(screen.getByLabelText(/Nombre/), { target: { value: "Ana" } });
++    fireEvent.change(screen.getByLabelText(/Correo/), { target: { value: "ana@example.com" } });
++    fireEvent.change(screen.getByLabelText(/Mensaje/), { target: { value: "Hola" } });
++    fireEvent.submit(screen.getByRole("form", { name: "Contactar a la asesora" }));
++    await waitFor(() => expect(fetchMock).toHaveBeenCalled());
++    expect(JSON.parse(fetchMock.mock.calls[0][1].body).listing_id).toBe(listing.id);
++    vi.unstubAllGlobals();
++  });
++
+   it("omits optional fields and shows rent pricing in English", async () => {
+     fetchListingBySlug.mockResolvedValue({ ...listing, operation: "rent", area_m2: null, stratum: null, admin_fee_cop: null, address: null, agent: null, images: [] });
+     await renderPage("en");
+diff --git a/src/app/[locale]/listings/[slug]/page.tsx b/src/app/[locale]/listings/[slug]/page.tsx
+index 0b03374..75e33d2 100644
+--- a/src/app/[locale]/listings/[slug]/page.tsx
++++ b/src/app/[locale]/listings/[slug]/page.tsx
+@@ -48,7 +48,8 @@ export default async function ListingPage({ params }: Props) {
+     [t("facts.bathrooms"), String(listing.bathrooms)],
+     [t("facts.parking"), String(listing.parking_spots)],
+   ];
+-  if (listing.area_m2) facts.push([t("facts.area"), t("facts.areaValue", { count: Number(listing.area_m2) })]);
++  const area = Number(listing.area_m2);
++  if (area > 0) facts.push([t("facts.area"), t("facts.areaValue", { count: area })]);
+   if (listing.stratum) facts.push([t("facts.stratum"), String(listing.stratum)]);
+   if (listing.admin_fee_cop != null) facts.push([t("facts.adminFee"), cop(listing.admin_fee_cop)]);
+ 
+diff --git a/src/components/ListingGallery.tsx b/src/components/ListingGallery.tsx
+index bbd59a8..7496135 100644
+--- a/src/components/ListingGallery.tsx
++++ b/src/components/ListingGallery.tsx
+@@ -27,7 +27,7 @@ export default function ListingGallery({ images, title }: { images: ListingImage
+       <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-slate-100">
+         <Image
+           src={current.url}
+-          alt={current.alt_text ?? title}
++          alt={current.alt_text?.trim() || title}
+           fill
+           priority
+           sizes="(min-width: 1024px) 66vw, 100vw"
+diff --git a/src/components/OpenHouseBanner.test.tsx b/src/components/OpenHouseBanner.test.tsx
+index 65c390a..4b10972 100644
+--- a/src/components/OpenHouseBanner.test.tsx
++++ b/src/components/OpenHouseBanner.test.tsx
+@@ -40,4 +40,17 @@ describe("OpenHouseBanner", () => {
+     });
+     expect(container.innerHTML).toBe("");
+   });
++
++  it("shows the event time in Bogota time regardless of the runtime zone", () => {
++    renderWithIntl(<OpenHouseBanner openHouseAt="2026-10-14T13:00:10Z" />);
++    expect(screen.getByText("miércoles, 14 de octubre de 2026, 8:00")).toBeTruthy();
++  });
++
++  it("stops ticking once the event has started", () => {
++    renderWithIntl(<OpenHouseBanner openHouseAt="2026-10-13T12:00:02Z" />);
++    act(() => {
++      vi.advanceTimersByTime(3000);
++    });
++    expect(vi.getTimerCount()).toBe(0);
++  });
+ });
+diff --git a/src/components/OpenHouseBanner.tsx b/src/components/OpenHouseBanner.tsx
+index b898a93..a494023 100644
+--- a/src/components/OpenHouseBanner.tsx
++++ b/src/components/OpenHouseBanner.tsx
+@@ -12,9 +12,13 @@ export default function OpenHouseBanner({ openHouseAt }: { openHouseAt: string }
+ 
+   useEffect(() => {
+     setNow(Date.now());
+-    const id = setInterval(() => setNow(Date.now()), 1000);
++    const id = setInterval(() => {
++      const tick = Date.now();
++      setNow(tick);
++      if (!getCountdown(openHouseAt, tick)) clearInterval(id);
++    }, 1000);
+     return () => clearInterval(id);
+-  }, []);
++  }, [openHouseAt]);
+ 
+   const countdown = now === null ? null : getCountdown(openHouseAt, now);
+   if (!countdown) return null;
+@@ -32,8 +36,7 @@ export default function OpenHouseBanner({ openHouseAt }: { openHouseAt: string }
+   ] as const;
+ 
+   return (
+-    <aside
+-      role="region"
++    <section
+       aria-label={t("label")}
+       className="rounded-2xl border border-amber-200 bg-amber-50 p-5 text-amber-950"
+     >
+@@ -42,12 +45,12 @@ export default function OpenHouseBanner({ openHouseAt }: { openHouseAt: string }
+       <p className="mt-3 text-sm">{t("startsIn")}</p>
+       <dl data-testid="countdown" className="mt-1 flex gap-4">
+         {units.map(([unit, value]) => (
+-          <div key={unit} className="text-center">
+-            <dd className="text-2xl font-semibold tabular-nums">{String(value).padStart(2, "0")}</dd>
++          <div key={unit} className="flex flex-col-reverse text-center">
+             <dt className="text-xs">{t(unit)}</dt>
++            <dd className="text-2xl font-semibold tabular-nums">{String(value).padStart(2, "0")}</dd>
+           </div>
+         ))}
+       </dl>
+-    </aside>
++    </section>
+   );
+ }

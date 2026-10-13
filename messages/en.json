@@ -175,5 +175,74 @@
       "area": "{count} m²",
       "perMonth": "/month"
     }
+  },
+  "Listing": {
+    "forSale": "For sale",
+    "forRent": "For rent",
+    "perMonth": "/month",
+    "description": "Description",
+    "gallery": {
+      "label": "Photo gallery",
+      "noImage": "No photos",
+      "previous": "Previous photo",
+      "next": "Next photo",
+      "counter": "{current} of {total}",
+      "show": "Show photo {number}"
+    },
+    "facts": {
+      "title": "Key facts",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "parking": "Parking spots",
+      "area": "Area",
+      "areaValue": "{count, number} m²",
+      "stratum": "Stratum (estrato)",
+      "adminFee": "HOA fee"
+    },
+    "openHouse": {
+      "label": "Open house",
+      "title": "Open house",
+      "startsIn": "Starts in",
+      "days": "days",
+      "hours": "hours",
+      "minutes": "min",
+      "seconds": "sec"
+    },
+    "agent": {
+      "title": "Agent"
+    },
+    "contact": {
+      "title": "Contact the agent",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "message": "Message",
+      "submit": "Send inquiry",
+      "sending": "Sending…",
+      "success": "Thank you! We received your inquiry and will contact you soon.",
+      "error": "We could not send your inquiry. Please try again.",
+      "errors": {
+        "name": {
+          "required": "Enter your name.",
+          "invalid": "Invalid name.",
+          "tooLong": "Name is too long."
+        },
+        "email": {
+          "required": "Enter your email.",
+          "invalid": "Enter a valid email.",
+          "tooLong": "Email is too long."
+        },
+        "phone": {
+          "required": "Enter your phone.",
+          "invalid": "Enter a valid phone number.",
+          "tooLong": "Phone is too long."
+        },
+        "message": {
+          "required": "Write a message.",
+          "invalid": "Invalid message.",
+          "tooLong": "Message is too long."
+        }
+      }
+    }
   }
 }
