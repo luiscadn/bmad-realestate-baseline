@@ -13,3 +13,7 @@
 - `POST /api/leads` route tests mock the Supabase client; add a local-Supabase integration check that anon insert works under the "anyone submits leads" policy.
 - Unknown or unpublished `listing_id` returns 500 (FK/RLS 23503/42501) per the story; consider mapping to 400 once the form can send stale listings.
 - Leads are stored only; no agent notification (email/webhook) exists yet.
+
+- source_spec: `_bmad-output/implementation-artifacts/spec-1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpublish.md`
+  summary: Re-publishing an already-published listing resets `published_at`.
+  evidence: PATCH `published: true` always writes now(); preserving the original date needs a read-before-write or a DB-side coalesce.
