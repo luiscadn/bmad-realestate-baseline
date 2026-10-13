@@ -48,5 +48,75 @@
     "privacy": "Privacy policy",
     "terms": "Terms of service",
     "legalNotice": "Prices and availability may change without notice. We protect your data in line with Colombian Law 1581 of 2012 and consumer protection rights."
+  },
+  "Home": {
+    "heroTitle": "Find the space that moves you",
+    "heroSubtitle": "Exclusive properties and personalized real estate advice in the best neighborhoods of Cali.",
+    "search": {
+      "label": "Quick property search",
+      "operation": "Operation",
+      "operationAny": "Buy or rent",
+      "sale": "Buy",
+      "rent": "Rent",
+      "neighborhood": "Neighborhood",
+      "neighborhoodAny": "All neighborhoods",
+      "propertyType": "Property type",
+      "propertyTypeAny": "All types",
+      "submit": "Search"
+    },
+    "propertyTypes": {
+      "apartment": "Apartment",
+      "house": "House",
+      "penthouse": "Penthouse",
+      "townhouse": "Townhouse",
+      "land": "Land",
+      "office": "Office",
+      "commercial": "Commercial space"
+    },
+    "featured": {
+      "title": "Featured properties",
+      "viewAll": "View all properties",
+      "empty": "New properties are coming soon. In the meantime, get in touch and we will help you find yours.",
+      "forSale": "For sale",
+      "forRent": "For rent",
+      "noImage": "No photo",
+      "beds": "{count, plural, one {# bedroom} other {# bedrooms}}",
+      "baths": "{count, plural, one {# bathroom} other {# bathrooms}}",
+      "area": "{count} m²",
+      "perMonth": "/month"
+    },
+    "process": {
+      "title": "Our process",
+      "steps": {
+        "talk": {
+          "title": "Talk to your agent",
+          "description": "We listen to your goals, budget and lifestyle."
+        },
+        "clarify": {
+          "title": "Clarify your needs",
+          "description": "We shortlist the right options and arrange private viewings."
+        },
+        "move": {
+          "title": "Move forward with confidence",
+          "description": "We guide you through negotiation, paperwork and handing over the keys."
+        }
+      }
+    },
+    "services": {
+      "title": "Specialized services",
+      "learnMore": "Learn more",
+      "buy": {
+        "title": "Buy",
+        "description": "Expert advice to find your ideal home or a high-yield investment."
+      },
+      "sell": {
+        "title": "Sell",
+        "description": "Valuation, marketing and negotiation to sell your property at the best price."
+      },
+      "rent": {
+        "title": "Rent",
+        "description": "Find or list a rental with clear, safe processes for both parties."
+      }
+    }
   }
 }
