@@ -118,5 +118,62 @@
         "description": "Encuentra o publica un arriendo con procesos claros y seguros para ambas partes."
       }
     }
+  },
+  "Search": {
+    "title": "Propiedades en Cali",
+    "subtitle": "Filtra por operación, barrio, precio y más.",
+    "filters": {
+      "label": "Filtros de propiedades",
+      "title": "Filtros",
+      "operation": "Operación",
+      "operationAny": "Comprar o arrendar",
+      "sale": "Comprar",
+      "rent": "Arrendar",
+      "neighborhood": "Barrio",
+      "neighborhoodAny": "Todos los barrios",
+      "propertyType": "Tipo de propiedad",
+      "propertyTypeAny": "Todos los tipos",
+      "minPrice": "Precio mínimo (COP)",
+      "maxPrice": "Precio máximo (COP)",
+      "bedrooms": "Habitaciones",
+      "bathrooms": "Baños",
+      "countAny": "Cualquiera",
+      "countAtLeast": "{count}+",
+      "sort": "Ordenar por",
+      "sortNewest": "Más recientes",
+      "sortPriceAsc": "Precio: menor a mayor",
+      "sortPriceDesc": "Precio: mayor a menor",
+      "apply": "Aplicar filtros",
+      "reset": "Limpiar filtros"
+    },
+    "propertyTypes": {
+      "apartment": "Apartamento",
+      "house": "Casa",
+      "penthouse": "Penthouse",
+      "townhouse": "Casa adosada",
+      "land": "Lote",
+      "office": "Oficina",
+      "commercial": "Local comercial"
+    },
+    "results": {
+      "count": "{count, plural, one {# propiedad encontrada} other {# propiedades encontradas}}",
+      "empty": "Ninguna propiedad coincide con tus filtros",
+      "emptyHint": "Amplía tu búsqueda o limpia los filtros para ver todas las propiedades.",
+      "error": "No pudimos cargar las propiedades en este momento. Inténtalo de nuevo en unos minutos.",
+      "invalid": "Algunos filtros no eran válidos y se ignoraron.",
+      "pagination": "Páginas de resultados",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageOf": "Página {page} de {total}"
+    },
+    "card": {
+      "forSale": "En venta",
+      "forRent": "En arriendo",
+      "noImage": "Sin foto",
+      "beds": "{count, plural, one {# habitación} other {# habitaciones}}",
+      "baths": "{count, plural, one {# baño} other {# baños}}",
+      "area": "{count} m²",
+      "perMonth": "/mes"
+    }
   }
 }

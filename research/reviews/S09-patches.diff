@@ -1,0 +1,115 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index 81d8a9f..441b2a7 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -22,3 +22,8 @@
+ - Featured images use raw `<img>` with full-size originals; move to `next/image` + `remotePatterns` for the Supabase host (with S09 ListingCard).
+ - Home "Sell" card (`/contact`) and "View all" (`/search`) 404 until S09/contact page exist.
+ - `revalidate = 300` caches the empty fallback for 5 minutes after a transient fetch failure.
++
++## Deferred from: code review of spec-1-9-s09 (2026-10-13)
++- Page past the last page shows "no properties match" although total > 0 [src/components/SearchResults.tsx:36]; only reachable through stale links; fix needs new copy and a branch.
++- `remotePatterns` is read at build time; images from any other host are not optimized [next.config.ts:10]; matches spec; revisit if non-Supabase image URLs appear.
++
+diff --git a/_bmad-output/implementation-artifacts/spec-1-9-s09-listingcard-and-results-grid-with-filters-panel.md b/_bmad-output/implementation-artifacts/spec-1-9-s09-listingcard-and-results-grid-with-filters-panel.md
+index f2aca8a..415b9b5 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-9-s09-listingcard-and-results-grid-with-filters-panel.md
++++ b/_bmad-output/implementation-artifacts/spec-1-9-s09-listingcard-and-results-grid-with-filters-panel.md
+@@ -2,7 +2,7 @@
+ title: 'S09 - ListingCard and results grid with filters panel'
+ type: 'feature'
+ created: '2026-10-13'
+-status: 'in-review'
++status: 'done'
+ baseline_commit: '846c20ca2e7814d9c67412b9a1131fcb25e36612'
+ route: 'dispatch'
+ review_loop_iteration: 0
+@@ -76,3 +76,12 @@ context: []
+ ## Spec Change Log
+ 
+ ## Review Triage Log
++
++### Review Findings
++
++- [x] [Review][Patch] No-JS GET form posted to `/search` and dropped the `en` locale [src/components/SearchFilters.tsx] — fixed: action carries the locale prefix; test added
++- [x] [Review][Patch] Nested `aria-live` (section + count) announced the whole results region [src/app/[locale]/search/page.tsx] — fixed: removed from the section
++- [x] [Review][Defer] Page past the last page shows "no properties match" although total > 0 [src/components/SearchResults.tsx:36] — deferred: only reachable through stale links; fix needs new copy and a branch
++- [x] [Review][Defer] `remotePatterns` is read at build time; images from any other host are not optimized [next.config.ts:10] — deferred: matches the spec; revisit if non-Supabase image URLs appear
++
++**Rejected:** `number` inputs accept `1e5` (server drops it and shows the notice; harmless). Blur-then-Enter double push (the second push is identical, and the form remounts on the new URL).
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index 90daf56..d2f784a 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -44,7 +44,7 @@ development_status:
+   1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpubl: review
+   1-7-s07-app-layout-header-footer-language-switch-responsive-nav: review
+   1-8-s08-home-hero-with-search-bar-featured-listings-services-car: done
+-  1-9-s09-listingcard-and-results-grid-with-filters-panel: review
++  1-9-s09-listingcard-and-results-grid-with-filters-panel: done
+   1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: backlog
+   1-11-s11-map-list-toggle-on-search: backlog
+   1-12-s12-newsletter-signup-testimonials-and-resources-sections: backlog
+diff --git a/src/app/[locale]/search/page.tsx b/src/app/[locale]/search/page.tsx
+index 1488f15..ed84b07 100644
+--- a/src/app/[locale]/search/page.tsx
++++ b/src/app/[locale]/search/page.tsx
+@@ -83,7 +83,7 @@ export default async function SearchPage({
+         <aside>
+           <SearchFilters key={JSON.stringify(values)} values={values} />
+         </aside>
+-        <section aria-live="polite">
++        <section>
+           <SearchResults listings={listings} total={total} page={page} totalPages={totalPages} query={linkQuery} failed={failed} />
+         </section>
+       </div>
+diff --git a/src/components/SearchFilters.test.tsx b/src/components/SearchFilters.test.tsx
+index 4afea83..93acdd6 100644
+--- a/src/components/SearchFilters.test.tsx
++++ b/src/components/SearchFilters.test.tsx
+@@ -17,6 +17,11 @@ describe("SearchFilters", () => {
+     expect(names).toEqual(["operation", "neighborhood", "property_type", "min_price", "max_price", "bedrooms", "bathrooms", "sort"]);
+   });
+ 
++  it("keeps the locale in the no-JS form action", () => {
++    expect(form(renderWithIntl(<SearchFilters values={{}} />, "en").container).getAttribute("action")).toBe("/en/search");
++    expect(form(renderWithIntl(<SearchFilters values={{}} />, "es").container).getAttribute("action")).toBe("/search");
++  });
++
+   it("preselects the active values, including a neighborhood outside the default list", () => {
+     const { container } = renderWithIntl(
+       <SearchFilters values={{ operation: "rent", neighborhood: "Menga", bedrooms: "2", min_price: "500000", sort: "price_asc" }} />,
+diff --git a/src/components/SearchFilters.tsx b/src/components/SearchFilters.tsx
+index bf6f065..0765002 100644
+--- a/src/components/SearchFilters.tsx
++++ b/src/components/SearchFilters.tsx
+@@ -1,8 +1,9 @@
+ "use client";
+ 
+ import type { FocusEvent, FormEvent } from "react";
+-import { useTranslations } from "next-intl";
++import { useLocale, useTranslations } from "next-intl";
+ import { Link, useRouter } from "@/i18n/navigation";
++import { routing } from "@/i18n/routing";
+ import { PROPERTY_TYPES, SORTS } from "@/lib/listings-query";
+ import { footerNeighborhoods } from "@/lib/site";
+ 
+@@ -21,6 +22,9 @@ const SORT_KEYS = { newest: "sortNewest", price_asc: "sortPriceAsc", price_desc:
+ export default function SearchFilters({ values }: { values: SearchFilterValues }) {
+   const t = useTranslations("Search");
+   const router = useRouter();
++  const locale = useLocale();
++  // Plain GET (no JS) bypasses the locale-aware router, so the action must carry the locale prefix itself.
++  const action = locale === routing.defaultLocale ? "/search" : `/${locale}/search`;
+ 
+   const neighborhoods: string[] = [...footerNeighborhoods];
+   if (values.neighborhood && !neighborhoods.includes(values.neighborhood)) neighborhoods.push(values.neighborhood);
+@@ -50,7 +54,7 @@ export default function SearchFilters({ values }: { values: SearchFilterValues }
+   return (
+     <form
+       method="get"
+-      action="/search"
++      action={action}
+       role="search"
+       aria-label={t("filters.label")}
+       onChange={onChange}

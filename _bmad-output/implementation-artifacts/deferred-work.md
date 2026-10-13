@@ -22,3 +22,8 @@
 - Featured images use raw `<img>` with full-size originals; move to `next/image` + `remotePatterns` for the Supabase host (with S09 ListingCard).
 - Home "Sell" card (`/contact`) and "View all" (`/search`) 404 until S09/contact page exist.
 - `revalidate = 300` caches the empty fallback for 5 minutes after a transient fetch failure.
+
+## Deferred from: code review of spec-1-9-s09 (2026-10-13)
+- Page past the last page shows "no properties match" although total > 0 [src/components/SearchResults.tsx:36]; only reachable through stale links; fix needs new copy and a branch.
+- `remotePatterns` is read at build time; images from any other host are not optimized [next.config.ts:10]; matches spec; revisit if non-Supabase image URLs appear.
+

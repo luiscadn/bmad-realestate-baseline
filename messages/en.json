@@ -118,5 +118,62 @@
         "description": "Find or list a rental with clear, safe processes for both parties."
       }
     }
+  },
+  "Search": {
+    "title": "Properties in Cali",
+    "subtitle": "Filter by operation, neighborhood, price and more.",
+    "filters": {
+      "label": "Property filters",
+      "title": "Filters",
+      "operation": "Operation",
+      "operationAny": "Buy or rent",
+      "sale": "Buy",
+      "rent": "Rent",
+      "neighborhood": "Neighborhood",
+      "neighborhoodAny": "All neighborhoods",
+      "propertyType": "Property type",
+      "propertyTypeAny": "All types",
+      "minPrice": "Minimum price (COP)",
+      "maxPrice": "Maximum price (COP)",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "countAny": "Any",
+      "countAtLeast": "{count}+",
+      "sort": "Sort by",
+      "sortNewest": "Newest",
+      "sortPriceAsc": "Price: low to high",
+      "sortPriceDesc": "Price: high to low",
+      "apply": "Apply filters",
+      "reset": "Clear filters"
+    },
+    "propertyTypes": {
+      "apartment": "Apartment",
+      "house": "House",
+      "penthouse": "Penthouse",
+      "townhouse": "Townhouse",
+      "land": "Land",
+      "office": "Office",
+      "commercial": "Commercial space"
+    },
+    "results": {
+      "count": "{count, plural, one {# property found} other {# properties found}}",
+      "empty": "No properties match your filters",
+      "emptyHint": "Try widening your search or clear the filters to see every property.",
+      "error": "We could not load the properties right now. Please try again in a moment.",
+      "invalid": "Some filters were not valid and were ignored.",
+      "pagination": "Results pages",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {page} of {total}"
+    },
+    "card": {
+      "forSale": "For sale",
+      "forRent": "For rent",
+      "noImage": "No photo",
+      "beds": "{count, plural, one {# bedroom} other {# bedrooms}}",
+      "baths": "{count, plural, one {# bathroom} other {# bathrooms}}",
+      "area": "{count} m²",
+      "perMonth": "/month"
+    }
   }
 }
