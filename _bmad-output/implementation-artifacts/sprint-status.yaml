@@ -35,14 +35,14 @@ project_key: NOKEY
 tracking_system: file-system
 story_location: _bmad-output/implementation-artifacts
 development_status:
-  epic-1: in-progress
-  1-1-s01-schema-and-migrations-for-agents-listings-listing_images: review
-  1-2-s02-image-storage-bucket-and-policies-with-listing-image-upl: review
-  1-3-s03-get-api-listings-with-filters-sorting-and-pagination: review
-  1-4-s04-get-api-listings-slug: review
+  epic-1: done
+  1-1-s01-schema-and-migrations-for-agents-listings-listing_images: done
+  1-2-s02-image-storage-bucket-and-policies-with-listing-image-upl: done
+  1-3-s03-get-api-listings-with-filters-sorting-and-pagination: done
+  1-4-s04-get-api-listings-slug: done
   1-5-s05-post-api-leads-contact-the-agent-form: done
-  1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpubl: review
-  1-7-s07-app-layout-header-footer-language-switch-responsive-nav: review
+  1-6-s06-authenticated-agent-crud-for-listings-publish-and-unpubl: done
+  1-7-s07-app-layout-header-footer-language-switch-responsive-nav: done
   1-8-s08-home-hero-with-search-bar-featured-listings-services-car: done
   1-9-s09-listingcard-and-results-grid-with-filters-panel: done
   1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: done
