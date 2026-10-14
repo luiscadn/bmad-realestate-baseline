@@ -2,7 +2,7 @@
 title: 'S18 - Agent dashboard and listing forms for Miami luxury properties'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'eb0ced2be879aa9cfc30292723377db3fc53e5e4'
@@ -43,3 +43,14 @@ baseline_commit: 'eb0ced2be879aa9cfc30292723377db3fc53e5e4'
 - [x] Update dashboard translation labels in `messages/es.json` and `messages/en.json`.
 - [x] Update tests in `ListingsTable.test.tsx`, `ListingForm.test.tsx`, and `agent-listings.test.ts`.
 - [x] Run test suite and production build verification.
+
+## Review Findings (Triage)
+
+- **Reviewer:** Gemini (BMAD Story Review via Antigravity)
+- **Status:** Approved (0 blocking defects)
+- **Validation:**
+  - `src/lib/agent-listings.ts`: Properly typed and validated `building_name`, `price_usd`, `hoa_fee_usd`, and `area_sqft`. Auto-derivation works smoothly for creation without regression on legacy payloads.
+  - `src/components/ListingsTable.tsx`: Displays formatted USD currency and building labels for Miami luxury listings, with clean fallback to COP for legacy listings.
+  - Test suite: 396/396 tests passing.
+  - Build: Production build succeeds with 0 errors across all routes.
+
