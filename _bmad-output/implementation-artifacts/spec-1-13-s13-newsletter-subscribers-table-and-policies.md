@@ -2,7 +2,7 @@
 title: 'S13 Newsletter subscribers table and policies'
 type: 'feature'
 created: '2026-10-13'
-status: 'in-review'
+status: 'done'
 route: 'oneshot'
 review_loop_iteration: 0
 ---
@@ -51,3 +51,11 @@ review_loop_iteration: 0
 - Given valid email, `POST /api/newsletter` returns 201 and inserts subscriber.
 - Given duplicate email, endpoint returns 200 without throwing 500.
 - Given invalid email, returns 400.
+
+### Review Findings
+
+- [x] [Review][Patch] Control characters in email caused 500 in Postgres; rejected with 400 in parseNewsletterBody [src/lib/newsletter.ts]
+- [x] [Review][Defer] Subscriber probing (200 vs 201 reveals existing emails) and rate limiting
+- [x] [Review][Defer] JS toLowerCase() vs Postgres lower() edge case for non-ASCII email casing
+- [x] [Review][Defer] Consent record persistence
+

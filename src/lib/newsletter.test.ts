@@ -43,4 +43,9 @@ describe("parseNewsletterBody", () => {
     expect(parseNewsletterBody({ email: "nope" }).ok).toBe(false);
     expect(parseNewsletterBody("x").ok).toBe(false);
   });
+
+  it("rejects emails with control characters (Postgres would fail them with a 500)", () => {
+    expect(parseNewsletterBody({ email: "a\u0000@b.co" }).ok).toBe(false);
+    expect(parseNewsletterBody({ email: "a\u007f@b.co" }).ok).toBe(false);
+  });
 });

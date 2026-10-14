@@ -28,7 +28,8 @@ export type NewsletterParse =
   | { ok: false; errors: Record<string, string> };
 
 // Strips control characters and collapses whitespace.
-const clean = (v: string) => v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
+const CONTROL_CHARS = /[\u0000-\u001f\u007f]/;
+const clean = (v: string) => v.replace(new RegExp(CONTROL_CHARS, "g"), " ").replace(/\s+/g, " ").trim();
 
 /** Server-side parsing of the POST /api/newsletter body: sanitizes and lowercases the email, name is optional. */
 export function parseNewsletterBody(body: unknown): NewsletterParse {
@@ -40,7 +41,7 @@ export function parseNewsletterBody(body: unknown): NewsletterParse {
 
   if (typeof b.email !== "string" || !b.email.trim()) errors.email = "email is required";
   const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
-  if (email && (email.length > MAX.email || !EMAIL_RE.test(email))) {
+  if (email && (email.length > MAX.email || CONTROL_CHARS.test(email) || !EMAIL_RE.test(email))) {
     errors.email = "email must be a valid email address";
   }
 
