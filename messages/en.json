@@ -117,6 +117,72 @@
         "title": "Rent",
         "description": "Find or list a rental with clear, safe processes for both parties."
       }
+    },
+    "testimonials": {
+      "title": "What our clients say",
+      "items": {
+        "first": {
+          "quote": "They guided us through every step and we found our apartment in Granada in three weeks.",
+          "name": "Camila R.",
+          "role": "Home buyer, Granada"
+        },
+        "second": {
+          "quote": "Professional marketing and honest advice: we sold our house above the asking price.",
+          "name": "Andrés M.",
+          "role": "Home seller, Ciudad Jardín"
+        },
+        "third": {
+          "quote": "Renting out my property was effortless, with clear paperwork and a reliable tenant.",
+          "name": "Laura P.",
+          "role": "Landlord, San Antonio"
+        }
+      }
+    },
+    "resources": {
+      "title": "Guides and market insights",
+      "subtitle": "Practical tips for buying, selling and investing in Cali.",
+      "items": {
+        "neighborhoods": {
+          "category": "Neighborhoods",
+          "title": "Where to live in Cali: a neighborhood guide",
+          "excerpt": "Compare Granada, El Peñón, Ciudad Jardín and more by lifestyle, price per m² and services."
+        },
+        "buying": {
+          "category": "Buying tips",
+          "title": "First-time buyer checklist in Colombia",
+          "excerpt": "Budget, mortgage pre-approval, legal checks and closing costs explained step by step."
+        },
+        "investing": {
+          "category": "Market insights",
+          "title": "Is Cali a good place to invest in real estate?",
+          "excerpt": "Demand trends, rental yields and the areas with the strongest appreciation."
+        }
+      }
+    },
+    "newsletter": {
+      "title": "Get Cali market news",
+      "description": "Receive new listings, guides and market insights in your inbox.",
+      "name": "Name",
+      "email": "Email",
+      "consent": "I agree to receive emails and accept the privacy policy.",
+      "submit": "Subscribe",
+      "sending": "Subscribing…",
+      "success": "Thank you! You are now subscribed.",
+      "error": "We could not complete your subscription. Please try again.",
+      "errors": {
+        "name": {
+          "required": "Enter your name.",
+          "tooLong": "Name is too long."
+        },
+        "email": {
+          "required": "Enter your email.",
+          "invalid": "Enter a valid email.",
+          "tooLong": "Email is too long."
+        },
+        "consent": {
+          "required": "You must accept to subscribe."
+        }
+      }
     }
   },
   "Search": {

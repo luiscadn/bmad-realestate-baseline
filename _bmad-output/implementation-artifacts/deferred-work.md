@@ -42,3 +42,11 @@
 - A stale `selectedId` can survive a page change.
 - The map only covers the current page of results.
 
+## Deferred from: code review of spec-1-12-s12 (2026-10-13)
+
+- Consent flag/timestamp is not sent to the API; the server (S13) has no consent record. Add `consent` to the payload and persist it in S13.
+- Consent copy says "accept the privacy policy" but links nowhere; no privacy-policy route exists yet.
+- Testimonials are invented placeholders; replace with real, consented content before launch.
+- Resource cards are non-linked; link them once guide pages exist.
+- No test asserts that Home (`page.tsx`) renders Testimonials, ResourceCards and NewsletterForm.
+- S13 contract: decide how 409 (already subscribed) and 4xx validation responses surface in the form, and add bot protection (honeypot/rate limit).
