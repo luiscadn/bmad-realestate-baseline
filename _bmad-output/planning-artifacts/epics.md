@@ -94,3 +94,35 @@
 - Protected dashboard route redirects unauthenticated visitors to login.
 - Listings table displays title, neighborhood, price, status (Published/Draft), and action buttons.
 - Create/Edit form allows full listing management including publish status toggle.
+
+## Epic 2: Victoria Ordoñez Miami Ultra-Luxury Real Estate Pivot
+
+### Story 2.1: S15 - Miami luxury database schema, USD pricing and seed data
+**Description:** Migrate schema and seed data to support Miami ultra-luxury residences: USD pricing (`price_usd`), HOA/condo fees (`hoa_fee_usd`), square footage (`area_sqft` with `area_m2` equivalent), and 14 flagship Miami luxury listings including Aston Martin Residences, Porsche Design Tower, Una Residences, 87 Park, One Thousand Museum, Continuum South Beach, and Fisher Island estates.
+**Acceptance Criteria:**
+- Database migration adds USD pricing and HOA fee columns with backwards compatibility.
+- Seed data contains 14 authentic Miami luxury developments with accurate coordinates, descriptions, and USD price brackets ($1.5M - $35M+).
+- Public listings API routes return USD price values and Miami neighborhood filters.
+
+### Story 2.2: S16 - Miami and Biscayne Bay interactive projection map
+**Description:** Adapt Web Mercator map projection and bounds to South Florida / Miami coastline (Brickell, Downtown Miami, Biscayne Bay, Miami Beach, Sunny Isles Beach, Coconut Grove, Coral Gables). Format interactive price pin badges in millions of USD (e.g., `$3.85M`, `$12.5M`).
+**Acceptance Criteria:**
+- Map viewport correctly bounds Miami luxury corridor without projection distortion.
+- Price pins render formatted USD millions and select listing cards on click.
+- Filter synchronization preserves map bounds and active view mode.
+
+### Story 2.3: S17 - Miami luxury brand identity, hero, editorial and bilingual catalogs
+**Description:** Update bilingual message catalogs (`es.json`, `en.json`) and UI components for Victoria Ordoñez as an elite Miami Luxury & Waterfront Real Estate Advisor. Update hero search, featured properties showcase (Aston Martin Residences, Porsche Design Tower, Una Residences), market advisory guides (FIRPTA, Florida tax advantages), and Brickell office contact details.
+**Acceptance Criteria:**
+- Hero section and meta tags reflect Miami luxury positioning and neighborhood selectors.
+- Featured listings highlight signature waterfront towers with USD pricing and sq ft.
+- Testimonials and market insight cards feature Miami/South Florida luxury real estate topics.
+- 100% key parity maintained between `es` and `en` next-intl catalogs.
+
+### Story 2.4: S18 - Agent dashboard and listing forms for Miami luxury properties
+**Description:** Update agent dashboard table and listing create/edit forms for USD pricing, HOA/condo fees, square footage, luxury property categories (Penthouse, Waterfront Residence, Island Estate, Sky Villa), and Miami neighborhood selections.
+**Acceptance Criteria:**
+- Agent listings table renders formatted USD currency and Miami neighborhoods.
+- Create/Edit form validates USD prices, HOA fees, sq ft/m², and Miami luxury locations.
+- Mutations (publish/unpublish, edit, delete) succeed through authenticated agent API.
+
