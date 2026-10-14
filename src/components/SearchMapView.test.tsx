@@ -86,4 +86,47 @@ describe("SearchMapView", () => {
     expect(tokens("map-pane")).not.toContain("block");
     expect(screen.getByRole("button", { name: "List" }).getAttribute("aria-pressed")).toBe("true");
   });
+
+  it("renders compact USD luxury pin badges and previews building name and HOA for Miami residences", () => {
+    const miamiListings = [
+      make("aston", {
+        slug: "aston-martin-residences-bayfront",
+        title: "Panoramic Bayfront Residence",
+        building_name: "Aston Martin Residences",
+        neighborhood: "Downtown Miami",
+        price_usd: 4_750_000,
+        hoa_fee_usd: 2_850,
+        latitude: 25.7709,
+        longitude: -80.1877,
+      }),
+      make("porsche", {
+        slug: "porsche-design-tower-sky-villa",
+        title: "Sky Villa with Dezervator",
+        building_name: "Porsche Design Tower",
+        neighborhood: "Sunny Isles Beach",
+        price_usd: 8_900_000,
+        hoa_fee_usd: 4_200,
+        latitude: 25.9482,
+        longitude: -80.1200,
+      }),
+    ];
+
+    renderWithIntl(<SearchMapView listings={miamiListings} />, "en");
+
+    const pins = screen.getAllByTestId("map-pin");
+    expect(pins).toHaveLength(2);
+    // Aston Martin ($4.75M) and Porsche Design Tower ($8.9M)
+    expect(pins[0].textContent).toBe("$4.75M");
+    expect(pins[1].textContent).toBe("$8.9M");
+
+    // Click on Aston Martin pin
+    fireEvent.click(pins[0]);
+    const preview = screen.getByTestId("map-preview");
+    expect(within(preview).getByText(/4,750,000/)).toBeTruthy();
+    expect(within(preview).getByTestId("preview-building").textContent).toBe("Aston Martin Residences");
+    expect(within(preview).getByTestId("preview-neighborhood").textContent).toBe("Downtown Miami");
+    expect(within(preview).getByText(/HOA:\s*\$2,850\/mo/)).toBeTruthy();
+    expect(within(preview).getByRole("link", { name: /View property/ }).getAttribute("href")).toBe("/listings/aston-martin-residences-bayfront");
+  });
 });
+

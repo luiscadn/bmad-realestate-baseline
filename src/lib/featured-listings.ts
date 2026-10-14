@@ -10,6 +10,10 @@ export interface FeaturedListing {
   operation: "sale" | "rent";
   property_type: string;
   price_cop: number;
+  price_usd?: number | null;
+  hoa_fee_usd?: number | null;
+  area_sqft?: number | null;
+  building_name?: string | null;
   bedrooms: number;
   bathrooms: number;
   area_m2: number | null;
@@ -23,7 +27,7 @@ export interface FeaturedListing {
 export async function fetchFeaturedListings(supabase: SupabaseClient, limit = FEATURED_LIMIT): Promise<FeaturedListing[]> {
   const { data, error } = await supabase
     .from("listings")
-    .select("id, slug, title, operation, property_type, price_cop, bedrooms, bathrooms, area_m2, neighborhood, images:listing_images(*)")
+    .select("*, images:listing_images(*)")
     .not("published_at", "is", null)
     .lte("published_at", new Date().toISOString())
     .order("featured", { ascending: false })

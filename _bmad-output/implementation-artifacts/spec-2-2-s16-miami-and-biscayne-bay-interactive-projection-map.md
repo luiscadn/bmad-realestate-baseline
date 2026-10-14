@@ -2,7 +2,7 @@
 title: 'S16 - Miami and Biscayne Bay interactive projection map'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-dev'
+status: 'ready-for-review'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '1611c6d3659fb2193f5451999971c2a1334c2678'
@@ -37,8 +37,8 @@ baseline_commit: '1611c6d3659fb2193f5451999971c2a1334c2678'
 
 ## Tasks
 
-- [ ] Create branch `story/S16-miami-map-view` and tag `S16-start`.
-- [ ] Update `src/lib/map-view.ts` with `formatPinPriceUsd` helper.
-- [ ] Update `src/components/SearchMap.tsx` to use USD formatting for pins and preview card.
-- [ ] Update tests in `src/components/SearchMap.test.tsx` / `SearchMapView.test.tsx` and `src/lib/map-view.test.ts`.
-- [ ] Run test suite and production build verification.
+- [x] Create branch `story/S16-miami-map-view` and tag `S16-start`.
+- [x] Update `src/lib/map-view.ts` with `formatPinPriceUsd` helper.
+- [x] Update `src/components/SearchMap.tsx` to use USD formatting for pins and preview card.
+- [x] Update tests in `src/components/SearchMap.test.tsx` / `SearchMapView.test.tsx` and `src/lib/map-view.test.ts`.
+- [x] Run test suite and production build verification.
