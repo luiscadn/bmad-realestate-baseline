@@ -2,7 +2,7 @@
 title: 'S19 - Ultra-Luxury Cinematic UX/UI & Architectural Hero (Inspired by FindRealEstate)'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-dev'
+status: 'ready-for-review'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'd06a3510e69e2135ad57161503c2a2f506eb365d'
@@ -40,11 +40,11 @@ baseline_commit: 'd06a3510e69e2135ad57161503c2a2f506eb365d'
 
 ## Tasks
 
-- [ ] Create branch `story/S19-miami-cinematic-ux` and tag `S19-start`.
-- [ ] Generate / add high-resolution luxury architectural hero image.
-- [ ] Redesign `src/components/HeroSearch.tsx` with floating glassmorphism aesthetics.
-- [ ] Redesign hero section in `src/app/[locale]/page.tsx` with architectural visual, monumental typography, and pill CTA.
-- [ ] Polish `src/components/Header.tsx` with floating minimalist glass and pill button.
-- [ ] Polish `src/components/ListingCard.tsx` with smooth hover zoom and glassmorphic badge styling.
-- [ ] Update tests in `Home.test.tsx`, `Header.test.tsx`, and `ListingCard.test.tsx`.
-- [ ] Verify test suite and production build.
+- [x] Create branch `story/S19-miami-cinematic-ux` and tag `S19-start`.
+- [x] Generate / add high-resolution luxury architectural hero image.
+- [x] Redesign `src/components/HeroSearch.tsx` with floating glassmorphism aesthetics.
+- [x] Redesign hero section in `src/app/[locale]/page.tsx` with architectural visual, monumental typography, and pill CTA.
+- [x] Polish `src/components/Header.tsx` with floating minimalist glass and pill button.
+- [x] Polish `src/components/ListingCard.tsx` with smooth hover zoom and glassmorphic badge styling.
+- [x] Update tests in `Home.test.tsx`, `Header.test.tsx`, and `ListingCard.test.tsx`.
+- [x] Verify test suite and production build.
