@@ -2,6 +2,7 @@
 
 import { useId, useState, type FormEvent } from "react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "@/i18n/navigation";
 import {
   EMPTY_FORM,
   fromListing,
@@ -27,6 +28,7 @@ const fieldClass =
 
 export default function ListingForm({ listing, onSaved, onCancel }: Props) {
   const t = useTranslations("Dashboard.form");
+  const router = useRouter();
   const uid = useId();
   const [values, setValues] = useState<FormValues>(() => (listing ? fromListing(listing) : EMPTY_FORM));
   const [errors, setErrors] = useState<FormErrors>({});
@@ -58,6 +60,10 @@ export default function ListingForm({ listing, onSaved, onCancel }: Props) {
       });
       if (res.ok) {
         onSaved();
+        return;
+      }
+      if (res.status === 401) {
+        router.push("/login");
         return;
       }
       if (res.status === 409) {

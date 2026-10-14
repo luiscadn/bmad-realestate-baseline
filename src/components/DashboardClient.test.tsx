@@ -86,6 +86,34 @@ describe("DashboardClient", () => {
     expect(screen.getByText("Publicada")).toBeTruthy();
   });
 
+  it("redirects to /login when a mutation gets 401", async () => {
+    fetchMock.mockResolvedValueOnce(list([row("a")])).mockResolvedValueOnce(res(401));
+    renderWithIntl(<DashboardClient />);
+    await screen.findByText("Casa a");
+    fireEvent.click(screen.getByRole("button", { name: "Despublicar" }));
+    await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/login"));
+    expect(screen.queryByRole("alert")).toBeNull();
+  });
+
+  it("keeps the row and shows an error when delete fails", async () => {
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    fetchMock.mockResolvedValueOnce(list([row("a")])).mockResolvedValueOnce(res(500));
+    renderWithIntl(<DashboardClient />);
+    await screen.findByText("Casa a");
+    fireEvent.click(screen.getByRole("button", { name: "Eliminar" }));
+    expect((await screen.findByRole("alert")).textContent).toBe("La acción falló. Inténtalo de nuevo.");
+    expect(screen.getByText("Casa a")).toBeTruthy();
+  });
+
+  it("goes to /login even when sign out throws", async () => {
+    fetchMock.mockResolvedValueOnce(list([]));
+    signOut.mockRejectedValueOnce(new Error("network"));
+    renderWithIntl(<DashboardClient />);
+    await screen.findByText("Aún no tienes propiedades.");
+    fireEvent.click(screen.getByRole("button", { name: "Cerrar sesión" }));
+    await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/login"));
+  });
+
   it("deletes a confirmed listing and removes the row", async () => {
     vi.spyOn(window, "confirm").mockReturnValue(true);
     fetchMock.mockResolvedValueOnce(list([row("a"), row("b")])).mockResolvedValueOnce(res(200));

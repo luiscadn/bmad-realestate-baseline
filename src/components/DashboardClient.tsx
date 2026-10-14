@@ -25,17 +25,23 @@ export default function DashboardClient() {
   const [busyId, setBusyId] = useState<string | null>(null);
   const [actionFailed, setActionFailed] = useState(false);
 
+  // Only the latest refresh may write state, so a slow earlier response cannot overwrite newer data.
+  const latestRefresh = useRef(0);
+
   const refresh = useCallback(async () => {
+    const id = ++latestRefresh.current;
     setLoad("loading");
     try {
       const res = await fetch(LIST_URL, { signal: AbortSignal.timeout(15_000) });
+      if (id !== latestRefresh.current) return;
       if (res.status === 401) return routerRef.current.push("/login");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const body = await res.json();
+      if (id !== latestRefresh.current) return;
       setListings(body.data ?? []);
       setLoad("ready");
     } catch {
-      setLoad("error");
+      if (id === latestRefresh.current) setLoad("error");
     }
   }, []);
 
@@ -48,6 +54,7 @@ export default function DashboardClient() {
     setActionFailed(false);
     try {
       const res = await fetch(`/api/agent/listings/${listing.id}`, { ...init, signal: AbortSignal.timeout(15_000) });
+      if (res.status === 401) return routerRef.current.push("/login");
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       apply();
     } catch {
@@ -72,6 +79,8 @@ export default function DashboardClient() {
   async function signOut() {
     try {
       await createBrowserSupabase().auth.signOut();
+    } catch {
+      // Navigate to /login regardless; the login page will show the real session state.
     } finally {
       router.push("/login");
     }

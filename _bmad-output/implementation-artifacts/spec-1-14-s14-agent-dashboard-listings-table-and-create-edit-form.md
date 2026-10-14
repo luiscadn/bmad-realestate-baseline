@@ -2,7 +2,7 @@
 title: 'S14 Agent dashboard: listings table and create/edit form'
 type: 'feature'
 created: '2026-10-13'
-status: 'in-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '02ea8a35a83e0046a2ded71ed2da7278c9d4c3a9'
@@ -74,6 +74,20 @@ baseline_commit: '02ea8a35a83e0046a2ded71ed2da7278c9d4c3a9'
 ## Spec Change Log
 
 ## Review Triage Log
+
+### Review Findings
+
+- [x] [Review][Patch] Mutations (publish/delete) and form save treat 401 as a generic failure instead of redirecting to /login [DashboardClient.tsx mutate, ListingForm.tsx onSubmit] — fixed + tests
+- [x] [Review][Patch] Out-of-order `refresh()` responses can overwrite newer data [DashboardClient.tsx refresh] — fixed with a latest-request guard
+- [x] [Review][Patch] `signOut()` rejection became an unhandled rejection [DashboardClient.tsx signOut] — fixed (catch, still navigates) + test
+- [x] [Review][Patch] Any 4xx (e.g. 429 rate limit) reported as "wrong password" [LoginForm.tsx] — now only 400/401/422; 429/5xx/no-status show generic; tests added
+- [x] [Review][Patch] Delete-failure banner untested [DashboardClient.test.tsx] — test added
+- [x] [Review][Defer] Only first 50 listings loaded, no pagination — deferred: needs product decision (load more vs pagination)
+- [x] [Review][Defer] No agent-role check; any authenticated user reaches /dashboard (RLS is the only gate) — deferred: pre-existing auth model from S-agent API
+- [x] [Review][Defer] Expired access token not refreshed on page load (`setAll` no-op) — deferred: spec assigns refresh to a later middleware story
+- [x] [Review][Defer] Server-side max bounds (MAX_PRICE/MAX_AREA/smallint) not mirrored client-side; lossy server-error messages — deferred: low, cosmetic
+
+**Rejected:** `getSessionAgent` throwing on missing env → 500 (loud config failure, correct); `AbortSignal.timeout` on old Safari (<16, out of support); 409 = non-slug conflict (API only returns 409 for slug uniqueness); `published_at` client clock (cosmetic, refreshed on next load); `busyId` single-row tracking (row actions already disabled while busy, low impact); missing DB migration for stratum/admin_fee (spec: columns pre-exist, no migration by design); a11y/UX nits (row-specific button names, window.confirm, en-US currency, titles, forgot-password) and suggestions outside S14 scope; stale-edit last-write-wins (no version column exists).
 
 ## Verification
 

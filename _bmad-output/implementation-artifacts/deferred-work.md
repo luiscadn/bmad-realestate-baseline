@@ -56,3 +56,8 @@
 - JS `toLowerCase()` vs Postgres `lower()` edge case for non-ASCII email casing.
 - Consent record persistence in database.
 
+## Deferred from: code review of spec-1-14-s14 (2026-10-13)
+- Dashboard loads only the first 50 listings (`?limit=50`); agents with more cannot see the rest. Needs load-more/pagination decision.
+- No agent-role check: any authenticated Supabase user can open /dashboard; RLS is the only gate.
+- Session cookie access token is not refreshed on server render (`getSessionAgent` `setAll` is a no-op); expired tokens redirect to /login until a middleware story lands.
+- Client validation lacks upper bounds mirroring server MAX_PRICE/MAX_AREA/smallint; server errors for those show generic messages.

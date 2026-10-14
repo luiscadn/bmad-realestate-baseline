@@ -29,9 +29,9 @@ export default function LoginForm() {
     try {
       const { error: authError } = await createBrowserSupabase().auth.signInWithPassword({ email: email.trim(), password });
       if (authError) {
-        // 4xx = bad credentials; anything else (network, 5xx) is a generic failure.
+        // 400/401/422 = bad credentials; anything else (429 rate limit, 5xx, network) is a generic failure.
         const status = (authError as { status?: number }).status;
-        setError(status && status >= 400 && status < 500 ? "invalid" : "generic");
+        setError(status === 400 || status === 401 || status === 422 ? "invalid" : "generic");
         setSubmitting(false);
         return;
       }

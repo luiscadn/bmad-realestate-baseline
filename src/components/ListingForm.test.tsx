@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { AgentListing } from "@/lib/dashboard";
 import { renderWithIntl } from "@/test/render";
+import { routerPush } from "@/test/setup";
 import ListingForm from "./ListingForm";
 
 const fetchMock = vi.fn();
@@ -100,6 +101,16 @@ describe("ListingForm", () => {
     setField("Slug", "taken");
     save();
     expect(await screen.findByText("Ese slug ya está en uso.")).toBeTruthy();
+    expect(onSaved).not.toHaveBeenCalled();
+  });
+
+  it("redirects to /login when the session has expired (401)", async () => {
+    fetchMock.mockResolvedValue(json(401));
+    const onSaved = vi.fn();
+    renderWithIntl(<ListingForm onSaved={onSaved} onCancel={vi.fn()} />);
+    fillRequired();
+    save();
+    await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/login"));
     expect(onSaved).not.toHaveBeenCalled();
   });
 

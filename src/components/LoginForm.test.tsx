@@ -54,4 +54,17 @@ describe("LoginForm", () => {
     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
     expect((await screen.findByRole("alert")).textContent).toBe("We couldn't sign you in. Try again.");
   });
+
+  it.each([
+    ["a 5xx error", { message: "boom", status: 500 }],
+    ["a rate limit", { message: "too many", status: 429 }],
+    ["an error without status", { message: "fetch failed" }],
+  ])("shows the generic error for %s, not bad credentials", async (_label, authError) => {
+    signInWithPassword.mockResolvedValue({ error: authError });
+    renderWithIntl(<LoginForm />, "en");
+    fill("a@b.co", "x", ["Email", "Password"]);
+    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+    expect((await screen.findByRole("alert")).textContent).toBe("We couldn't sign you in. Try again.");
+    expect(routerPush).not.toHaveBeenCalled();
+  });
 });
