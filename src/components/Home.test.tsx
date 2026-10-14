@@ -53,9 +53,9 @@ describe("HeroSearch", () => {
     const { container } = renderWithIntl(<HeroSearch />);
     const form = container.querySelector("form")!;
     fireEvent.change(form.querySelector("select[name=operation]")!, { target: { value: "sale" } });
-    fireEvent.change(form.querySelector("select[name=neighborhood]")!, { target: { value: "Granada" } });
+    fireEvent.change(form.querySelector("select[name=neighborhood]")!, { target: { value: "Brickell" } });
     fireEvent.submit(form);
-    expect(routerPush).toHaveBeenCalledWith("/search?operation=sale&neighborhood=Granada");
+    expect(routerPush).toHaveBeenCalledWith("/search?operation=sale&neighborhood=Brickell");
   });
 });
 
@@ -69,9 +69,35 @@ describe("FeaturedListings", () => {
     expect(within(link).getByText("En venta")).toBeTruthy();
   });
 
+  it("renders Miami luxury residence with USD price, building badge, and square footage", () => {
+    const miamiListing: FeaturedListing = {
+      id: "aston-1",
+      slug: "aston-martin-residences-triplex-penthouse",
+      title: "Signature Triplex Penthouse",
+      building_name: "Aston Martin Residences",
+      operation: "sale",
+      property_type: "penthouse",
+      price_cop: 100_000_000_000,
+      price_usd: 25_000_000,
+      bedrooms: 5,
+      bathrooms: 6,
+      area_sqft: 8900,
+      area_m2: 826.8,
+      neighborhood: "Downtown Miami",
+      images: [],
+    };
+    renderWithIntl(<FeaturedListings listings={[miamiListing]} />, "en");
+    const link = screen.getByRole("link", { name: /Signature Triplex Penthouse/ });
+    expect(link.getAttribute("href")).toBe("/listings/aston-martin-residences-triplex-penthouse");
+    expect(within(link).getByTestId("building-badge").textContent).toBe("Aston Martin Residences");
+    expect(within(link).getByTestId("neighborhood-badge").textContent).toBe("Downtown Miami");
+    expect(within(link).getByText(/25,000,000/)).toBeTruthy();
+    expect(within(link).getByTestId("sqft-badge").textContent).toBe("8,900 sq ft");
+  });
+
   it("shows a fallback when there are no listings", () => {
     renderWithIntl(<FeaturedListings listings={[]} />, "en");
-    expect(screen.getByText(/New properties are coming soon/)).toBeTruthy();
+    expect(screen.getByText(/New Miami ultra-luxury residences coming soon/)).toBeTruthy();
   });
 });
 

@@ -10,11 +10,18 @@ export default function ListingCard({ listing, priority = false }: { listing: Li
   const format = useFormatter();
   const image = listing.images[0];
   const isRent = listing.operation === "rent";
-  const price = format.number(Number(listing.price_cop), {
-    style: "currency",
-    currency: "COP",
-    maximumFractionDigits: 0,
-  });
+  const hasUsd = listing.price_usd != null && Number.isFinite(Number(listing.price_usd));
+  const price = hasUsd
+    ? format.number(Number(listing.price_usd), {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      })
+    : format.number(Number(listing.price_cop), {
+        style: "currency",
+        currency: "COP",
+        maximumFractionDigits: 0,
+      });
 
   return (
     <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-shadow hover:shadow-md">
@@ -45,18 +52,30 @@ export default function ListingCard({ listing, priority = false }: { listing: Li
             {isRent ? <span className="text-sm font-normal text-slate-500"> {t("perMonth")}</span> : null}
           </p>
           <h3 className="mt-1 font-medium text-slate-800">{listing.title}</h3>
-          <p className="mt-2">
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            {listing.building_name ? (
+              <span
+                data-testid="building-badge"
+                className="inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700"
+              >
+                {listing.building_name}
+              </span>
+            ) : null}
             <span
               data-testid="neighborhood-badge"
               className="inline-block rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-medium text-emerald-900"
             >
               {listing.neighborhood}
             </span>
-          </p>
+          </div>
           <p className="mt-3 flex flex-wrap gap-x-4 text-sm text-slate-600">
             <span>{t("beds", { count: listing.bedrooms })}</span>
             <span>{t("baths", { count: listing.bathrooms })}</span>
-            {listing.area_m2 ? <span>{t("area", { count: Number(listing.area_m2) })}</span> : null}
+            {listing.area_sqft ? (
+              <span data-testid="sqft-badge">{Number(listing.area_sqft).toLocaleString()} sq ft</span>
+            ) : listing.area_m2 ? (
+              <span>{t("area", { count: Number(listing.area_m2) })}</span>
+            ) : null}
           </p>
         </div>
       </Link>

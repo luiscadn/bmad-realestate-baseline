@@ -1,14 +1,14 @@
 {
   "Metadata": {
-    "title": "Victoria Ordoñez | Real Estate in Cali",
-    "description": "Exclusive properties and personalized real estate advice in the best neighborhoods of Cali."
+    "title": "Victoria Ordoñez | Miami Ultra-Luxury Real Estate",
+    "description": "Exclusive properties and bespoke real estate advisory across Miami's most prestigious waterfront enclaves."
   },
   "Common": {
     "skipToContent": "Skip to content"
   },
   "Header": {
     "brand": "Victoria Ordoñez",
-    "tagline": "Real Estate • Cali",
+    "tagline": "Ultra-Luxury Real Estate • Miami",
     "homeLabel": "Victoria Ordoñez, home",
     "mainNav": "Main navigation",
     "mobileNav": "Mobile navigation",
@@ -31,8 +31,8 @@
   },
   "Footer": {
     "identityTitle": "Victoria Ordoñez",
-    "identityBlurb": "Real estate advisor in Cali, focused on the western and southern neighborhoods of the city.",
-    "license": "Independent real estate advisory • Cali, Colombia",
+    "identityBlurb": "Ultra-luxury real estate advisor in Miami, specializing in iconic towers such as Aston Martin Residences, Porsche Design Tower, and waterfront estates.",
+    "license": "Ultra-Luxury Real Estate Advisory • Miami, Florida, USA",
     "sectorsTitle": "Properties and neighborhoods",
     "sale": "For sale",
     "rent": "For rent",
@@ -41,17 +41,17 @@
     "phoneLabel": "Phone",
     "emailLabel": "Email",
     "addressLabel": "Office",
-    "address": "Av. 4A Norte, Granada, Cali, Valle del Cauca",
+    "address": "1421 Brickell Ave, Suite 1200, Miami, FL 33131",
     "whatsapp": "Chat with us on WhatsApp",
     "whatsappMessage": "Hello Victoria, I would like more information about your properties.",
     "copyright": "© {year} Victoria Ordoñez Real Estate. All rights reserved.",
     "privacy": "Privacy policy",
     "terms": "Terms of service",
-    "legalNotice": "Prices and availability may change without notice. We protect your data in line with Colombian Law 1581 of 2012 and consumer protection rights."
+    "legalNotice": "Prices and availability are stated in USD and subject to change without notice. Equal Housing Opportunity. Compliance with the Fair Housing Act and Florida real estate regulations."
   },
   "Home": {
-    "heroTitle": "Find the space that moves you",
-    "heroSubtitle": "Exclusive properties and personalized real estate advice in the best neighborhoods of Cali.",
+    "heroTitle": "Ultra-Luxury Residences in Miami & Biscayne Bay",
+    "heroSubtitle": "Iconic waterfront residences and private advisory in Florida's most prestigious towers: Aston Martin Residences, Porsche Design Tower, and bayfront estates.",
     "search": {
       "label": "Quick property search",
       "operation": "Operation",
@@ -76,7 +76,7 @@
     "featured": {
       "title": "Featured properties",
       "viewAll": "View all properties",
-      "empty": "New properties are coming soon. In the meantime, get in touch and we will help you find yours.",
+      "empty": "New Miami ultra-luxury residences coming soon. In the meantime, contact us for access to our private off-market portfolio.",
       "forSale": "For sale",
       "forRent": "For rent",
       "noImage": "No photo",
@@ -122,46 +122,46 @@
       "title": "What our clients say",
       "items": {
         "first": {
-          "quote": "They guided us through every step and we found our apartment in Granada in three weeks.",
+          "quote": "They guided us through acquiring our residence at Aston Martin Residences with complete discretion and expertise.",
           "name": "Camila R.",
-          "role": "Home buyer, Granada"
+          "role": "Buyer, Aston Martin Residences"
         },
         "second": {
-          "quote": "Professional marketing and honest advice: we sold our house above the asking price.",
+          "quote": "World-class international marketing: we sold our penthouse at Porsche Design Tower well above our target price.",
           "name": "Andrés M.",
-          "role": "Home seller, Ciudad Jardín"
+          "role": "Seller, Sunny Isles Beach"
         },
         "third": {
-          "quote": "Renting out my property was effortless, with clear paperwork and a reliable tenant.",
+          "quote": "Exceptional advisory on tax structuring and acquisition for our waterfront estate in Brickell.",
           "name": "Laura P.",
-          "role": "Landlord, San Antonio"
+          "role": "Investor, Brickell"
         }
       }
     },
     "resources": {
       "title": "Guides and market insights",
-      "subtitle": "Practical tips for buying, selling and investing in Cali.",
+      "subtitle": "Strategic advice for buying, selling and investing in Miami's ultra-luxury market.",
       "items": {
         "neighborhoods": {
           "category": "Neighborhoods",
-          "title": "Where to live in Cali: a neighborhood guide",
-          "excerpt": "Compare Granada, El Peñón, Ciudad Jardín and more by lifestyle, price per m² and services."
+          "title": "Where to live in Miami: an ultra-luxury enclave guide",
+          "excerpt": "Compare Brickell, Sunny Isles Beach, Fisher Island, and Miami Beach by lifestyle, super-amenities, and nautical access."
         },
         "buying": {
           "category": "Buying tips",
-          "title": "First-time buyer checklist in Colombia",
-          "excerpt": "Budget, mortgage pre-approval, legal checks and closing costs explained step by step."
+          "title": "Foreign buyer and investor guide for Florida luxury real estate",
+          "excerpt": "Corporate structuring, FIRPTA regulations, Florida tax advantages, and closing procedures step by step."
         },
         "investing": {
           "category": "Market insights",
-          "title": "Is Cali a good place to invest in real estate?",
-          "excerpt": "Demand trends, rental yields and the areas with the strongest appreciation."
+          "title": "Why invest in branded towers and luxury residences in Miami?",
+          "excerpt": "Global demand trends, wealth preservation, and appreciation analysis in iconic towers like Aston Martin Residences."
         }
       }
     },
     "newsletter": {
-      "title": "Get Cali market news",
-      "description": "Receive new listings, guides and market insights in your inbox.",
+      "title": "Receive Miami ultra-luxury market insights",
+      "description": "We deliver private off-market residences, new tower debuts, and investment insights directly to your inbox.",
       "name": "Name",
       "email": "Email",
       "consent": "I agree to receive emails and accept the privacy policy.",
@@ -186,8 +186,8 @@
     }
   },
   "Search": {
-    "title": "Properties in Cali",
-    "subtitle": "Filter by operation, neighborhood, price and more.",
+    "title": "Ultra-Luxury Properties in Miami",
+    "subtitle": "Filter by operation, neighborhood, USD price and more.",
     "filters": {
       "label": "Property filters",
       "title": "Filters",
@@ -199,8 +199,8 @@
       "neighborhoodAny": "All neighborhoods",
       "propertyType": "Property type",
       "propertyTypeAny": "All types",
-      "minPrice": "Minimum price (COP)",
-      "maxPrice": "Maximum price (COP)",
+      "minPrice": "Minimum price (USD)",
+      "maxPrice": "Maximum price (USD)",
       "bedrooms": "Bedrooms",
       "bathrooms": "Bathrooms",
       "countAny": "Any",
