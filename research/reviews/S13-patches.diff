@@ -1,0 +1,88 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index f0eb3d2..b4d26af 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -50,3 +50,9 @@
+ - Resource cards are non-linked; link them once guide pages exist.
+ - No test asserts that Home (`page.tsx`) renders Testimonials, ResourceCards and NewsletterForm.
+ - S13 contract: decide how 409 (already subscribed) and 4xx validation responses surface in the form, and add bot protection (honeypot/rate limit).
++
++## Deferred from: code review of spec-1-13-s13 (2026-10-13)
++- Subscriber probing (200 vs 201 reveals existing emails) and rate limiting on `/api/newsletter`.
++- JS `toLowerCase()` vs Postgres `lower()` edge case for non-ASCII email casing.
++- Consent record persistence in database.
++
+diff --git a/_bmad-output/implementation-artifacts/spec-1-13-s13-newsletter-subscribers-table-and-policies.md b/_bmad-output/implementation-artifacts/spec-1-13-s13-newsletter-subscribers-table-and-policies.md
+index 54a7b9e..f7f6572 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-13-s13-newsletter-subscribers-table-and-policies.md
++++ b/_bmad-output/implementation-artifacts/spec-1-13-s13-newsletter-subscribers-table-and-policies.md
+@@ -2,7 +2,7 @@
+ title: 'S13 Newsletter subscribers table and policies'
+ type: 'feature'
+ created: '2026-10-13'
+-status: 'in-review'
++status: 'done'
+ route: 'oneshot'
+ review_loop_iteration: 0
+ ---
+@@ -51,3 +51,11 @@ review_loop_iteration: 0
+ - Given valid email, `POST /api/newsletter` returns 201 and inserts subscriber.
+ - Given duplicate email, endpoint returns 200 without throwing 500.
+ - Given invalid email, returns 400.
++
++### Review Findings
++
++- [x] [Review][Patch] Control characters in email caused 500 in Postgres; rejected with 400 in parseNewsletterBody [src/lib/newsletter.ts]
++- [x] [Review][Defer] Subscriber probing (200 vs 201 reveals existing emails) and rate limiting
++- [x] [Review][Defer] JS toLowerCase() vs Postgres lower() edge case for non-ASCII email casing
++- [x] [Review][Defer] Consent record persistence
++
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index 8b0414e..330a686 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -48,6 +48,6 @@ development_status:
+   1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: done
+   1-11-s11-map-list-toggle-on-search: done
+   1-12-s12-newsletter-signup-testimonials-and-resources-sections: done
+-  1-13-s13-newsletter-subscribers-table-and-policies: review
++  1-13-s13-newsletter-subscribers-table-and-policies: done
+   1-14-s14-agent-dashboard-listings-table-and-create-edit-form: backlog
+   epic-1-retrospective: optional
+diff --git a/src/lib/newsletter.test.ts b/src/lib/newsletter.test.ts
+index 4145191..0426374 100644
+--- a/src/lib/newsletter.test.ts
++++ b/src/lib/newsletter.test.ts
+@@ -43,4 +43,9 @@ describe("parseNewsletterBody", () => {
+     expect(parseNewsletterBody({ email: "nope" }).ok).toBe(false);
+     expect(parseNewsletterBody("x").ok).toBe(false);
+   });
++
++  it("rejects emails with control characters (Postgres would fail them with a 500)", () => {
++    expect(parseNewsletterBody({ email: "a\u0000@b.co" }).ok).toBe(false);
++    expect(parseNewsletterBody({ email: "a\u007f@b.co" }).ok).toBe(false);
++  });
+ });
+diff --git a/src/lib/newsletter.ts b/src/lib/newsletter.ts
+index a8d89f6..2ee828b 100644
+--- a/src/lib/newsletter.ts
++++ b/src/lib/newsletter.ts
+@@ -28,7 +28,8 @@ export type NewsletterParse =
+   | { ok: false; errors: Record<string, string> };
+ 
+ // Strips control characters and collapses whitespace.
+-const clean = (v: string) => v.replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim();
++const CONTROL_CHARS = /[\u0000-\u001f\u007f]/;
++const clean = (v: string) => v.replace(new RegExp(CONTROL_CHARS, "g"), " ").replace(/\s+/g, " ").trim();
+ 
+ /** Server-side parsing of the POST /api/newsletter body: sanitizes and lowercases the email, name is optional. */
+ export function parseNewsletterBody(body: unknown): NewsletterParse {
+@@ -40,7 +41,7 @@ export function parseNewsletterBody(body: unknown): NewsletterParse {
+ 
+   if (typeof b.email !== "string" || !b.email.trim()) errors.email = "email is required";
+   const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
+-  if (email && (email.length > MAX.email || !EMAIL_RE.test(email))) {
++  if (email && (email.length > MAX.email || CONTROL_CHARS.test(email) || !EMAIL_RE.test(email))) {
+     errors.email = "email must be a valid email address";
+   }
+ 
