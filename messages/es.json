@@ -1,14 +1,14 @@
 {
   "Metadata": {
-    "title": "Victoria Ordoñez | Bienes Raíces en Cali",
-    "description": "Propiedades exclusivas y asesoría inmobiliaria personalizada en los mejores sectores de Cali."
+    "title": "Victoria Ordoñez | Bienes Raíces de Ultra Lujo en Miami",
+    "description": "Propiedades exclusivas y asesoría inmobiliaria personalizada en los enclaves más prestigiosos de Miami y Biscayne Bay."
   },
   "Common": {
     "skipToContent": "Saltar al contenido"
   },
   "Header": {
     "brand": "Victoria Ordoñez",
-    "tagline": "Bienes Raíces • Cali",
+    "tagline": "Bienes Raíces de Ultra Lujo • Miami",
     "homeLabel": "Victoria Ordoñez, inicio",
     "mainNav": "Navegación principal",
     "mobileNav": "Navegación móvil",
@@ -31,8 +31,8 @@
   },
   "Footer": {
     "identityTitle": "Victoria Ordoñez",
-    "identityBlurb": "Asesora inmobiliaria en Cali, enfocada en los barrios del oeste y sur de la ciudad.",
-    "license": "Asesoría inmobiliaria independiente • Cali, Colombia",
+    "identityBlurb": "Asesora inmobiliaria de ultra lujo en Miami, especializada en residencias icónicas como Aston Martin Residences, Porsche Design Tower y propiedades frente al mar.",
+    "license": "Asesoría inmobiliaria de ultra lujo • Miami, Florida, USA",
     "sectorsTitle": "Propiedades y sectores",
     "sale": "En venta",
     "rent": "En arriendo",
@@ -41,17 +41,18 @@
     "phoneLabel": "Teléfono",
     "emailLabel": "Correo",
     "addressLabel": "Oficina",
-    "address": "Av. 4A Norte, Granada, Cali, Valle del Cauca",
+    "address": "1421 Brickell Ave, Suite 1200, Miami, FL 33131",
     "whatsapp": "Escríbenos por WhatsApp",
     "whatsappMessage": "Hola Victoria, quiero más información sobre sus propiedades.",
     "copyright": "© {year} Victoria Ordoñez Bienes Raíces. Todos los derechos reservados.",
     "privacy": "Política de privacidad",
     "terms": "Términos de servicio",
-    "legalNotice": "Los precios y la disponibilidad pueden cambiar sin previo aviso. Protegemos tus datos conforme a la Ley 1581 de 2012 y los derechos del consumidor en Colombia."
+    "legalNotice": "Los precios y la disponibilidad están expresados en USD y sujetos a cambio sin previo aviso. Cumplimiento con la Ley de Vivienda Justa (Fair Housing Act) y regulaciones del Estado de Florida."
   },
   "Home": {
-    "heroTitle": "Encuentra el espacio que te mueve",
-    "heroSubtitle": "Propiedades exclusivas y asesoría inmobiliaria personalizada en los mejores sectores de Cali.",
+    "heroBadge": "Portafolio de Ultra Lujo",
+    "heroTitle": "Residencias de ultra lujo en Miami y Biscayne Bay",
+    "heroSubtitle": "Propiedades icónicas y asesoría privada en las torres más exclusivas de Florida: Aston Martin Residences, Porsche Design Tower y mansiones frente al mar.",
     "search": {
       "label": "Búsqueda rápida de propiedades",
       "operation": "Operación",
@@ -76,7 +77,7 @@
     "featured": {
       "title": "Propiedades destacadas",
       "viewAll": "Ver todas las propiedades",
-      "empty": "Pronto publicaremos nuevas propiedades. Mientras tanto, escríbenos y te ayudamos a encontrar la tuya.",
+      "empty": "Pronto publicaremos nuevas residencias de ultra lujo en Miami. Mientras tanto, contáctanos para acceder a nuestro portafolio privado off-market.",
       "forSale": "En venta",
       "forRent": "En arriendo",
       "noImage": "Sin foto",
@@ -122,46 +123,46 @@
       "title": "Lo que dicen nuestros clientes",
       "items": {
         "first": {
-          "quote": "Nos acompañaron en cada paso y encontramos nuestro apartamento en Granada en tres semanas.",
+          "quote": "Nos acompañaron en cada paso para adquirir nuestra residencia en Aston Martin Residences con total discreción y profesionalismo.",
           "name": "Camila R.",
-          "role": "Compradora, Granada"
+          "role": "Compradora, Aston Martin Residences"
         },
         "second": {
-          "quote": "Marketing profesional y asesoría honesta: vendimos nuestra casa por encima del precio inicial.",
+          "quote": "Marketing internacional de primer nivel: vendimos nuestro penthouse en Porsche Design Tower superando el objetivo inicial.",
           "name": "Andrés M.",
-          "role": "Vendedor, Ciudad Jardín"
+          "role": "Vendedor, Sunny Isles Beach"
         },
         "third": {
-          "quote": "Arrendar mi propiedad fue muy sencillo, con trámites claros y un inquilino confiable.",
+          "quote": "Asesoría experta en estructuración patrimonial y adquisición para nuestra residencia frente al mar en Brickell.",
           "name": "Laura P.",
-          "role": "Arrendadora, San Antonio"
+          "role": "Inversionista, Brickell"
         }
       }
     },
     "resources": {
       "title": "Guías y análisis de mercado",
-      "subtitle": "Consejos prácticos para comprar, vender e invertir en Cali.",
+      "subtitle": "Consejos estratégicos para comprar, vender e invertir en el mercado de ultra lujo de Miami.",
       "items": {
         "neighborhoods": {
           "category": "Barrios",
-          "title": "Dónde vivir en Cali: guía de barrios",
-          "excerpt": "Compara Granada, El Peñón, Ciudad Jardín y más según estilo de vida, precio por m² y servicios."
+          "title": "Dónde vivir en Miami: guía de enclaves de ultra lujo",
+          "excerpt": "Compara Brickell, Sunny Isles Beach, Fisher Island y Miami Beach según estilo de vida, super-amenidades y accesos náuticos."
         },
         "buying": {
           "category": "Consejos de compra",
-          "title": "Lista para compradores primerizos en Colombia",
-          "excerpt": "Presupuesto, preaprobación de crédito, revisión legal y gastos de escrituración paso a paso."
+          "title": "Guía para compradores e inversionistas internacionales en Florida",
+          "excerpt": "Estructuración corporativa, normativa FIRPTA, beneficios tributarios de Florida y trámites de cierre paso a paso."
         },
         "investing": {
           "category": "Análisis de mercado",
-          "title": "¿Es Cali buena opción para invertir en finca raíz?",
-          "excerpt": "Tendencias de demanda, rentabilidad por arriendo y zonas con mayor valorización."
+          "title": "¿Por qué invertir en torres de marca y residencias de lujo en Miami?",
+          "excerpt": "Tendencias de demanda global, preservación de capital y análisis de valorización en torres como Aston Martin Residences."
         }
       }
     },
     "newsletter": {
-      "title": "Recibe noticias del mercado en Cali",
-      "description": "Te enviamos nuevas propiedades, guías y análisis de mercado a tu correo.",
+      "title": "Recibe noticias del mercado de ultra lujo en Miami",
+      "description": "Te enviamos residencias privadas off-market, lanzamientos y análisis de inversión directamente a tu correo.",
       "name": "Nombre",
       "email": "Correo electrónico",
       "consent": "Acepto recibir correos y la política de privacidad.",
@@ -186,8 +187,8 @@
     }
   },
   "Search": {
-    "title": "Propiedades en Cali",
-    "subtitle": "Filtra por operación, barrio, precio y más.",
+    "title": "Propiedades de ultra lujo en Miami",
+    "subtitle": "Filtra por operación, barrio, precio en USD y más.",
     "filters": {
       "label": "Filtros de propiedades",
       "title": "Filtros",
@@ -199,8 +200,8 @@
       "neighborhoodAny": "Todos los barrios",
       "propertyType": "Tipo de propiedad",
       "propertyTypeAny": "Todos los tipos",
-      "minPrice": "Precio mínimo (COP)",
-      "maxPrice": "Precio máximo (COP)",
+      "minPrice": "Precio mínimo (USD)",
+      "maxPrice": "Precio máximo (USD)",
       "bedrooms": "Habitaciones",
       "bathrooms": "Baños",
       "countAny": "Cualquiera",
@@ -355,7 +356,7 @@
       "caption": "Tus propiedades",
       "title": "Título",
       "neighborhood": "Barrio",
-      "price": "Precio (COP)",
+      "price": "Precio (USD)",
       "status": "Estado",
       "actions": "Acciones"
     },
@@ -379,12 +380,12 @@
       "description": "Descripción",
       "propertyType": "Tipo de inmueble",
       "operation": "Operación",
-      "priceCop": "Precio (COP)",
-      "areaM2": "Área (m²)",
+      "priceCop": "Precio (USD)",
+      "areaM2": "Área (sqft / m²)",
       "bedrooms": "Habitaciones",
       "bathrooms": "Baños",
       "stratum": "Estrato (1–6)",
-      "adminFeeCop": "Administración (COP)",
+      "adminFeeCop": "Administración / HOA (USD)",
       "neighborhood": "Barrio",
       "address": "Dirección",
       "published": "Publicada (visible al público)",

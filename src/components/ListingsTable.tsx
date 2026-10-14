@@ -18,11 +18,23 @@ const actionClass =
 export default function ListingsTable({ listings, busyId, onEdit, onTogglePublish, onDelete }: Props) {
   const t = useTranslations("Dashboard");
   const locale = useLocale();
+  const usd = new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 0,
+  });
   const cop = new Intl.NumberFormat(locale === "en" ? "en-US" : "es-CO", {
     style: "currency",
     currency: "COP",
     maximumFractionDigits: 0,
   });
+
+  const formatPrice = (l: AgentListing) => {
+    if (l.price_usd != null && Number.isFinite(Number(l.price_usd))) {
+      return usd.format(Number(l.price_usd));
+    }
+    return cop.format(Number(l.price_cop));
+  };
 
   return (
     <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
@@ -43,9 +55,12 @@ export default function ListingsTable({ listings, busyId, onEdit, onTogglePublis
             const busy = busyId === l.id;
             return (
               <tr key={l.id}>
-                <td className="px-4 py-3 font-medium text-slate-900">{l.title}</td>
+                <td className="px-4 py-3 font-medium text-slate-900">
+                  <div>{l.title}</div>
+                  {l.building_name ? <div className="text-xs font-normal text-slate-500">{l.building_name}</div> : null}
+                </td>
                 <td className="px-4 py-3 text-slate-600">{l.neighborhood}</td>
-                <td className="whitespace-nowrap px-4 py-3 text-slate-600">{cop.format(Number(l.price_cop))}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-slate-600">{formatPrice(l)}</td>
                 <td className="px-4 py-3">
                   <span
                     className={`inline-block rounded-full px-2.5 py-0.5 text-xs font-semibold ${

@@ -1,8 +1,8 @@
-// Placeholder contact details: replace with the agent's real data before launch.
+// Elite Miami Luxury Real Estate contact details
 export const siteConfig = {
-  phone: "+57 602 000 0000",
-  whatsappNumber: "573000000000",
-  email: "contacto@victoriaordonez.co",
+  phone: "+1 305 555 0199",
+  whatsappNumber: "13055550199",
+  email: "victoria@victoriaordonezluxury.com",
 } as const;
 
 export function whatsappUrl(text?: string): string {
@@ -18,12 +18,12 @@ export const navItems = [
 ] as const;
 
 export const footerNeighborhoods = [
-  "Granada",
-  "Ciudad Jardín",
-  "El Peñón",
-  "Pance",
-  "San Antonio",
-  "Santa Teresita",
+  "Brickell",
+  "Downtown Miami",
+  "Sunny Isles Beach",
+  "Miami Beach",
+  "Coconut Grove",
+  "Coral Gables",
 ] as const;
 
 export const AGENT_SIGN_IN_HREF = "/login";

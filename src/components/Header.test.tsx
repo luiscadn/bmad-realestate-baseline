@@ -8,7 +8,7 @@ describe("Header", () => {
   it("renders branding, nav, language switch and agent sign-in in Spanish", () => {
     setMockLocation("/");
     renderWithIntl(<Header />);
-    expect(screen.getByText("Bienes Raíces • Cali")).toBeTruthy();
+    expect(screen.getByText("Bienes Raíces de Ultra Lujo • Miami")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Propiedades" }).getAttribute("href")).toBe("/search");
     expect(screen.getByRole("link", { name: "Ingreso Agente" }).getAttribute("href")).toBe("/login");
     expect(screen.getByRole("group", { name: "Idioma" })).toBeTruthy();
@@ -24,6 +24,7 @@ describe("Header", () => {
   it("renders English strings", () => {
     setMockLocation("/");
     renderWithIntl(<Header />, "en");
+    expect(screen.getByText("Ultra-Luxury Real Estate • Miami")).toBeTruthy();
     expect(screen.getByRole("link", { name: "Agent Sign In" })).toBeTruthy();
     expect(screen.getByRole("link", { name: "About Victoria" })).toBeTruthy();
   });

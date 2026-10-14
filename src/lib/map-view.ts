@@ -54,3 +54,40 @@ export function projectPins(listings: FeaturedListing[]): { pins: MapPin[]; miss
   }));
   return { pins, missing: listings.length - located.length };
 }
+
+/**
+ * Formats a USD amount into a compact luxury pin label:
+ * - $25,000,000 -> "$25M"
+ * - $4,750,000 -> "$4.75M"
+ * - $850,000 -> "$850K"
+ * - $1,000 -> "$1K"
+ * - under 1,000 -> "$X"
+ */
+export function formatPinPriceUsd(amount: number | null | undefined): string {
+  if (amount == null) return "$0";
+  const num = Number(amount);
+  if (!Number.isFinite(num) || num <= 0) return "$0";
+  if (num >= 1_000_000) {
+    const m = Number((num / 1_000_000).toFixed(2));
+    return `$${m}M`;
+  }
+  if (num >= 1_000) {
+    const k = Number((num / 1_000).toFixed(2));
+    return `$${k}K`;
+  }
+  return `$${Math.round(num)}`;
+}
+
+/**
+ * Resolves compact pin price: uses price_usd when present, otherwise estimates USD from price_cop.
+ */
+export function formatPinPrice(listing: Pick<FeaturedListing, "price_usd" | "price_cop">): string {
+  if (listing.price_usd != null && Number.isFinite(Number(listing.price_usd))) {
+    return formatPinPriceUsd(Number(listing.price_usd));
+  }
+  if (listing.price_cop != null && Number.isFinite(Number(listing.price_cop))) {
+    return formatPinPriceUsd(Number(listing.price_cop) / 4000);
+  }
+  return "$0";
+}
+

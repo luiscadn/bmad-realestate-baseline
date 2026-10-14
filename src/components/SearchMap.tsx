@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { useFormatter, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { FeaturedListing } from "@/lib/featured-listings";
-import { projectPins } from "@/lib/map-view";
+import { formatPinPrice, projectPins } from "@/lib/map-view";
 
 export interface SearchMapProps {
   listings: FeaturedListing[];
@@ -27,8 +27,20 @@ export default function SearchMap({ listings, selectedId, onSelect }: SearchMapP
     return () => document.removeEventListener("keydown", onKey);
   }, [selected, onSelect]);
 
-  const priceOf = (listing: FeaturedListing) =>
-    format.number(Number(listing.price_cop), { style: "currency", currency: "COP", maximumFractionDigits: 0 });
+  const priceOf = (listing: FeaturedListing) => {
+    if (listing.price_usd != null && Number.isFinite(Number(listing.price_usd))) {
+      return format.number(Number(listing.price_usd), {
+        style: "currency",
+        currency: "USD",
+        maximumFractionDigits: 0,
+      });
+    }
+    return format.number(Number(listing.price_cop), {
+      style: "currency",
+      currency: "COP",
+      maximumFractionDigits: 0,
+    });
+  };
 
   const image = selected?.images[0];
 
@@ -57,7 +69,7 @@ export default function SearchMap({ listings, selectedId, onSelect }: SearchMapP
                   active ? "z-20 border-emerald-950 bg-emerald-950 text-white" : "z-10 border-emerald-900 bg-white text-emerald-950 hover:bg-emerald-100"
                 }`}
               >
-                {priceOf(listing)}
+                {formatPinPrice(listing)}
               </button>
             );
           })
@@ -81,11 +93,27 @@ export default function SearchMap({ listings, selectedId, onSelect }: SearchMapP
                 {selected.operation === "rent" ? <span className="text-xs font-normal text-slate-500"> {tCard("perMonth")}</span> : null}
               </p>
               <h3 className="truncate text-sm font-medium text-slate-800">{selected.title}</h3>
-              <p className="mt-1">
-                <span data-testid="preview-neighborhood" className="inline-block rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-900">
+              <div className="mt-1 flex flex-wrap items-center gap-1.5">
+                {selected.building_name ? (
+                  <span
+                    data-testid="preview-building"
+                    className="inline-block rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700"
+                  >
+                    {selected.building_name}
+                  </span>
+                ) : null}
+                <span
+                  data-testid="preview-neighborhood"
+                  className="inline-block rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-900"
+                >
                   {selected.neighborhood}
                 </span>
-              </p>
+              </div>
+              {selected.hoa_fee_usd ? (
+                <p className="mt-0.5 text-[11px] text-slate-500">
+                  HOA: {format.number(Number(selected.hoa_fee_usd), { style: "currency", currency: "USD", maximumFractionDigits: 0 })}/mo
+                </p>
+              ) : null}
               <Link href={`/listings/${selected.slug}`} className="mt-1 inline-block text-sm font-medium text-emerald-800 hover:underline">
                 {t("viewListing")} →
               </Link>

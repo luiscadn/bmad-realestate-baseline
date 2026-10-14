@@ -31,7 +31,7 @@ describe("Testimonials", () => {
   it("renders in English", () => {
     renderWithIntl(<Testimonials />, "en");
     expect(screen.getByRole("heading", { name: "What our clients say" })).toBeTruthy();
-    expect(screen.getByText(/found our apartment in Granada/)).toBeTruthy();
+    expect(screen.getByText(/residence at Aston Martin Residences/)).toBeTruthy();
   });
 });
 
@@ -39,11 +39,11 @@ describe("ResourceCards", () => {
   it("renders three guide cards in both languages", () => {
     const { unmount } = renderWithIntl(<ResourceCards />);
     expect(screen.getAllByRole("article")).toHaveLength(3);
-    expect(screen.getByRole("heading", { name: "Dónde vivir en Cali: guía de barrios" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Dónde vivir en Miami: guía de enclaves de ultra lujo" })).toBeTruthy();
     unmount();
     renderWithIntl(<ResourceCards />, "en");
     expect(screen.getAllByRole("article")).toHaveLength(3);
-    expect(screen.getByRole("heading", { name: "Where to live in Cali: a neighborhood guide" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Where to live in Miami: an ultra-luxury enclave guide" })).toBeTruthy();
   });
 });
 
