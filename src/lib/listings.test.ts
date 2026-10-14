@@ -56,6 +56,17 @@ describe("fetchListings", () => {
     expect(calls).toContainEqual(["order", "price_cop", { ascending: false }]);
   });
 
+  it("applies USD price filters when provided", async () => {
+    const { client, calls } = fakeClient([{ data: [], count: 0 }]);
+    await fetchListings(client, {
+      ...base,
+      minPriceUsd: 1_000_000,
+      maxPriceUsd: 15_000_000,
+    });
+    expect(calls).toContainEqual(["gte", "price_usd", 1_000_000]);
+    expect(calls).toContainEqual(["lte", "price_usd", 15_000_000]);
+  });
+
   it("computes the range and pagination metadata", async () => {
     const { client, calls } = fakeClient([{ data: [{ id: "a", images: [] }], count: 25 }]);
     const page = await fetchListings(client, { ...base, page: 3, limit: 10 });
