@@ -327,5 +327,93 @@
         }
       }
     }
+  },
+  "Login": {
+    "title": "Acceso para agentes",
+    "subtitle": "Administra tus propiedades.",
+    "email": "Correo electrónico",
+    "password": "Contraseña",
+    "submit": "Iniciar sesión",
+    "submitting": "Iniciando sesión…",
+    "errors": {
+      "emailRequired": "Ingresa tu correo.",
+      "passwordRequired": "Ingresa tu contraseña.",
+      "invalid": "Correo o contraseña incorrectos.",
+      "generic": "No pudimos iniciar tu sesión. Inténtalo de nuevo."
+    }
+  },
+  "Dashboard": {
+    "title": "Mis propiedades",
+    "signOut": "Cerrar sesión",
+    "newListing": "Nueva propiedad",
+    "loading": "Cargando propiedades…",
+    "loadError": "No pudimos cargar tus propiedades.",
+    "retry": "Reintentar",
+    "empty": "Aún no tienes propiedades.",
+    "actionError": "La acción falló. Inténtalo de nuevo.",
+    "table": {
+      "caption": "Tus propiedades",
+      "title": "Título",
+      "neighborhood": "Barrio",
+      "price": "Precio (COP)",
+      "status": "Estado",
+      "actions": "Acciones"
+    },
+    "status": {
+      "published": "Publicada",
+      "draft": "Borrador"
+    },
+    "actions": {
+      "edit": "Editar",
+      "publish": "Publicar",
+      "unpublish": "Despublicar",
+      "delete": "Eliminar",
+      "confirmDelete": "¿Eliminar “{title}”? Esta acción no se puede deshacer."
+    },
+    "form": {
+      "createTitle": "Nueva propiedad",
+      "editTitle": "Editar propiedad",
+      "title": "Título",
+      "slug": "Slug (URL)",
+      "slugHint": "Déjalo vacío para generarlo automáticamente.",
+      "description": "Descripción",
+      "propertyType": "Tipo de inmueble",
+      "operation": "Operación",
+      "priceCop": "Precio (COP)",
+      "areaM2": "Área (m²)",
+      "bedrooms": "Habitaciones",
+      "bathrooms": "Baños",
+      "stratum": "Estrato (1–6)",
+      "adminFeeCop": "Administración (COP)",
+      "neighborhood": "Barrio",
+      "address": "Dirección",
+      "published": "Publicada (visible al público)",
+      "save": "Guardar propiedad",
+      "saving": "Guardando…",
+      "cancel": "Cancelar",
+      "saveError": "No pudimos guardar la propiedad. Inténtalo de nuevo.",
+      "slugTaken": "Ese slug ya está en uso.",
+      "propertyTypes": {
+        "apartment": "Apartamento",
+        "house": "Casa",
+        "penthouse": "Penthouse",
+        "townhouse": "Casa adosada",
+        "land": "Lote",
+        "office": "Oficina",
+        "commercial": "Local comercial"
+      },
+      "operations": {
+        "sale": "Venta",
+        "rent": "Arriendo"
+      },
+      "errors": {
+        "required": "Este campo es obligatorio.",
+        "positiveInt": "Ingresa un número entero mayor que 0.",
+        "positiveNumber": "Ingresa un número mayor que 0.",
+        "nonNegInt": "Ingresa un número entero, 0 o más.",
+        "stratum": "Ingresa un estrato de 1 a 6.",
+        "slug": "Usa minúsculas, números y guiones simples."
+      }
+    }
   }
 }

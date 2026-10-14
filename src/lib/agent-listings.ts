@@ -23,6 +23,8 @@ export interface ListingFields {
   bathrooms?: number;
   parking_spots?: number;
   area_m2?: number | null;
+  stratum?: number | null;
+  admin_fee_cop?: number | null;
   neighborhood?: string;
   address?: string | null;
   city?: string;
@@ -119,6 +121,18 @@ export function validateListingInput(body: unknown, partial: boolean): ListingVa
     } else fields[key] = v;
   };
 
+  const nullableInt = (key: "stratum" | "admin_fee_cop", min: number, max: number) => {
+    if (!has(key)) return;
+    if (b[key] === null) {
+      fields[key] = null;
+      return;
+    }
+    const v = b[key];
+    if (typeof v !== "number" || !Number.isSafeInteger(v) || v < min || v > max) {
+      errors[key] = `${key} must be an integer between ${min} and ${max} or null`;
+    } else fields[key] = v;
+  };
+
   text("title", MAX_TITLE, !partial);
   text("neighborhood", MAX_TEXT, !partial);
   text("city", MAX_TEXT, false);
@@ -155,6 +169,8 @@ export function validateListingInput(body: unknown, partial: boolean): ListingVa
   int("bathrooms", 0, MAX_SMALLINT, false);
   int("parking_spots", 0, MAX_SMALLINT, false);
   nullableNumber("area_m2", 0, MAX_AREA, true);
+  nullableInt("stratum", 1, 6);
+  nullableInt("admin_fee_cop", 0, MAX_PRICE);
   nullableNumber("latitude", -90, 90);
   nullableNumber("longitude", -180, 180);
 

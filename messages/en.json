@@ -327,5 +327,93 @@
         }
       }
     }
+  },
+  "Login": {
+    "title": "Agent sign in",
+    "subtitle": "Manage your listings.",
+    "email": "Email",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "errors": {
+      "emailRequired": "Enter your email.",
+      "passwordRequired": "Enter your password.",
+      "invalid": "Incorrect email or password.",
+      "generic": "We couldn't sign you in. Try again."
+    }
+  },
+  "Dashboard": {
+    "title": "My listings",
+    "signOut": "Sign out",
+    "newListing": "New listing",
+    "loading": "Loading listings…",
+    "loadError": "We couldn't load your listings.",
+    "retry": "Retry",
+    "empty": "You have no listings yet.",
+    "actionError": "The action failed. Try again.",
+    "table": {
+      "caption": "Your listings",
+      "title": "Title",
+      "neighborhood": "Neighborhood",
+      "price": "Price (COP)",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "status": {
+      "published": "Published",
+      "draft": "Draft"
+    },
+    "actions": {
+      "edit": "Edit",
+      "publish": "Publish",
+      "unpublish": "Unpublish",
+      "delete": "Delete",
+      "confirmDelete": "Delete “{title}”? This cannot be undone."
+    },
+    "form": {
+      "createTitle": "New listing",
+      "editTitle": "Edit listing",
+      "title": "Title",
+      "slug": "Slug (URL)",
+      "slugHint": "Leave blank to generate it automatically.",
+      "description": "Description",
+      "propertyType": "Property type",
+      "operation": "Operation",
+      "priceCop": "Price (COP)",
+      "areaM2": "Area (m²)",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bathrooms",
+      "stratum": "Stratum (1–6)",
+      "adminFeeCop": "Admin fee (COP)",
+      "neighborhood": "Neighborhood",
+      "address": "Address",
+      "published": "Published (visible to the public)",
+      "save": "Save listing",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "saveError": "We couldn't save the listing. Try again.",
+      "slugTaken": "That slug is already in use.",
+      "propertyTypes": {
+        "apartment": "Apartment",
+        "house": "House",
+        "penthouse": "Penthouse",
+        "townhouse": "Townhouse",
+        "land": "Land",
+        "office": "Office",
+        "commercial": "Commercial"
+      },
+      "operations": {
+        "sale": "For sale",
+        "rent": "For rent"
+      },
+      "errors": {
+        "required": "This field is required.",
+        "positiveInt": "Enter a whole number greater than 0.",
+        "positiveNumber": "Enter a number greater than 0.",
+        "nonNegInt": "Enter a whole number, 0 or more.",
+        "stratum": "Enter a stratum from 1 to 6.",
+        "slug": "Use lowercase letters, digits and single hyphens."
+      }
+    }
   }
 }
