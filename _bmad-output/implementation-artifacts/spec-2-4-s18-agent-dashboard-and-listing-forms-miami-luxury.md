@@ -2,7 +2,7 @@
 title: 'S18 - Agent dashboard and listing forms for Miami luxury properties'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-dev'
+status: 'ready-for-review'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'eb0ced2be879aa9cfc30292723377db3fc53e5e4'
@@ -37,9 +37,9 @@ baseline_commit: 'eb0ced2be879aa9cfc30292723377db3fc53e5e4'
 
 ## Tasks
 
-- [ ] Create branch `story/S18-miami-dashboard` and tag `S18-start`.
-- [ ] Update `src/lib/agent-listings.ts` and `src/lib/dashboard.ts` to support `price_usd`, `hoa_fee_usd`, `area_sqft`, and `building_name`.
-- [ ] Update `src/components/ListingsTable.tsx` with USD price formatting and building badges.
-- [ ] Update dashboard translation labels in `messages/es.json` and `messages/en.json`.
-- [ ] Update tests in `ListingsTable.test.tsx`, `ListingForm.test.tsx`, and `agent-listings.test.ts`.
-- [ ] Run test suite and production build verification.
+- [x] Create branch `story/S18-miami-dashboard` and tag `S18-start`.
+- [x] Update `src/lib/agent-listings.ts` and `src/lib/dashboard.ts` to support `price_usd`, `hoa_fee_usd`, `area_sqft`, and `building_name`.
+- [x] Update `src/components/ListingsTable.tsx` with USD price formatting and building badges.
+- [x] Update dashboard translation labels in `messages/es.json` and `messages/en.json`.
+- [x] Update tests in `ListingsTable.test.tsx`, `ListingForm.test.tsx`, and `agent-listings.test.ts`.
+- [x] Run test suite and production build verification.

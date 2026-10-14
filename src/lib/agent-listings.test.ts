@@ -172,3 +172,38 @@ describe("validateListingInput stratum and admin_fee_cop", () => {
     expect(errorsOf({ ...valid, admin_fee_cop: "10" })).toHaveProperty("admin_fee_cop");
   });
 });
+
+describe("validateListingInput Miami luxury fields", () => {
+  it("accepts valid building_name, price_usd, hoa_fee_usd, and area_sqft", () => {
+    const r = validateListingInput(
+      {
+        title: "Aston Martin Sky Residence",
+        operation: "sale",
+        property_type: "apartment",
+        neighborhood: "Downtown Miami",
+        building_name: "Aston Martin Residences",
+        price_usd: 8_500_000,
+        hoa_fee_usd: 4_200,
+        area_sqft: 3950,
+      },
+      false,
+    );
+    expect(r.ok).toBe(true);
+    if (!r.ok) return;
+    expect(r.value.fields).toMatchObject({
+      building_name: "Aston Martin Residences",
+      price_usd: 8_500_000,
+      hoa_fee_usd: 4_200,
+      area_sqft: 3950,
+      price_cop: 34_000_000_000,
+    });
+    expect(r.value.fields.area_m2).toBeCloseTo(367, 0);
+  });
+
+  it("rejects negative numbers or overly long building names", () => {
+    expect(errorsOf({ ...valid, price_usd: -100 })).toHaveProperty("price_usd");
+    expect(errorsOf({ ...valid, hoa_fee_usd: -50 })).toHaveProperty("hoa_fee_usd");
+    expect(errorsOf({ ...valid, area_sqft: -20 })).toHaveProperty("area_sqft");
+    expect(errorsOf({ ...valid, building_name: "x".repeat(201) })).toHaveProperty("building_name");
+  });
+});
