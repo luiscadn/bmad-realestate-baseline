@@ -50,3 +50,9 @@
 - Resource cards are non-linked; link them once guide pages exist.
 - No test asserts that Home (`page.tsx`) renders Testimonials, ResourceCards and NewsletterForm.
 - S13 contract: decide how 409 (already subscribed) and 4xx validation responses surface in the form, and add bot protection (honeypot/rate limit).
+
+## Deferred from: code review of spec-1-13-s13 (2026-10-13)
+- Subscriber probing (200 vs 201 reveals existing emails) and rate limiting on `/api/newsletter`.
+- JS `toLowerCase()` vs Postgres `lower()` edge case for non-ASCII email casing.
+- Consent record persistence in database.
+

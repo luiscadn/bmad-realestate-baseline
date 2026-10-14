@@ -20,3 +20,40 @@ export function validateNewsletter(values: NewsletterValues): NewsletterErrors {
   if (!values.consent) errors.consent = "required";
   return errors;
 }
+
+export type NewsletterInput = { email: string; name: string | null };
+
+export type NewsletterParse =
+  | { ok: true; value: NewsletterInput }
+  | { ok: false; errors: Record<string, string> };
+
+// Strips control characters and collapses whitespace.
+const CONTROL_CHARS = /[\u0000-\u001f\u007f]/;
+const clean = (v: string) => v.replace(new RegExp(CONTROL_CHARS, "g"), " ").replace(/\s+/g, " ").trim();
+
+/** Server-side parsing of the POST /api/newsletter body: sanitizes and lowercases the email, name is optional. */
+export function parseNewsletterBody(body: unknown): NewsletterParse {
+  if (typeof body !== "object" || body === null || Array.isArray(body)) {
+    return { ok: false, errors: { body: "Payload must be a JSON object" } };
+  }
+  const b = body as Record<string, unknown>;
+  const errors: Record<string, string> = {};
+
+  if (typeof b.email !== "string" || !b.email.trim()) errors.email = "email is required";
+  const email = typeof b.email === "string" ? b.email.trim().toLowerCase() : "";
+  if (email && (email.length > MAX.email || CONTROL_CHARS.test(email) || !EMAIL_RE.test(email))) {
+    errors.email = "email must be a valid email address";
+  }
+
+  let name: string | null = null;
+  if (b.name != null) {
+    if (typeof b.name !== "string") errors.name = "name must be a string";
+    else {
+      name = clean(b.name) || null;
+      if (name && name.length > MAX.name) errors.name = `name must be at most ${MAX.name} characters`;
+    }
+  }
+
+  if (Object.keys(errors).length) return { ok: false, errors };
+  return { ok: true, value: { email, name } };
+}
