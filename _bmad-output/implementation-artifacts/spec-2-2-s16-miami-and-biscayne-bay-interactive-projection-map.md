@@ -2,7 +2,7 @@
 title: 'S16 - Miami and Biscayne Bay interactive projection map'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '1611c6d3659fb2193f5451999971c2a1334c2678'
@@ -42,3 +42,5 @@ baseline_commit: '1611c6d3659fb2193f5451999971c2a1334c2678'
 - [x] Update `src/components/SearchMap.tsx` to use USD formatting for pins and preview card.
 - [x] Update tests in `src/components/SearchMap.test.tsx` / `SearchMapView.test.tsx` and `src/lib/map-view.test.ts`.
 - [x] Run test suite and production build verification.
+- [x] [Review][Accept] Map pin badges render compact luxury USD prices, preview cards display building name and HOA fee, Miami projection preserves aspect ratio.
+
