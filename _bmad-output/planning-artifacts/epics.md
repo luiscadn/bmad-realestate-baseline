@@ -126,3 +126,13 @@
 - Create/Edit form validates USD prices, HOA fees, sq ft/m², and Miami luxury locations.
 - Mutations (publish/unpublish, edit, delete) succeed through authenticated agent API.
 
+### Story 2.5: S19 - Ultra-Luxury Cinematic UX/UI & Architectural Hero (Inspired by FindRealEstate)
+**Description:** Elevate the platform UX/UI to premier luxury standards inspired by FindRealEstate.com: floating minimalist navigation with pill buttons, cinematic architectural penthouse hero with ethereal cloud atmosphere, bold modern display typography with subtle translucency, floating glassmorphic search bar with backdrop blur, and listing cards with smooth hover zoom micro-interactions, translucent status badges, and crisp USD price hierarchy.
+**Acceptance Criteria:**
+- Floating minimalist navigation header with rounded pill button for agent portal.
+- Hero section featuring high-end architectural imagery, monumental modern typography, and pill CTA button.
+- Glassmorphic floating search bar with backdrop blur and responsive inputs.
+- Listing cards feature smooth image zoom-in on hover, glassmorphic badges, and high-contrast USD formatting.
+- All existing tests pass, and Next.js production build succeeds with 0 errors.
+
+
