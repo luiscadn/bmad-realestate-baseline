@@ -66,4 +66,22 @@ describe("ListingsTable", () => {
     expect(h.onDelete).toHaveBeenCalledTimes(1);
     expect(confirm.mock.calls[0][0]).toContain("Casa Granada");
   });
+
+  it("renders USD price and building name for Miami luxury residences", () => {
+    setup([
+      make({
+        id: "aston-triplex",
+        title: "Signature Triplex Penthouse",
+        building_name: "Aston Martin Residences",
+        neighborhood: "Downtown Miami",
+        price_usd: 25_000_000,
+        price_cop: 100_000_000_000,
+      }),
+    ]);
+    const row = screen.getAllByRole("row")[1];
+    expect(within(row).getByText("Signature Triplex Penthouse")).toBeTruthy();
+    expect(within(row).getByText("Aston Martin Residences")).toBeTruthy();
+    expect(within(row).getByText("Downtown Miami")).toBeTruthy();
+    expect(within(row).getByText("$25,000,000")).toBeTruthy();
+  });
 });

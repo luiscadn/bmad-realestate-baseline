@@ -34,6 +34,10 @@ export interface AgentListing {
   operation: string;
   property_type: string;
   price_cop: number;
+  price_usd?: number | null;
+  hoa_fee_usd?: number | null;
+  area_sqft?: number | string | null;
+  building_name?: string | null;
   area_m2: number | string | null;
   bedrooms: number;
   bathrooms: number;
@@ -111,18 +115,23 @@ export function validateForm(v: FormValues): FormErrors {
 /** Builds the JSON body for POST/PATCH `/api/agent/listings`. A blank slug is omitted so the server keeps/generates it. */
 export function toPayload(v: FormValues): Record<string, unknown> {
   const num = (raw: string) => (raw.trim() ? Number(raw.trim()) : null);
+  const rawPrice = Number(v.price_cop.trim());
   const payload: Record<string, unknown> = {
     title: v.title.trim(),
     description: v.description.trim(),
     property_type: v.property_type,
     operation: v.operation,
-    price_cop: Number(v.price_cop.trim()),
+    price_cop: rawPrice,
+    price_usd: rawPrice >= 1_000_000_000 ? Math.round(rawPrice / 4000) : rawPrice,
     area_m2: num(v.area_m2),
+    area_sqft: num(v.area_m2) ? Math.round(Number(v.area_m2) * 10.7639) : null,
     bedrooms: num(v.bedrooms) ?? 0,
     bathrooms: num(v.bathrooms) ?? 0,
     stratum: num(v.stratum),
     admin_fee_cop: num(v.admin_fee_cop),
+    hoa_fee_usd: num(v.admin_fee_cop),
     neighborhood: v.neighborhood.trim(),
+    city: "Miami",
     address: v.address.trim() || null,
     published: v.published,
   };

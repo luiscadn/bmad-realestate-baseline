@@ -19,6 +19,10 @@ export interface ListingFields {
   operation?: (typeof OPERATIONS)[number];
   property_type?: (typeof PROPERTY_TYPES)[number];
   price_cop?: number;
+  price_usd?: number | null;
+  hoa_fee_usd?: number | null;
+  area_sqft?: number | null;
+  building_name?: string | null;
   bedrooms?: number;
   bathrooms?: number;
   parking_spots?: number;
@@ -87,7 +91,7 @@ export function validateListingInput(body: unknown, partial: boolean): ListingVa
     else fields[key] = v;
   };
 
-  const nullableText = (key: "address", max: number) => {
+  const nullableText = (key: "address" | "building_name", max: number) => {
     if (!has(key)) return;
     if (b[key] === null) fields[key] = null;
     else if (typeof b[key] !== "string") errors[key] = `${key} must be a string or null`;
@@ -109,7 +113,12 @@ export function validateListingInput(body: unknown, partial: boolean): ListingVa
     } else fields[key] = v;
   };
 
-  const nullableNumber = (key: "area_m2" | "latitude" | "longitude", min: number, max: number, exclusiveMin = false) => {
+  const nullableNumber = (
+    key: "area_m2" | "latitude" | "longitude" | "price_usd" | "hoa_fee_usd" | "area_sqft",
+    min: number,
+    max: number,
+    exclusiveMin = false,
+  ) => {
     if (!has(key)) return;
     if (b[key] === null) {
       fields[key] = null;
@@ -164,7 +173,12 @@ export function validateListingInput(body: unknown, partial: boolean): ListingVa
     } else fields.property_type = b.property_type as ListingFields["property_type"];
   }
 
-  int("price_cop", 1, MAX_PRICE, !partial);
+  nullableText("building_name", MAX_TEXT);
+  nullableNumber("price_usd", 0, MAX_PRICE, true);
+  nullableNumber("hoa_fee_usd", 0, MAX_PRICE);
+  nullableNumber("area_sqft", 0, MAX_AREA, true);
+
+  int("price_cop", 1, MAX_PRICE, !partial && !has("price_usd"));
   int("bedrooms", 0, MAX_SMALLINT, false);
   int("bathrooms", 0, MAX_SMALLINT, false);
   int("parking_spots", 0, MAX_SMALLINT, false);
@@ -173,6 +187,14 @@ export function validateListingInput(body: unknown, partial: boolean): ListingVa
   nullableInt("admin_fee_cop", 0, MAX_PRICE);
   nullableNumber("latitude", -90, 90);
   nullableNumber("longitude", -180, 180);
+
+  // Auto-derive COP and m2 from USD/sqft if not provided on create
+  if (fields.price_usd && !fields.price_cop && !partial) {
+    fields.price_cop = Math.round(fields.price_usd * 4000);
+  }
+  if (fields.area_sqft && !fields.area_m2 && !partial) {
+    fields.area_m2 = Math.round((fields.area_sqft / 10.7639) * 100) / 100;
+  }
 
   if (has("featured")) {
     if (typeof b.featured !== "boolean") errors.featured = "featured must be a boolean";
