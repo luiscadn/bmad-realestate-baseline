@@ -29,7 +29,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 # - Retrospective appends its action items to action_items; the status view surfaces open ones
 generated: 10-13-2026 12:37
-last_updated: 10-13-2026 15:30
+last_updated: 10-13-2026 19:40
 project: Bmad-RealEstate
 project_key: NOKEY
 tracking_system: file-system
@@ -49,5 +49,5 @@ development_status:
   1-11-s11-map-list-toggle-on-search: done
   1-12-s12-newsletter-signup-testimonials-and-resources-sections: done
   1-13-s13-newsletter-subscribers-table-and-policies: done
-  1-14-s14-agent-dashboard-listings-table-and-create-edit-form: backlog
+  1-14-s14-agent-dashboard-listings-table-and-create-edit-form: done
   epic-1-retrospective: optional

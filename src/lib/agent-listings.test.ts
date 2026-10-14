@@ -155,3 +155,20 @@ describe("slug helpers", () => {
     expect(generateSlug("x".repeat(300))).toMatch(re);
   });
 });
+
+describe("validateListingInput stratum and admin_fee_cop", () => {
+  it("accepts valid values and null", () => {
+    const r = validateListingInput({ ...valid, stratum: 4, admin_fee_cop: 350_000 }, false);
+    expect(r.ok && r.value.fields).toMatchObject({ stratum: 4, admin_fee_cop: 350_000 });
+    const cleared = validateListingInput({ stratum: null, admin_fee_cop: null }, true);
+    expect(cleared.ok && cleared.value.fields).toEqual({ stratum: null, admin_fee_cop: null });
+  });
+
+  it("rejects out-of-range or non-integer values", () => {
+    expect(errorsOf({ ...valid, stratum: 0 })).toHaveProperty("stratum");
+    expect(errorsOf({ ...valid, stratum: 7 })).toHaveProperty("stratum");
+    expect(errorsOf({ ...valid, stratum: 2.5 })).toHaveProperty("stratum");
+    expect(errorsOf({ ...valid, admin_fee_cop: -1 })).toHaveProperty("admin_fee_cop");
+    expect(errorsOf({ ...valid, admin_fee_cop: "10" })).toHaveProperty("admin_fee_cop");
+  });
+});

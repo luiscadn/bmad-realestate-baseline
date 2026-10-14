@@ -1,0 +1,250 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index b4d26af..7e26c5b 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -56,3 +56,8 @@
+ - JS `toLowerCase()` vs Postgres `lower()` edge case for non-ASCII email casing.
+ - Consent record persistence in database.
+ 
++## Deferred from: code review of spec-1-14-s14 (2026-10-13)
++- Dashboard loads only the first 50 listings (`?limit=50`); agents with more cannot see the rest. Needs load-more/pagination decision.
++- No agent-role check: any authenticated Supabase user can open /dashboard; RLS is the only gate.
++- Session cookie access token is not refreshed on server render (`getSessionAgent` `setAll` is a no-op); expired tokens redirect to /login until a middleware story lands.
++- Client validation lacks upper bounds mirroring server MAX_PRICE/MAX_AREA/smallint; server errors for those show generic messages.
+diff --git a/_bmad-output/implementation-artifacts/spec-1-14-s14-agent-dashboard-listings-table-and-create-edit-form.md b/_bmad-output/implementation-artifacts/spec-1-14-s14-agent-dashboard-listings-table-and-create-edit-form.md
+index d3e7133..63d19eb 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-14-s14-agent-dashboard-listings-table-and-create-edit-form.md
++++ b/_bmad-output/implementation-artifacts/spec-1-14-s14-agent-dashboard-listings-table-and-create-edit-form.md
+@@ -2,7 +2,7 @@
+ title: 'S14 Agent dashboard: listings table and create/edit form'
+ type: 'feature'
+ created: '2026-10-13'
+-status: 'in-review'
++status: 'done'
+ route: 'dispatch'
+ review_loop_iteration: 0
+ baseline_commit: '02ea8a35a83e0046a2ded71ed2da7278c9d4c3a9'
+@@ -75,6 +75,20 @@ baseline_commit: '02ea8a35a83e0046a2ded71ed2da7278c9d4c3a9'
+ 
+ ## Review Triage Log
+ 
++### Review Findings
++
++- [x] [Review][Patch] Mutations (publish/delete) and form save treat 401 as a generic failure instead of redirecting to /login [DashboardClient.tsx mutate, ListingForm.tsx onSubmit] — fixed + tests
++- [x] [Review][Patch] Out-of-order `refresh()` responses can overwrite newer data [DashboardClient.tsx refresh] — fixed with a latest-request guard
++- [x] [Review][Patch] `signOut()` rejection became an unhandled rejection [DashboardClient.tsx signOut] — fixed (catch, still navigates) + test
++- [x] [Review][Patch] Any 4xx (e.g. 429 rate limit) reported as "wrong password" [LoginForm.tsx] — now only 400/401/422; 429/5xx/no-status show generic; tests added
++- [x] [Review][Patch] Delete-failure banner untested [DashboardClient.test.tsx] — test added
++- [x] [Review][Defer] Only first 50 listings loaded, no pagination — deferred: needs product decision (load more vs pagination)
++- [x] [Review][Defer] No agent-role check; any authenticated user reaches /dashboard (RLS is the only gate) — deferred: pre-existing auth model from S-agent API
++- [x] [Review][Defer] Expired access token not refreshed on page load (`setAll` no-op) — deferred: spec assigns refresh to a later middleware story
++- [x] [Review][Defer] Server-side max bounds (MAX_PRICE/MAX_AREA/smallint) not mirrored client-side; lossy server-error messages — deferred: low, cosmetic
++
++**Rejected:** `getSessionAgent` throwing on missing env → 500 (loud config failure, correct); `AbortSignal.timeout` on old Safari (<16, out of support); 409 = non-slug conflict (API only returns 409 for slug uniqueness); `published_at` client clock (cosmetic, refreshed on next load); `busyId` single-row tracking (row actions already disabled while busy, low impact); missing DB migration for stratum/admin_fee (spec: columns pre-exist, no migration by design); a11y/UX nits (row-specific button names, window.confirm, en-US currency, titles, forgot-password) and suggestions outside S14 scope; stale-edit last-write-wins (no version column exists).
++
+ ## Verification
+ 
+ **Commands:**
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index b2e8f49..1f1f055 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -29,7 +29,7 @@
+ # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+ # - Retrospective appends its action items to action_items; the status view surfaces open ones
+ generated: 10-13-2026 12:37
+-last_updated: 10-13-2026 15:30
++last_updated: 10-13-2026 19:40
+ project: Bmad-RealEstate
+ project_key: NOKEY
+ tracking_system: file-system
+@@ -49,5 +49,5 @@ development_status:
+   1-11-s11-map-list-toggle-on-search: done
+   1-12-s12-newsletter-signup-testimonials-and-resources-sections: done
+   1-13-s13-newsletter-subscribers-table-and-policies: done
+-  1-14-s14-agent-dashboard-listings-table-and-create-edit-form: review
++  1-14-s14-agent-dashboard-listings-table-and-create-edit-form: done
+   epic-1-retrospective: optional
+diff --git a/src/components/DashboardClient.test.tsx b/src/components/DashboardClient.test.tsx
+index bc1ada2..8e327cf 100644
+--- a/src/components/DashboardClient.test.tsx
++++ b/src/components/DashboardClient.test.tsx
+@@ -86,6 +86,34 @@ describe("DashboardClient", () => {
+     expect(screen.getByText("Publicada")).toBeTruthy();
+   });
+ 
++  it("redirects to /login when a mutation gets 401", async () => {
++    fetchMock.mockResolvedValueOnce(list([row("a")])).mockResolvedValueOnce(res(401));
++    renderWithIntl(<DashboardClient />);
++    await screen.findByText("Casa a");
++    fireEvent.click(screen.getByRole("button", { name: "Despublicar" }));
++    await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/login"));
++    expect(screen.queryByRole("alert")).toBeNull();
++  });
++
++  it("keeps the row and shows an error when delete fails", async () => {
++    vi.spyOn(window, "confirm").mockReturnValue(true);
++    fetchMock.mockResolvedValueOnce(list([row("a")])).mockResolvedValueOnce(res(500));
++    renderWithIntl(<DashboardClient />);
++    await screen.findByText("Casa a");
++    fireEvent.click(screen.getByRole("button", { name: "Eliminar" }));
++    expect((await screen.findByRole("alert")).textContent).toBe("La acción falló. Inténtalo de nuevo.");
++    expect(screen.getByText("Casa a")).toBeTruthy();
++  });
++
++  it("goes to /login even when sign out throws", async () => {
++    fetchMock.mockResolvedValueOnce(list([]));
++    signOut.mockRejectedValueOnce(new Error("network"));
++    renderWithIntl(<DashboardClient />);
++    await screen.findByText("Aún no tienes propiedades.");
++    fireEvent.click(screen.getByRole("button", { name: "Cerrar sesión" }));
++    await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/login"));
++  });
++
+   it("deletes a confirmed listing and removes the row", async () => {
+     vi.spyOn(window, "confirm").mockReturnValue(true);
+     fetchMock.mockResolvedValueOnce(list([row("a"), row("b")])).mockResolvedValueOnce(res(200));
+diff --git a/src/components/DashboardClient.tsx b/src/components/DashboardClient.tsx
+index 68e8627..ecee985 100644
+--- a/src/components/DashboardClient.tsx
++++ b/src/components/DashboardClient.tsx
+@@ -25,17 +25,23 @@ export default function DashboardClient() {
+   const [busyId, setBusyId] = useState<string | null>(null);
+   const [actionFailed, setActionFailed] = useState(false);
+ 
++  // Only the latest refresh may write state, so a slow earlier response cannot overwrite newer data.
++  const latestRefresh = useRef(0);
++
+   const refresh = useCallback(async () => {
++    const id = ++latestRefresh.current;
+     setLoad("loading");
+     try {
+       const res = await fetch(LIST_URL, { signal: AbortSignal.timeout(15_000) });
++      if (id !== latestRefresh.current) return;
+       if (res.status === 401) return routerRef.current.push("/login");
+       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+       const body = await res.json();
++      if (id !== latestRefresh.current) return;
+       setListings(body.data ?? []);
+       setLoad("ready");
+     } catch {
+-      setLoad("error");
++      if (id === latestRefresh.current) setLoad("error");
+     }
+   }, []);
+ 
+@@ -48,6 +54,7 @@ export default function DashboardClient() {
+     setActionFailed(false);
+     try {
+       const res = await fetch(`/api/agent/listings/${listing.id}`, { ...init, signal: AbortSignal.timeout(15_000) });
++      if (res.status === 401) return routerRef.current.push("/login");
+       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+       apply();
+     } catch {
+@@ -72,6 +79,8 @@ export default function DashboardClient() {
+   async function signOut() {
+     try {
+       await createBrowserSupabase().auth.signOut();
++    } catch {
++      // Navigate to /login regardless; the login page will show the real session state.
+     } finally {
+       router.push("/login");
+     }
+diff --git a/src/components/ListingForm.test.tsx b/src/components/ListingForm.test.tsx
+index 51272e2..b2f540f 100644
+--- a/src/components/ListingForm.test.tsx
++++ b/src/components/ListingForm.test.tsx
+@@ -2,6 +2,7 @@ import { fireEvent, screen, waitFor } from "@testing-library/react";
+ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+ import type { AgentListing } from "@/lib/dashboard";
+ import { renderWithIntl } from "@/test/render";
++import { routerPush } from "@/test/setup";
+ import ListingForm from "./ListingForm";
+ 
+ const fetchMock = vi.fn();
+@@ -103,6 +104,16 @@ describe("ListingForm", () => {
+     expect(onSaved).not.toHaveBeenCalled();
+   });
+ 
++  it("redirects to /login when the session has expired (401)", async () => {
++    fetchMock.mockResolvedValue(json(401));
++    const onSaved = vi.fn();
++    renderWithIntl(<ListingForm onSaved={onSaved} onCancel={vi.fn()} />);
++    fillRequired();
++    save();
++    await waitFor(() => expect(routerPush).toHaveBeenCalledWith("/login"));
++    expect(onSaved).not.toHaveBeenCalled();
++  });
++
+   it("maps 400 field errors inline", async () => {
+     fetchMock.mockResolvedValue(json(400, { errors: { price_cop: "bad" } }));
+     renderWithIntl(<ListingForm onSaved={vi.fn()} onCancel={vi.fn()} />);
+diff --git a/src/components/ListingForm.tsx b/src/components/ListingForm.tsx
+index 0203501..e491d7e 100644
+--- a/src/components/ListingForm.tsx
++++ b/src/components/ListingForm.tsx
+@@ -2,6 +2,7 @@
+ 
+ import { useId, useState, type FormEvent } from "react";
+ import { useTranslations } from "next-intl";
++import { useRouter } from "@/i18n/navigation";
+ import {
+   EMPTY_FORM,
+   fromListing,
+@@ -27,6 +28,7 @@ const fieldClass =
+ 
+ export default function ListingForm({ listing, onSaved, onCancel }: Props) {
+   const t = useTranslations("Dashboard.form");
++  const router = useRouter();
+   const uid = useId();
+   const [values, setValues] = useState<FormValues>(() => (listing ? fromListing(listing) : EMPTY_FORM));
+   const [errors, setErrors] = useState<FormErrors>({});
+@@ -60,6 +62,10 @@ export default function ListingForm({ listing, onSaved, onCancel }: Props) {
+         onSaved();
+         return;
+       }
++      if (res.status === 401) {
++        router.push("/login");
++        return;
++      }
+       if (res.status === 409) {
+         setSlugTaken(true);
+         document.getElementById(`${uid}-slug`)?.focus();
+diff --git a/src/components/LoginForm.test.tsx b/src/components/LoginForm.test.tsx
+index 10a12bf..23c33a4 100644
+--- a/src/components/LoginForm.test.tsx
++++ b/src/components/LoginForm.test.tsx
+@@ -54,4 +54,17 @@ describe("LoginForm", () => {
+     fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
+     expect((await screen.findByRole("alert")).textContent).toBe("We couldn't sign you in. Try again.");
+   });
++
++  it.each([
++    ["a 5xx error", { message: "boom", status: 500 }],
++    ["a rate limit", { message: "too many", status: 429 }],
++    ["an error without status", { message: "fetch failed" }],
++  ])("shows the generic error for %s, not bad credentials", async (_label, authError) => {
++    signInWithPassword.mockResolvedValue({ error: authError });
++    renderWithIntl(<LoginForm />, "en");
++    fill("a@b.co", "x", ["Email", "Password"]);
++    fireEvent.click(screen.getByRole("button", { name: "Sign in" }));
++    expect((await screen.findByRole("alert")).textContent).toBe("We couldn't sign you in. Try again.");
++    expect(routerPush).not.toHaveBeenCalled();
++  });
+ });
+diff --git a/src/components/LoginForm.tsx b/src/components/LoginForm.tsx
+index 2043669..21d70fd 100644
+--- a/src/components/LoginForm.tsx
++++ b/src/components/LoginForm.tsx
+@@ -29,9 +29,9 @@ export default function LoginForm() {
+     try {
+       const { error: authError } = await createBrowserSupabase().auth.signInWithPassword({ email: email.trim(), password });
+       if (authError) {
+-        // 4xx = bad credentials; anything else (network, 5xx) is a generic failure.
++        // 400/401/422 = bad credentials; anything else (429 rate limit, 5xx, network) is a generic failure.
+         const status = (authError as { status?: number }).status;
+-        setError(status && status >= 400 && status < 500 ? "invalid" : "generic");
++        setError(status === 400 || status === 401 || status === 422 ? "invalid" : "generic");
+         setSubmitting(false);
+         return;
+       }

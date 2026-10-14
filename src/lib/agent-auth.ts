@@ -40,11 +40,17 @@ export async function getAgent(request: Request): Promise<AgentContext | null> {
     return error || !data.user ? null : { user: data.user, supabase };
   }
 
+  return getSessionAgent();
+}
+
+/** Authenticates from the Supabase session cookie only (used by server components and route handlers). */
+export async function getSessionAgent(): Promise<AgentContext | null> {
+  const { url, key } = env();
   const cookieStore = await cookies();
   const supabase = createServerClient(url, key, {
     cookies: {
       getAll: () => cookieStore.getAll(),
-      // Route handlers here only read the session; token refresh is left to a later middleware story.
+      // Only reads the session; token refresh is left to a later middleware story.
       setAll: () => {},
     },
   });
