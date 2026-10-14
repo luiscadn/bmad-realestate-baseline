@@ -71,6 +71,6 @@ describe("SearchFilters", () => {
     renderWithIntl(<SearchFilters values={{ operation: "sale" }} />, "en");
     expect(screen.getByRole("link", { name: "Clear filters" }).getAttribute("href")).toBe("/search");
     expect(screen.getByLabelText("Bedrooms")).toBeTruthy();
-    expect(screen.getByLabelText("Minimum price (COP)")).toBeTruthy();
+    expect(screen.getByLabelText("Minimum price (USD)")).toBeTruthy();
   });
 });

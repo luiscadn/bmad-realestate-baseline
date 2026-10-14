@@ -56,4 +56,28 @@ describe("ListingCard", () => {
     expect(screen.getByText("1 bedroom")).toBeTruthy();
     expect(screen.queryByText(/m²/)).toBeNull();
   });
+
+  it("renders Miami luxury residence with USD price, building badge, and square footage", () => {
+    const miamiListing: FeaturedListing = {
+      id: "porsche-1",
+      slug: "porsche-design-tower-sky-villa",
+      title: "Sky Villa with Dezervator",
+      building_name: "Porsche Design Tower",
+      operation: "sale",
+      property_type: "apartment",
+      price_cop: 35_600_000_000,
+      price_usd: 8_900_000,
+      bedrooms: 4,
+      bathrooms: 5,
+      area_sqft: 4800,
+      area_m2: 445.9,
+      neighborhood: "Sunny Isles Beach",
+      images: [{ id: "p1", listing_id: "porsche-1", url: "https://img.test/porsche.jpg", alt_text: "Sky Villa", position: 0 }],
+    };
+    renderWithIntl(<ListingCard listing={miamiListing} />, "en");
+    expect(screen.getByText(/8,900,000/)).toBeTruthy();
+    expect(screen.getByTestId("building-badge").textContent).toBe("Porsche Design Tower");
+    expect(screen.getByTestId("neighborhood-badge").textContent).toBe("Sunny Isles Beach");
+    expect(screen.getByTestId("sqft-badge").textContent).toBe("4,800 sq ft");
+  });
 });

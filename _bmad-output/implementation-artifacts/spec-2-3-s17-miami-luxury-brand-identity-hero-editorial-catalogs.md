@@ -2,7 +2,7 @@
 title: 'S17 - Miami luxury brand identity, hero, editorial and catalogs'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-dev'
+status: 'ready-for-review'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'd25b49b2c2ba3afa647fe6e9d4ce7f68603c85dd'
@@ -40,9 +40,9 @@ baseline_commit: 'd25b49b2c2ba3afa647fe6e9d4ce7f68603c85dd'
 
 ## Tasks
 
-- [ ] Create branch `story/S17-miami-brand-identity` and tag `S17-start`.
-- [ ] Update `messages/es.json` and `messages/en.json` with Miami luxury copy.
-- [ ] Update `SearchFilters.tsx` and `HeroSearch.tsx` to use `MIAMI_NEIGHBORHOODS`.
-- [ ] Update `ListingCard.tsx` to format USD prices and display square footage.
-- [ ] Update component and layout tests (`Home.test.tsx`, `HomeEditorial.test.tsx`, `ListingCard.test.tsx`, `Footer.test.tsx`, `SearchFilters.test.tsx`).
-- [ ] Run test suite and production build verification.
+- [x] Create branch `story/S17-miami-brand-identity` and tag `S17-start`.
+- [x] Update `messages/es.json` and `messages/en.json` with Miami luxury copy.
+- [x] Update `SearchFilters.tsx` and `HeroSearch.tsx` to use `MIAMI_NEIGHBORHOODS`.
+- [x] Update `ListingCard.tsx` to format USD prices and display square footage.
+- [x] Update component and layout tests (`Home.test.tsx`, `HomeEditorial.test.tsx`, `ListingCard.test.tsx`, `Footer.test.tsx`, `SearchFilters.test.tsx`).
+- [x] Run test suite and production build verification.

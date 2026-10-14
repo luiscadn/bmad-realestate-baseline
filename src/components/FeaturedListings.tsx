@@ -24,11 +24,18 @@ export default function FeaturedListings({ listings }: { listings: FeaturedListi
         <ul className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {listings.map((l) => {
             const image = l.images[0];
-            const price = format.number(Number(l.price_cop), {
-              style: "currency",
-              currency: "COP",
-              maximumFractionDigits: 0,
-            });
+            const hasUsd = l.price_usd != null && Number.isFinite(Number(l.price_usd));
+            const price = hasUsd
+              ? format.number(Number(l.price_usd), {
+                  style: "currency",
+                  currency: "USD",
+                  maximumFractionDigits: 0,
+                })
+              : format.number(Number(l.price_cop), {
+                  style: "currency",
+                  currency: "COP",
+                  maximumFractionDigits: 0,
+                });
             return (
               <li key={l.id} className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
                 <Link href={`/listings/${l.slug}`} className="block">
@@ -49,11 +56,27 @@ export default function FeaturedListings({ listings }: { listings: FeaturedListi
                       {l.operation === "rent" ? <span className="text-sm font-normal text-slate-500"> {t("featured.perMonth")}</span> : null}
                     </p>
                     <h3 className="mt-1 font-medium text-slate-800">{l.title}</h3>
-                    <p className="text-sm text-slate-500">{l.neighborhood}</p>
+                    <div className="mt-2 flex flex-wrap items-center gap-1.5">
+                      {l.building_name ? (
+                        <span
+                          data-testid="building-badge"
+                          className="inline-block rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-700"
+                        >
+                          {l.building_name}
+                        </span>
+                      ) : null}
+                      <span data-testid="neighborhood-badge" className="text-sm text-slate-500">
+                        {l.neighborhood}
+                      </span>
+                    </div>
                     <p className="mt-3 flex flex-wrap gap-x-4 text-sm text-slate-600">
                       <span>{t("featured.beds", { count: l.bedrooms })}</span>
                       <span>{t("featured.baths", { count: l.bathrooms })}</span>
-                      {l.area_m2 ? <span>{t("featured.area", { count: Number(l.area_m2) })}</span> : null}
+                      {l.area_sqft ? (
+                        <span data-testid="sqft-badge">{Number(l.area_sqft).toLocaleString()} sq ft</span>
+                      ) : l.area_m2 ? (
+                        <span>{t("featured.area", { count: Number(l.area_m2) })}</span>
+                      ) : null}
                     </p>
                   </div>
                 </Link>
