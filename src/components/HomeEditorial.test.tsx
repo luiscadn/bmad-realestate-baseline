@@ -67,6 +67,7 @@ describe("NewsletterForm", () => {
     expect(screen.getByText("You must accept to subscribe.")).toBeTruthy();
     expect(screen.getByLabelText(/Email/).getAttribute("aria-invalid")).toBe("true");
     expect(fetchMock).not.toHaveBeenCalled();
+    expect(document.activeElement).toBe(screen.getByLabelText(/Name/));
   });
 
   it("rejects an invalid email", () => {
@@ -98,7 +99,7 @@ describe("NewsletterForm", () => {
     renderWithIntl(<NewsletterForm />, "en");
     fill("Ana", "ana@example.com");
     submit();
-    expect(await screen.findByRole("alert")).toBeTruthy();
+    expect(await screen.findByText("We could not complete your subscription. Please try again.")).toBeTruthy();
     expect(screen.getByText("We could not complete your subscription. Please try again.")).toBeTruthy();
     expect((screen.getByLabelText(/Email/) as HTMLInputElement).value).toBe("ana@example.com");
   });
@@ -109,10 +110,10 @@ describe("NewsletterForm", () => {
     renderWithIntl(<NewsletterForm />, "en");
     fill("Ana", "ana@example.com");
     submit();
-    expect(await screen.findByRole("alert")).toBeTruthy();
+    expect(await screen.findByText(/could not complete your subscription/)).toBeTruthy();
     submit();
-    await waitFor(() => expect(screen.getByRole("status")).toBeTruthy());
-    expect(screen.queryByRole("alert")).toBeNull();
+    await waitFor(() => expect(screen.getByRole("status").textContent).toContain("subscribed"));
+    expect(screen.getByRole("alert").textContent).toBe("");
   });
 
   it("disables the button while submitting and renders Spanish copy", async () => {

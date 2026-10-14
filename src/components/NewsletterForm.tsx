@@ -22,8 +22,10 @@ export default function NewsletterForm() {
     if (status === "submitting") return;
     const found = validateNewsletter(values);
     setErrors(found);
-    if (Object.keys(found).length) {
+    const firstInvalid = (["name", "email", "consent"] as const).find((f) => found[f]);
+    if (firstInvalid) {
       setStatus("idle");
+      document.getElementById(`${uid}-${firstInvalid}`)?.focus();
       return;
     }
     setStatus("submitting");
@@ -32,6 +34,7 @@ export default function NewsletterForm() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: values.name.trim(), email: values.email.trim() }),
+        signal: AbortSignal.timeout(10_000),
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setValues(EMPTY);
@@ -67,6 +70,7 @@ export default function NewsletterForm() {
           value={values[name]}
           onChange={(e) => setValues((v) => ({ ...v, [name]: e.target.value }))}
           className={fieldClass}
+          aria-required="true"
           {...props}
         />
         {code ? (
@@ -88,16 +92,16 @@ export default function NewsletterForm() {
         </h2>
         <p className="mt-2 text-sm text-emerald-100/80">{t("description")}</p>
         <form onSubmit={onSubmit} noValidate aria-labelledby="newsletter-title" className="mt-6 space-y-4">
-          {status === "success" ? (
-            <p role="status" className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
-              {t("success")}
-            </p>
-          ) : null}
-          {status === "error" ? (
-            <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">
-              {t("error")}
-            </p>
-          ) : null}
+          <div role="status">
+            {status === "success" ? (
+              <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-900">{t("success")}</p>
+            ) : null}
+          </div>
+          <div role="alert">
+            {status === "error" ? (
+              <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{t("error")}</p>
+            ) : null}
+          </div>
           {textField("name", "text", "name")}
           {textField("email", "email", "email")}
           <div>
@@ -109,6 +113,7 @@ export default function NewsletterForm() {
                 checked={values.consent}
                 onChange={(e) => setValues((v) => ({ ...v, consent: e.target.checked }))}
                 className="mt-0.5 h-4 w-4"
+                aria-required="true"
                 {...consent.props}
               />
               <span>{t("consent")}</span>
