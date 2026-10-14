@@ -54,6 +54,6 @@ development_status:
   epic-2: in-progress
   2-1-s15-miami-luxury-schema-usd-pricing-and-seed-data: done
   2-2-s16-miami-and-biscayne-bay-interactive-projection-map: done
-  2-3-s17-miami-luxury-brand-identity-hero-editorial-catalogs: ready-for-dev
-  2-4-s18-agent-dashboard-and-listing-forms-miami-luxury: backlog
+  2-3-s17-miami-luxury-brand-identity-hero-editorial-catalogs: done
+  2-4-s18-agent-dashboard-and-listing-forms-miami-luxury: ready-for-dev
   epic-2-retrospective: optional
