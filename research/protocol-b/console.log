@@ -1,0 +1,14 @@
+[S01] attempt 1: ok 85.968s findings=56 clean=True
+[S02] attempt 1: ok 91.02s findings=56 clean=True
+[S03] attempt 1: ok 63.22s findings=27 clean=True
+[S04] attempt 1: ok 62.698s findings=26 clean=True
+[S05] attempt 1: ok 67.402s findings=27 clean=True
+[S06] attempt 1: ok 77.331s findings=36 clean=True
+[S07] attempt 1: ok 88.297s findings=40 clean=True
+[S08] attempt 1: ok 67.989s findings=33 clean=True
+[S09] attempt 1: ok 92.211s findings=39 clean=True
+[S10] attempt 1: ok 89.302s findings=44 clean=True
+[S11] attempt 1: ok 71.88s findings=28 clean=True
+[S12] attempt 1: ok 70.295s findings=40 clean=True
+[S13] attempt 1: ok 69.633s findings=30 clean=True
+[S14] attempt 1: error 1.857s findings=None clean=True
