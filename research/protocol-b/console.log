@@ -12,3 +12,4 @@
 [S12] attempt 1: ok 70.295s findings=40 clean=True
 [S13] attempt 1: ok 69.633s findings=30 clean=True
 [S14] attempt 1: error 1.857s findings=None clean=True
+[S14] attempt 2: ok 48.21s findings=34 clean=True
