@@ -1,0 +1,152 @@
+diff --git a/_bmad-output/implementation-artifacts/deferred-work.md b/_bmad-output/implementation-artifacts/deferred-work.md
+index 3f9ef50..f0eb3d2 100644
+--- a/_bmad-output/implementation-artifacts/deferred-work.md
++++ b/_bmad-output/implementation-artifacts/deferred-work.md
+@@ -42,3 +42,11 @@
+ - A stale `selectedId` can survive a page change.
+ - The map only covers the current page of results.
+ 
++## Deferred from: code review of spec-1-12-s12 (2026-10-13)
++
++- Consent flag/timestamp is not sent to the API; the server (S13) has no consent record. Add `consent` to the payload and persist it in S13.
++- Consent copy says "accept the privacy policy" but links nowhere; no privacy-policy route exists yet.
++- Testimonials are invented placeholders; replace with real, consented content before launch.
++- Resource cards are non-linked; link them once guide pages exist.
++- No test asserts that Home (`page.tsx`) renders Testimonials, ResourceCards and NewsletterForm.
++- S13 contract: decide how 409 (already subscribed) and 4xx validation responses surface in the form, and add bot protection (honeypot/rate limit).
+diff --git a/_bmad-output/implementation-artifacts/spec-1-12-s12-newsletter-signup-testimonials-and-resources-sections.md b/_bmad-output/implementation-artifacts/spec-1-12-s12-newsletter-signup-testimonials-and-resources-sections.md
+index 65d50cb..e4b6a6d 100644
+--- a/_bmad-output/implementation-artifacts/spec-1-12-s12-newsletter-signup-testimonials-and-resources-sections.md
++++ b/_bmad-output/implementation-artifacts/spec-1-12-s12-newsletter-signup-testimonials-and-resources-sections.md
+@@ -22,3 +22,16 @@ review_loop_iteration: 0
+ - New: `src/lib/newsletter.ts` (validator), `src/components/Testimonials.tsx`, `ResourceCards.tsx`, `NewsletterForm.tsx`, tests for each; Home page and `messages/{es,en}.json` updated.
+ - Resource cards are non-linked articles (no guide pages exist yet). Form sends `{name, email}` only; consent is enforced client-side. `/api/newsletter` is S13, so until then the form shows the error state.
+ - Review: the blind-hunter subagent layer was skipped (no explicit permission to spawn); a self-review found nothing further. tsc, eslint, vitest (314 passed) and `next build` are clean.
++
++### Review Findings
++
++- [x] [Review][Patch] Fetch timeout: added `AbortSignal.timeout(10_000)` to prevent indefinite disabled button on network stall [NewsletterForm.tsx]
++- [x] [Review][Patch] Persistent live regions: rendered status and alert containers permanently so screen readers announce changes [NewsletterForm.tsx]
++- [x] [Review][Patch] Validation failure focus: auto-focus first invalid input on submit error [NewsletterForm.tsx]
++- [x] [Review][Patch] Added `aria-required` to required form inputs with noValidate [NewsletterForm.tsx]
++- [x] [Review][Defer] Consent flag not sent to API (S13 record)
++- [x] [Review][Defer] Privacy policy text not linked
++- [x] [Review][Defer] Real client testimonial copy needed before launch
++- [x] [Review][Defer] Resource cards not linked to detail guides
++- [x] [Review][Defer] S13 409 handling and bot protection
++
+diff --git a/_bmad-output/implementation-artifacts/sprint-status.yaml b/_bmad-output/implementation-artifacts/sprint-status.yaml
+index e59a5db..736747f 100644
+--- a/_bmad-output/implementation-artifacts/sprint-status.yaml
++++ b/_bmad-output/implementation-artifacts/sprint-status.yaml
+@@ -47,7 +47,7 @@ development_status:
+   1-9-s09-listingcard-and-results-grid-with-filters-panel: done
+   1-10-s10-listing-detail-page-gallery-facts-open-house-countdown-c: done
+   1-11-s11-map-list-toggle-on-search: done
+-  1-12-s12-newsletter-signup-testimonials-and-resources-sections: review
++  1-12-s12-newsletter-signup-testimonials-and-resources-sections: done
+   1-13-s13-newsletter-subscribers-table-and-policies: backlog
+   1-14-s14-agent-dashboard-listings-table-and-create-edit-form: backlog
+   epic-1-retrospective: optional
+diff --git a/src/components/HomeEditorial.test.tsx b/src/components/HomeEditorial.test.tsx
+index 3c99e5d..1fea674 100644
+--- a/src/components/HomeEditorial.test.tsx
++++ b/src/components/HomeEditorial.test.tsx
+@@ -67,6 +67,7 @@ describe("NewsletterForm", () => {
+     expect(screen.getByText("You must accept to subscribe.")).toBeTruthy();
+     expect(screen.getByLabelText(/Email/).getAttribute("aria-invalid")).toBe("true");
+     expect(fetchMock).not.toHaveBeenCalled();
++    expect(document.activeElement).toBe(screen.getByLabelText(/Name/));
+   });
+ 
+   it("rejects an invalid email", () => {
+@@ -98,7 +99,7 @@ describe("NewsletterForm", () => {
+     renderWithIntl(<NewsletterForm />, "en");
+     fill("Ana", "ana@example.com");
+     submit();
+-    expect(await screen.findByRole("alert")).toBeTruthy();
++    expect(await screen.findByText("We could not complete your subscription. Please try again.")).toBeTruthy();
+     expect(screen.getByText("We could not complete your subscription. Please try again.")).toBeTruthy();
+     expect((screen.getByLabelText(/Email/) as HTMLInputElement).value).toBe("ana@example.com");
+   });
+@@ -109,10 +110,10 @@ describe("NewsletterForm", () => {
+     renderWithIntl(<NewsletterForm />, "en");
+     fill("Ana", "ana@example.com");
+     submit();
+-    expect(await screen.findByRole("alert")).toBeTruthy();
++    expect(await screen.findByText(/could not complete your subscription/)).toBeTruthy();
+     submit();
+-    await waitFor(() => expect(screen.getByRole("status")).toBeTruthy());
+-    expect(screen.queryByRole("alert")).toBeNull();
++    await waitFor(() => expect(screen.getByRole("status").textContent).toContain("subscribed"));
++    expect(screen.getByRole("alert").textContent).toBe("");
+   });
+ 
+   it("disables the button while submitting and renders Spanish copy", async () => {
+diff --git a/src/components/NewsletterForm.tsx b/src/components/NewsletterForm.tsx
+index 599cd1a..f50a4d7 100644
+--- a/src/components/NewsletterForm.tsx
++++ b/src/components/NewsletterForm.tsx
+@@ -22,8 +22,10 @@ export default function NewsletterForm() {
+     if (status === "submitting") return;
+     const found = validateNewsletter(values);
+     setErrors(found);
+-    if (Object.keys(found).length) {
++    const firstInvalid = (["name", "email", "consent"] as const).find((f) => found[f]);
++    if (firstInvalid) {
+       setStatus("idle");
++      document.getElementById(`${uid}-${firstInvalid}`)?.focus();
+       return;
+     }
+     setStatus("submitting");
+@@ -32,6 +34,7 @@ export default function NewsletterForm() {
+         method: "POST",
+         headers: { "Content-Type": "application/json" },
+         body: JSON.stringify({ name: values.name.trim(), email: values.email.trim() }),
++        signal: AbortSignal.timeout(10_000),
+       });
+       if (!res.ok) throw new Error(`HTTP ${res.status}`);
+       setValues(EMPTY);
+@@ -67,6 +70,7 @@ export default function NewsletterForm() {
+           value={values[name]}
+           onChange={(e) => setValues((v) => ({ ...v, [name]: e.target.value }))}
+           className={fieldClass}
++          aria-required="true"
+           {...props}
+         />
+         {code ? (
+@@ -88,16 +92,16 @@ export default function NewsletterForm() {
+         </h2>
+         <p className="mt-2 text-sm text-emerald-100/80">{t("description")}</p>
+         <form onSubmit={onSubmit} noValidate aria-labelledby="newsletter-title" className="mt-6 space-y-4">
+-          {status === "success" ? (
+-            <p role="status" className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-900">
+-              {t("success")}
+-            </p>
+-          ) : null}
+-          {status === "error" ? (
+-            <p role="alert" className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">
+-              {t("error")}
+-            </p>
+-          ) : null}
++          <div role="status">
++            {status === "success" ? (
++              <p className="rounded-lg bg-emerald-50 px-4 py-3 text-sm text-emerald-900">{t("success")}</p>
++            ) : null}
++          </div>
++          <div role="alert">
++            {status === "error" ? (
++              <p className="rounded-lg bg-red-50 px-4 py-3 text-sm text-red-800">{t("error")}</p>
++            ) : null}
++          </div>
+           {textField("name", "text", "name")}
+           {textField("email", "email", "email")}
+           <div>
+@@ -109,6 +113,7 @@ export default function NewsletterForm() {
+                 checked={values.consent}
+                 onChange={(e) => setValues((v) => ({ ...v, consent: e.target.checked }))}
+                 className="mt-0.5 h-4 w-4"
++                aria-required="true"
+                 {...consent.props}
+               />
+               <span>{t("consent")}</span>
