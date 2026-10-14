@@ -2,7 +2,7 @@
 title: 'S17 - Miami luxury brand identity, hero, editorial and catalogs'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-review'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: 'd25b49b2c2ba3afa647fe6e9d4ce7f68603c85dd'
@@ -46,3 +46,5 @@ baseline_commit: 'd25b49b2c2ba3afa647fe6e9d4ce7f68603c85dd'
 - [x] Update `ListingCard.tsx` to format USD prices and display square footage.
 - [x] Update component and layout tests (`Home.test.tsx`, `HomeEditorial.test.tsx`, `ListingCard.test.tsx`, `Footer.test.tsx`, `SearchFilters.test.tsx`).
 - [x] Run test suite and production build verification.
+- [x] [Review][Accept] Bilingual message catalogs, Miami luxury identity, USD card displays, and editorial sections fully verified.
+
