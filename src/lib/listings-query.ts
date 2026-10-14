@@ -2,6 +2,19 @@ export const PROPERTY_TYPES = ["apartment", "house", "penthouse", "townhouse", "
 export const OPERATIONS = ["sale", "rent"] as const;
 export const SORTS = ["price_asc", "price_desc", "newest"] as const;
 
+export const MIAMI_NEIGHBORHOODS = [
+  "Brickell",
+  "Downtown Miami",
+  "Miami Beach",
+  "South Beach",
+  "Sunny Isles Beach",
+  "Coconut Grove",
+  "Coral Gables",
+  "Edgewater",
+  "Surfside",
+  "Fisher Island",
+] as const;
+
 export const DEFAULT_LIMIT = 12;
 export const MAX_LIMIT = 50;
 export const MAX_PAGE = 100_000;
@@ -17,6 +30,8 @@ export interface ListingsQuery {
   neighborhood?: string;
   minPrice?: number;
   maxPrice?: number;
+  minPriceUsd?: number;
+  maxPriceUsd?: number;
   bedrooms?: number;
   bathrooms?: number;
   propertyType?: PropertyType;
@@ -62,6 +77,8 @@ export function parseListingsQuery(params: URLSearchParams): ParseResult {
   const sort = oneOf("sort", SORTS) ?? "newest";
   const minPrice = int("min_price", 0);
   const maxPrice = int("max_price", 0);
+  const minPriceUsd = int("min_price_usd", 0);
+  const maxPriceUsd = int("max_price_usd", 0);
   const bedrooms = int("bedrooms", 0, MAX_SMALLINT);
   const bathrooms = int("bathrooms", 0, MAX_SMALLINT);
   const page = int("page", 1, MAX_PAGE) ?? 1;
@@ -71,7 +88,26 @@ export function parseListingsQuery(params: URLSearchParams): ParseResult {
   if (minPrice !== undefined && maxPrice !== undefined && minPrice > maxPrice) {
     errors.min_price = "must be less than or equal to max_price";
   }
+  if (minPriceUsd !== undefined && maxPriceUsd !== undefined && minPriceUsd > maxPriceUsd) {
+    errors.min_price_usd = "must be less than or equal to max_price_usd";
+  }
 
   if (Object.keys(errors).length > 0) return { ok: false, errors };
-  return { ok: true, value: { operation, neighborhood, minPrice, maxPrice, bedrooms, bathrooms, propertyType, sort, page, limit } };
+  return {
+    ok: true,
+    value: {
+      operation,
+      neighborhood,
+      minPrice,
+      maxPrice,
+      minPriceUsd,
+      maxPriceUsd,
+      bedrooms,
+      bathrooms,
+      propertyType,
+      sort,
+      page,
+      limit,
+    },
+  };
 }

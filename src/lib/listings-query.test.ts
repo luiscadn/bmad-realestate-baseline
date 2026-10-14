@@ -65,4 +65,16 @@ describe("parseListingsQuery", () => {
     expect(r.ok).toBe(false);
     if (!r.ok) expect(Object.keys(r.errors).sort()).toEqual(["operation", "page"]);
   });
+
+  it("parses USD price filters and validates bounds", () => {
+    const valid = parse("min_price_usd=1000000&max_price_usd=25000000");
+    expect(valid).toEqual({
+      ok: true,
+      value: expect.objectContaining({ minPriceUsd: 1_000_000, maxPriceUsd: 25_000_000 }),
+    });
+
+    const invalid = parse("min_price_usd=5000000&max_price_usd=1000000");
+    expect(invalid.ok).toBe(false);
+    if (!invalid.ok) expect(invalid.errors.min_price_usd).toContain("must be less than or equal to max_price_usd");
+  });
 });

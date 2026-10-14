@@ -27,6 +27,8 @@ function applyFilters<T extends PostgrestFilterBuilder<any, any, any, any, any, 
   if (q.neighborhood) f = f.ilike("neighborhood", escapeLike(q.neighborhood)) as T;
   if (q.minPrice !== undefined) f = f.gte("price_cop", q.minPrice) as T;
   if (q.maxPrice !== undefined) f = f.lte("price_cop", q.maxPrice) as T;
+  if (q.minPriceUsd !== undefined) f = f.gte("price_usd", q.minPriceUsd) as T;
+  if (q.maxPriceUsd !== undefined) f = f.lte("price_usd", q.maxPriceUsd) as T;
   if (q.bedrooms !== undefined) f = f.gte("bedrooms", q.bedrooms) as T;
   if (q.bathrooms !== undefined) f = f.gte("bathrooms", q.bathrooms) as T;
   return f;
