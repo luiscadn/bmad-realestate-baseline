@@ -16,6 +16,8 @@
 # misc
 .DS_Store
 *.pem
+__MACOSX
+scratch/
 
 # debug
 npm-debug.log*
@@ -24,8 +26,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files
-.env*.local
-.env
+.env*
 !.env.example
 
 # vercel
@@ -37,4 +38,5 @@ next-env.d.ts
 
 # supabase local temp
 .branches/
+supabase/.branches/
 supabase/.temp/
