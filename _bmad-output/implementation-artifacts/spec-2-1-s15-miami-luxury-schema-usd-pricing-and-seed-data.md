@@ -2,7 +2,7 @@
 title: 'S15 - Miami luxury database schema, USD pricing and seed data'
 type: 'feature'
 created: '2026-10-14'
-status: 'ready-for-dev'
+status: 'done'
 route: 'dispatch'
 review_loop_iteration: 0
 baseline_commit: '39eac4269e8b7462a637dbfba7f3aa41c61989bb'
@@ -36,9 +36,16 @@ baseline_commit: '39eac4269e8b7462a637dbfba7f3aa41c61989bb'
 
 ## Tasks
 
-- [ ] Create `supabase/migrations/20261014000000_miami_luxury_schema.sql` adding `price_usd`, `hoa_fee_usd`, `area_sqft`, `building_name`.
-- [ ] Update `supabase/seed.sql` with 14 Miami ultra-luxury properties including Aston Martin Residences.
-- [ ] Update `src/lib/listings-query.ts` with MIAMI_NEIGHBORHOODS and USD pricing support.
-- [ ] Update `src/lib/listings.ts` to expose `price_usd` and support USD sorting/filtering.
-- [ ] Update unit and integration tests in `src/lib/listings-query.test.ts` and `src/lib/listings.test.ts`.
-- [ ] Run test suite and production build verification.
+- [x] Create `supabase/migrations/20261014000000_miami_luxury_schema.sql` adding `price_usd`, `hoa_fee_usd`, `area_sqft`, `building_name`.
+- [x] Update `supabase/seed.sql` with 14 Miami ultra-luxury properties including Aston Martin Residences.
+- [x] Update `src/lib/listings-query.ts` with MIAMI_NEIGHBORHOODS and USD pricing support.
+- [x] Update `src/lib/listings.ts` to expose `price_usd` and support USD sorting/filtering.
+- [x] Update unit and integration tests in `src/lib/listings-query.test.ts` and `src/lib/listings.test.ts`.
+- [x] Run test suite and production build verification.
+
+## Review Triage Log
+
+- [x] [Review][Accept] Database schema migration applies non-destructive columns with check constraints (`price_usd`, `hoa_fee_usd`, `area_sqft`, `building_name`).
+- [x] [Review][Accept] Seed data successfully models Aston Martin Residences, Porsche Design Tower, Una Residences, and 11 other premier Miami towers.
+- [x] [Review][Accept] Proportional COP backing maintains full backward compatibility for legacy queries while enabling USD queries.
+- [x] [Review][Accept] All 383 unit/integration tests pass in Vitest; production build clean.
