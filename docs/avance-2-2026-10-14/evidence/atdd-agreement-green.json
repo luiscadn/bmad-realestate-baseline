@@ -1,0 +1,10 @@
+{
+  "phase": "green",
+  "timestamp": 1792024857.7923121,
+  "returncode": 0,
+  "test_sha256": "1dcb0f3e54ed72698a6cac199f33666684c59d7f956d64437c1c0c5205060770",
+  "source_sha256": "204259157bd750b61614e23bfd2a3081f27fa021db6fc77f42892d9defe8bdae",
+  "red_commit": "6c2d238",
+  "test_count": 8,
+  "tests_unchanged_from_red": true
+}

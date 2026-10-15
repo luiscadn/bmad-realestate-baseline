@@ -1,0 +1,48 @@
+{
+  "package": "bmad-method-test-architecture-enterprise",
+  "version": "2.0.2",
+  "license": "MIT",
+  "registry": "https://www.npmjs.com/package/bmad-method-test-architecture-enterprise/v/2.0.2",
+  "tarball": "https://registry.npmjs.org/bmad-method-test-architecture-enterprise/-/bmad-method-test-architecture-enterprise-2.0.2.tgz",
+  "integrity": "sha512-QaiT0u1HY60WwW7BMEAR6ivhq+BkKZcqvAuHK8lx2Xs0vEA3+irz9MsO/9rjoLquWfwAkJAZXdCUD5jcJ5kjVA==",
+  "gitHead": "211b0e59181bbcb64c696316c62677ac05f8af47",
+  "inspected_on": "2026-10-14",
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "4a43cb1ee39a7ee2e9ccc5b485c06375299c6a55aef2a7036fd8322e242d7719"
+    },
+    {
+      "path": "cli/atdd-red-check.js",
+      "sha256": "1a57c351e9e31713ddc9dec228a1df49f730174b56179dae198a54673c21afcf"
+    },
+    {
+      "path": "cli/trace.js",
+      "sha256": "b570151756dad83af96edb934d26c9f266a7d3e834d66aec38d070f05ed8a77c"
+    },
+    {
+      "path": "cli/lib/trace-command.js",
+      "sha256": "3f1e69d8f068408bed2a9cb48e05c458de5aa7f6908663c03ce36a2764b1db41"
+    },
+    {
+      "path": "skills/bmad-testarch-framework/resources/hooks/tea-enforce.cjs",
+      "sha256": "e94cc2dd8d4b64105860b5c75e2bbe48ac3ad6a41fc459bfcb132a0ce08f594d"
+    },
+    {
+      "path": "skills/bmad-testarch-trace/trace-template.md",
+      "sha256": "d3b1b507c0828c4d08876846bdbb23724cb579b4b96e298d4ceb6d96e1cfdd01"
+    }
+  ],
+  "findings": [
+    "README: eight skills and ten entry commands, not the previous nine-workflow claim.",
+    "atdd-red-check executes scaffolds and records results; it delegates expected-failure interpretation to its harness.",
+    "tea-trace can exit 1 for FAIL; tea-enforce can block mechanically decidable test-writing violations.",
+    "Trace supports story scope and criterion-linked persistent evidence.",
+    "The draft gap is specific story-type DoD and integration with story-state transitions, not absence of TEA gates."
+  ],
+  "matrixChanges": {
+    "F.D6": "Sí",
+    "E.D5": "Parcial: a merge gate is not by itself a story-state gate"
+  },
+  "remaining": "Validate the delimitation and comparative criteria with the tutor."
+}

@@ -1,0 +1,133 @@
+{
+  "standard": "ISO/IEC 25010:2023",
+  "source": "https://www.iso.org/standard/78176.html",
+  "categories": [
+    "functional_suitability",
+    "performance_efficiency",
+    "compatibility",
+    "interaction_capability",
+    "reliability",
+    "security",
+    "maintainability",
+    "flexibility",
+    "safety"
+  ],
+  "rules": [
+    {
+      "category": "process_traceability",
+      "regex": "sprint.status|spec.{0,35}status|status.{0,30}(?:spec|review|done)|triage.{0,30}(?:missing|record)|review.{0,30}(?:skipped|not launched)|claimed.{0,25}(?:pass|build)|claim.{0,25}unverified|no committed evidence|spec filename|acceptance criteria.{0,25}(?:empty|missing)",
+      "reason": "P01: observación del proceso; no se fuerza a una característica de producto."
+    },
+    {
+      "category": "security",
+      "regex": "\\brls\\b|authoriz|unauthoriz|authentica|service.role|row.level|\\bcsrf\\b|\\bxss\\b|injection|permission|cross.agent|password|\\bpii\\b|sensitive|search_path|token|session|rate.limit|captcha|privacy|consent|expos|access.control",
+      "reason": "S01: acceso, autorización, abuso, privacidad o protección de datos."
+    },
+    {
+      "category": "interaction_capability",
+      "regex": "aria|screen.reader|a11y|accessib|focus|alt.text|keyboard|landmark|tabindex|contrast|i18n|localiz|locale|translat|next.intl|hard.coded.{0,25}(?:string|quote|text)|currency.format|visual|viewport|responsive|accessible.name|user.experience",
+      "reason": "I01: interacción, comprensión, accesibilidad o adecuación lingüística de la interfaz."
+    },
+    {
+      "category": "maintainability",
+      "regex": "\\btest|assert|coverage|mock|readab|duplicat|hard.cod|dead.code|type.safe|typescript|\\bany\\b|modular|magic.number|maintain|lint|code.quality",
+      "reason": "M01: capacidad de análisis, modificación o prueba del código."
+    },
+    {
+      "category": "reliability",
+      "regex": "race|out.of.order|stale|unmount|cleanup|leak|timer|interval|abort|hang|timeout|unhandled|retry|network.failure|network.error|double.submit|concurrent|idempot|resilien|fault|loading.state",
+      "reason": "R01: consistencia del estado y comportamiento ante concurrencia o fallo."
+    },
+    {
+      "category": "performance_efficiency",
+      "regex": "index|performance|expensive|\\bn\\+1\\b|latency|resource.use|memory|full.table|query.plan|trigram|full.text|unbounded|large.payload",
+      "reason": "E01: tiempo de respuesta, capacidad o consumo de recursos."
+    },
+    {
+      "category": "compatibility",
+      "regex": "browser|safari|compatib|version.{0,25}(?:schema|supabase)|supabase.{0,25}upgrade|integration.contract|interoperab",
+      "reason": "C01: coexistencia o interoperabilidad entre componentes y plataformas."
+    },
+    {
+      "category": "flexibility",
+      "regex": "portab|adaptab|installab|deployment|environment|env.var|configur|platform",
+      "reason": "F01: adaptación, instalación o cambio de entorno."
+    },
+    {
+      "category": "functional_suitability",
+      "regex": "validat|invalid|regex|constraint|input|return|error|404|400|409|500|missing|incorrect|wrong|allow|reject|check|sort|filter|slug|date|timestamp|timezone|time.zone|calculation|precision|round|empty|no |cannot|can.t|does not|not ",
+      "reason": "U01: adecuación, corrección o completitud del comportamiento funcional."
+    }
+  ],
+  "assisted_case_decisions": {
+    "B-S01-002": "security",
+    "B-S01-011": "security",
+    "B-S01-012": "security",
+    "B-S01-041": "security",
+    "B-S02-001": "security",
+    "B-S02-006": "security",
+    "B-S13-002": "security",
+    "B-S13-009": "security",
+    "B-S01-010": "functional_suitability",
+    "B-S01-034": "functional_suitability",
+    "B-S01-036": "functional_suitability",
+    "B-S01-037": "functional_suitability",
+    "B-S01-042": "functional_suitability",
+    "B-S01-052": "functional_suitability",
+    "B-S03-003": "functional_suitability",
+    "B-S03-012": "functional_suitability",
+    "B-S03-016": "functional_suitability",
+    "B-S05-022": "functional_suitability",
+    "B-S05-026": "functional_suitability",
+    "B-S06-001": "functional_suitability",
+    "B-S06-013": "functional_suitability",
+    "B-S06-030": "functional_suitability",
+    "B-S06-031": "functional_suitability",
+    "B-S06-032": "functional_suitability",
+    "B-S07-004": "functional_suitability",
+    "B-S07-014": "functional_suitability",
+    "B-S07-016": "functional_suitability",
+    "B-S07-027": "functional_suitability",
+    "B-S08-009": "functional_suitability",
+    "B-S08-018": "functional_suitability",
+    "B-S09-019": "functional_suitability",
+    "B-S10-025": "functional_suitability",
+    "B-S10-028": "functional_suitability",
+    "B-S10-036": "functional_suitability",
+    "B-S11-013": "functional_suitability",
+    "B-S11-024": "functional_suitability",
+    "B-S12-010": "functional_suitability",
+    "B-S01-019": "maintainability",
+    "B-S02-016": "maintainability",
+    "B-S02-020": "maintainability",
+    "B-S02-047": "maintainability",
+    "B-S02-051": "maintainability",
+    "B-S04-008": "maintainability",
+    "B-S07-033": "maintainability",
+    "B-S09-027": "maintainability",
+    "B-S09-036": "maintainability",
+    "B-S12-032": "maintainability",
+    "B-S02-004": "reliability",
+    "B-S02-025": "reliability",
+    "B-S02-048": "reliability",
+    "B-S06-021": "reliability",
+    "B-S08-006": "reliability",
+    "B-S08-020": "reliability",
+    "B-S12-021": "reliability",
+    "B-S03-024": "process_traceability",
+    "B-S07-040": "process_traceability",
+    "B-S07-005": "interaction_capability",
+    "B-S07-026": "interaction_capability",
+    "B-S10-011": "interaction_capability",
+    "B-S10-015": "interaction_capability",
+    "B-S10-016": "interaction_capability",
+    "B-S11-007": "interaction_capability",
+    "B-S11-015": "interaction_capability",
+    "B-S11-020": "interaction_capability",
+    "B-S09-039": "not_applicable",
+    "B-S12-038": "not_applicable",
+    "B-S13-016": "compatibility"
+  },
+  "unmapped": "needs_review; no default product category is invented",
+  "independence": "Initial rule outputs and Codex-assisted case classifications are not a human first evaluation."
+}

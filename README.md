@@ -129,3 +129,39 @@ For each story `Sxx` (S01 through S14), the git history strictly adheres to the 
 - **Review Patch Diffs**: Captured under `research/reviews/Sxx-patches.diff`.
 - **Run Telemetry**: Recorded with timestamps, durations, and commit hashes in `research/run-log.jsonl`.
 - **Decision Audit Trail**: Cataloged in `research/decisions.md`.
+
+
+## 6. Avance de investigación — 14 de octubre de 2026
+
+La condición de control de E1 es `baseline-v0^{commit}` (`4c9f927`), con S01–S14. El desarrollo posterior S15–S19 y el pivote comercial a Miami quedan fuera de ese corpus. El contenido de `main` puede incluir ese desarrollo posterior: para reproducir el control se debe usar el tag, sin moverlo.
+
+El [paquete de avance](docs/avance-2-2026-10-14/) contiene el estado del arte revisado, mapa de calor, Gantt, E1 preliminar, E4 revisado, reproducibilidad, riesgos, plan de calidad y 12 diapositivas. El anteproyecto completo actualizado queda en el paquete local de revisión y en Jira. Estos archivos no acreditan entrega institucional ni aprobación del tutor.
+
+Se incorporan sin edición los archivos de `research/protocol-b/` de `origin/e1-protocol-b` (`f8977b6`). El inventario tiene **517 ocurrencias de candidatos**, con 517 decisiones enlazadas: 121 patch, 132 defer, 21 decision-needed y 243 reject. No son defectos únicos confirmados. S12 tiene 41 filas frente a 40 declaradas. S14 tiene un segundo intento archivado etiquetado Gemini (34 ocurrencias) y se reporta aparte del subconjunto Claude S01–S13 (483). Los 175 enunciados de A son resúmenes heterogéneos, no un inventario exhaustivo comparable con B.
+
+La clasificación ISO inicial es una ayuda que requiere validación humana. La primera evaluación aún no está congelada y la segunda evaluación ciega de 30 casos está pendiente; **kappa no se ha calculado**. La clave de la muestra y la evaluación inicial para revisar permanecen en el paquete local. Santiago debe utilizar únicamente el archivo de evaluación ciega hasta entregar su clasificación. Los criterios de E2 publicados son una propuesta; sus asociaciones no miden detección. El paquete original `bmad-dod` y sus 29 pruebas no se localizaron y no se certifican.
+
+### Reproducir el inventario y la demostración ATDD
+
+Se requiere Python 3.11+ sin dependencias adicionales para estos dos scripts. Los tags y la referencia remota de origen deben estar disponibles:
+
+```bash
+git fetch origin --tags
+git fetch origin e1-protocol-b:refs/remotes/origin/e1-protocol-b
+python3 research/avance2/analyze_e1.py --out /tmp/pdg-e1-reproduction
+python3 -m unittest discover -s research/avance2 -p 'test_*.py' -v
+```
+
+El análisis genera un borrador y la clave de muestra; el segundo evaluador debe abstenerse de consultar esos archivos antes de entregar sus respuestas. Las ocho pruebas del ejemplo de acuerdo se escribieron y ejecutaron en rojo en `6c2d238`, antes de implementar. Las mismas ocho pasan en la implementación posterior. Esta demostración manual no acredita ejecución bajo el skill perdido.
+
+La utilidad de acuerdo se ejecuta, una vez congelada la primera clasificación humana, con dos CSV que contengan los mismos `sample_id`:
+
+```bash
+python3 research/avance2/compute_agreement.py \
+  --first evaluador1.csv --second evaluador2.csv \
+  --first-validated --out acuerdo.json
+```
+
+La opción `--first-validated` declara una validación que debe documentarse; el programa no puede verificar independencia ni cegamiento. Sin todos los pares completos no emite un coeficiente final (salida 2).
+
+La reproducibilidad del control registró 381 pruebas y una compilación de producción correctas, además de HTTP 200 en `/` y `/en`. No se arrancó una base Supabase aislada: RLS, autenticación y mutaciones reales quedan pendientes de una comprobación de integración. Las evidencias y sus límites están en [Informe_reproducibilidad.pdf](docs/avance-2-2026-10-14/Informe_reproducibilidad.pdf).
