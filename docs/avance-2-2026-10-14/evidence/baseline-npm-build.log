@@ -1,0 +1,59 @@
+
+> bmad-real-estate@0.1.0 build
+> next build
+
+   ▲ Next.js 15.5.27
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully in 2.5s
+   Linting and checking validity of types ...
+   Collecting page data ...
+   Generating static pages (0/12) ...
+   Generating static pages (3/12) 
+   Generating static pages (6/12) 
+   Generating static pages (9/12) 
+ ✓ Generating static pages (12/12)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                                 Size  First Load JS  Revalidate  Expire
+┌ ○ /_not-found                            997 B         104 kB
+├ ● /[locale]                            2.75 kB         130 kB          5m      1y
+├   ├ /es                                                                5m      1y
+├   └ /en                                                                5m      1y
+├ ● /[locale]/dashboard                  4.37 kB         199 kB
+├   ├ /es/dashboard
+├   └ /en/dashboard
+├ ƒ /[locale]/listings/[slug]            2.82 kB         127 kB
+├ ● /[locale]/login                      1.29 kB         196 kB
+├   ├ /es/login
+├   └ /en/login
+├ ● /[locale]/search                     4.26 kB         137 kB
+├   ├ /es/search
+├   └ /en/search
+├ ƒ /api/agent/listings                    139 B         103 kB
+├ ƒ /api/agent/listings/[id]               139 B         103 kB
+├ ƒ /api/leads                             139 B         103 kB
+├ ƒ /api/listings                          139 B         103 kB
+├ ƒ /api/listings/[slug]                   139 B         103 kB
+└ ƒ /api/newsletter                        139 B         103 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/255-ce8c7c75002f810b.js       46.5 kB
+  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB
+  └ other shared chunks (total)          1.92 kB
+
+
+ƒ Middleware                             52.4 kB
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses generateStaticParams)
+ƒ  (Dynamic)  server-rendered on demand
+
+Home: could not load featured listings Error: TypeError: fetch failed
+    at v (.next/server/app/[locale]/page.js:1:6830)
+    at async y (.next/server/app/[locale]/page.js:1:6963)
+    at async z (.next/server/app/[locale]/page.js:1:7152)
+Home: could not load featured listings Error: TypeError: fetch failed
+    at v (.next/server/app/[locale]/page.js:1:6830)
+    at async y (.next/server/app/[locale]/page.js:1:6963)
+    at async z (.next/server/app/[locale]/page.js:1:7152)

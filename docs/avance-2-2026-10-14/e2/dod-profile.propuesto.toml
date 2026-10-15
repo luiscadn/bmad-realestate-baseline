@@ -1,0 +1,132 @@
+version = "0.2-proposal"
+status = "proposed_pending_evaluator_and_tutor_validation"
+source = "E1 archived candidate inventory; not the unavailable original bmad-dod package"
+original_package_available = false
+note = "Evidence associations are hypotheses, not measured detector recall."
+
+[[criteria]]
+id = "GEN-01"
+profile = "generic"
+iso_category = "maintainability"
+title = "Trazabilidad de criterios y evidencia"
+check = "Cada criterio de aceptación debe enlazar una evidencia reproducible; no se aceptan solo declaraciones de done."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-022", "B-S01-047", "B-S02-002", "B-S02-012", "B-S02-013", "B-S02-045", "B-S02-046", "B-S02-047", "B-S02-056", "B-S03-002", "B-S03-006", "B-S03-008", "B-S03-017", "B-S03-018", "B-S03-019", "B-S03-020", "B-S04-005", "B-S04-007", "B-S04-010", "B-S04-021", "B-S04-023", "B-S04-025", "B-S05-006", "B-S05-009", "B-S05-020", "B-S05-021", "B-S06-005", "B-S06-027", "B-S06-028", "B-S06-029", "B-S07-001", "B-S07-002", "B-S07-008", "B-S07-024", "B-S07-027", "B-S07-028", "B-S07-029", "B-S07-030", "B-S07-031", "B-S07-033", "B-S07-035", "B-S07-036", "B-S07-039", "B-S08-001", "B-S08-002", "B-S08-005", "B-S08-007", "B-S08-012", "B-S08-014", "B-S08-015", "B-S08-021", "B-S08-022", "B-S08-023", "B-S08-026", "B-S08-030", "B-S08-032", "B-S08-033", "B-S09-023", "B-S09-025", "B-S09-026", "B-S09-031", "B-S09-032", "B-S09-034", "B-S10-002", "B-S10-012", "B-S10-014", "B-S10-033", "B-S10-034", "B-S10-040", "B-S10-041", "B-S10-043", "B-S11-006", "B-S11-008", "B-S11-011", "B-S11-021", "B-S11-022", "B-S11-023", "B-S12-002", "B-S12-012", "B-S12-014", "B-S12-016", "B-S12-026", "B-S12-029", "B-S12-030", "B-S12-033", "B-S12-034", "B-S12-036", "B-S13-001", "B-S13-006", "B-S13-017", "B-S13-018", "B-S13-027", "B-S13-030", "B-S14-010", "B-S14-022", "B-S14-023", "B-S14-024", "B-S14-025", "B-S14-026", "B-S14-027"]
+
+[[criteria]]
+id = "GEN-02"
+profile = "generic"
+iso_category = "maintainability"
+title = "Fase roja anterior a implementación"
+check = "Registrar pruebas, código de salida y fallo por comportamiento esperado antes de implementar el cambio."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-022", "B-S01-047", "B-S02-002", "B-S02-012", "B-S02-013", "B-S02-046", "B-S02-047", "B-S03-002", "B-S03-006", "B-S03-008", "B-S03-017", "B-S03-018", "B-S03-019", "B-S03-020", "B-S04-005", "B-S04-007", "B-S04-010", "B-S04-021", "B-S04-023", "B-S04-025", "B-S05-006", "B-S05-009", "B-S05-020", "B-S05-021", "B-S06-005", "B-S06-027", "B-S06-028", "B-S06-029", "B-S07-002", "B-S07-008", "B-S07-024", "B-S07-028", "B-S07-029", "B-S07-030", "B-S07-031", "B-S07-035", "B-S07-036", "B-S08-001", "B-S08-002", "B-S08-005", "B-S08-007", "B-S08-012", "B-S08-015", "B-S08-021", "B-S08-022", "B-S08-023", "B-S08-026", "B-S08-030", "B-S08-033", "B-S09-023", "B-S09-025", "B-S09-026", "B-S09-031", "B-S09-032", "B-S09-034", "B-S10-002", "B-S10-014", "B-S10-033", "B-S10-034", "B-S10-040", "B-S10-041", "B-S10-043", "B-S11-008", "B-S11-011", "B-S11-021", "B-S11-022", "B-S12-002", "B-S12-012", "B-S12-014", "B-S12-026", "B-S12-029", "B-S12-030", "B-S12-033", "B-S12-034", "B-S13-006", "B-S13-018", "B-S13-027", "B-S13-030", "B-S14-022", "B-S14-023", "B-S14-024", "B-S14-025", "B-S14-026", "B-S14-027"]
+
+[[criteria]]
+id = "GEN-03"
+profile = "generic"
+iso_category = "maintainability"
+title = "Pruebas de aceptación y regresión"
+check = "Ejecutar las pruebas de los criterios y la regresión pertinente; explicar exclusiones y fallos restantes."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-022", "B-S01-047", "B-S02-002", "B-S02-012", "B-S02-013", "B-S02-046", "B-S02-047", "B-S03-002", "B-S03-006", "B-S03-008", "B-S03-017", "B-S03-018", "B-S03-019", "B-S03-020", "B-S04-005", "B-S04-007", "B-S04-010", "B-S04-021", "B-S04-023", "B-S04-025", "B-S05-006", "B-S05-009", "B-S05-020", "B-S05-021", "B-S06-005", "B-S06-027", "B-S06-028", "B-S06-029", "B-S07-002", "B-S07-008", "B-S07-024", "B-S07-028", "B-S07-029", "B-S07-030", "B-S07-031", "B-S07-035", "B-S07-036", "B-S08-001", "B-S08-002", "B-S08-005", "B-S08-007", "B-S08-012", "B-S08-015", "B-S08-021", "B-S08-022", "B-S08-023", "B-S08-026", "B-S08-030", "B-S08-033", "B-S09-023", "B-S09-025", "B-S09-026", "B-S09-031", "B-S09-032", "B-S09-034", "B-S10-002", "B-S10-014", "B-S10-033", "B-S10-034", "B-S10-040", "B-S10-041", "B-S10-043", "B-S11-008", "B-S11-011", "B-S11-021", "B-S11-022", "B-S12-002", "B-S12-012", "B-S12-014", "B-S12-026", "B-S12-029", "B-S12-030", "B-S12-033", "B-S12-034", "B-S13-006", "B-S13-018", "B-S13-027", "B-S13-030", "B-S14-022", "B-S14-023", "B-S14-024", "B-S14-025", "B-S14-026", "B-S14-027"]
+
+[[criteria]]
+id = "API-01"
+profile = "api_route"
+iso_category = "security"
+title = "Autorización por propietario y alcance"
+check = "Probar acceso anónimo y de un segundo propietario; RLS y autorización deben coincidir con el contrato."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-001", "B-S01-002", "B-S01-010", "B-S01-013", "B-S01-022", "B-S01-030", "B-S01-031", "B-S01-040", "B-S01-046", "B-S01-047", "B-S01-053", "B-S02-002", "B-S02-013", "B-S02-026", "B-S02-042", "B-S02-046", "B-S04-010", "B-S04-016", "B-S05-009", "B-S06-003", "B-S06-005", "B-S06-029", "B-S11-005", "B-S13-006", "B-S13-018", "B-S13-030", "B-S14-002", "B-S14-008", "B-S14-010", "B-S14-012"]
+
+[[criteria]]
+id = "API-02"
+profile = "api_route"
+iso_category = "functional_suitability"
+title = "Validación y contrato de errores"
+check = "Validar cuerpo, parámetros y límites; probar errores observables con códigos y esquema acordados, sin filtrar datos sensibles."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S03-005", "B-S03-006", "B-S03-011", "B-S03-013", "B-S03-020", "B-S05-020", "B-S06-012", "B-S06-016", "B-S06-018", "B-S07-034", "B-S08-002", "B-S08-032", "B-S09-013", "B-S10-002", "B-S10-020", "B-S10-023", "B-S11-004", "B-S11-005", "B-S11-009", "B-S12-002", "B-S12-004", "B-S12-007", "B-S12-020", "B-S12-023", "B-S13-001", "B-S13-011", "B-S13-012", "B-S13-025", "B-S13-026", "B-S14-002", "B-S14-004", "B-S14-006", "B-S14-022", "B-S14-025", "B-S14-026"]
+
+[[criteria]]
+id = "API-03"
+profile = "api_route"
+iso_category = "functional_suitability"
+title = "Fechas con zona y contrato explícitos"
+check = "Declarar zona horaria y formato; probar entradas inválidas y presentación de fechas cuando aplique."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-001", "B-S01-013", "B-S01-038", "B-S02-005", "B-S02-026", "B-S02-027", "B-S03-002", "B-S03-018", "B-S04-005", "B-S04-021", "B-S05-020", "B-S06-001", "B-S06-013", "B-S06-016", "B-S06-028", "B-S06-029", "B-S06-030", "B-S06-031", "B-S08-002", "B-S08-005", "B-S08-032", "B-S10-002", "B-S12-003", "B-S13-003"]
+
+[[criteria]]
+id = "UI-01"
+profile = "frontend_component"
+iso_category = "interaction_capability"
+title = "Consulta del diseño aprobado"
+check = "Registrar una referencia verificable al diseño aprobado antes de implementar; criterio hipotético hasta contar con evidencia de diseño."
+validation = "hipotesis_sin_respaldo_directo_en_corpus"
+evidence_candidate_ids = []
+
+[[criteria]]
+id = "UI-02"
+profile = "frontend_component"
+iso_category = "reliability"
+title = "Ciclo de vida y estados asíncronos"
+check = "Probar carga, vacío, error y éxito; limpiar temporizadores y manejar respuestas tardías cuando existan."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S02-003", "B-S02-033", "B-S04-005", "B-S09-007", "B-S09-016", "B-S10-019", "B-S11-010", "B-S11-014", "B-S12-009", "B-S12-018"]
+
+[[criteria]]
+id = "UI-03"
+profile = "frontend_component"
+iso_category = "interaction_capability"
+title = "Internacionalización"
+check = "Usar catálogos y conservar idioma, ruta y parámetros; justificar símbolos o valores que no sean traducibles."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S07-004", "B-S07-013", "B-S07-015", "B-S07-017", "B-S07-018", "B-S07-028", "B-S07-029", "B-S07-030", "B-S07-033", "B-S07-035", "B-S08-008", "B-S08-012", "B-S08-023", "B-S08-026", "B-S08-028", "B-S09-018", "B-S09-034", "B-S10-009", "B-S10-014", "B-S10-043", "B-S11-006", "B-S12-004"]
+
+[[criteria]]
+id = "UI-04"
+profile = "frontend_component"
+iso_category = "interaction_capability"
+title = "Interacción accesible"
+check = "Verificar nombres accesibles, navegación por teclado, foco y anuncio de cambios según la interacción."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S07-006", "B-S07-007", "B-S07-011", "B-S07-015", "B-S07-019", "B-S07-020", "B-S09-020", "B-S10-041", "B-S11-005", "B-S12-001", "B-S12-006", "B-S12-007", "B-S12-014", "B-S12-020", "B-S14-010"]
+
+[[criteria]]
+id = "DATA-01"
+profile = "data_integration"
+iso_category = "security"
+title = "Acceso a datos acotado"
+check = "Verificar lectura y escritura por rol y propietario, incluidos registros huérfanos y referencias nulas."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-001", "B-S01-002", "B-S01-010", "B-S01-013", "B-S01-022", "B-S01-030", "B-S01-031", "B-S01-040", "B-S01-042", "B-S01-046", "B-S01-047", "B-S01-049", "B-S01-053", "B-S02-001", "B-S02-002", "B-S02-013", "B-S02-026", "B-S02-042", "B-S02-046", "B-S04-010", "B-S04-016", "B-S05-009", "B-S06-002", "B-S06-003", "B-S06-005", "B-S06-018", "B-S06-029", "B-S12-003", "B-S12-041", "B-S13-006", "B-S13-013", "B-S13-018", "B-S13-030", "B-S14-002", "B-S14-003", "B-S14-008"]
+
+[[criteria]]
+id = "DATA-02"
+profile = "data_integration"
+iso_category = "functional_suitability"
+title = "Alineación de esquema y restricciones"
+check = "Alinear validadores, tipos y restricciones; documentar y probar las dependencias de migración."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-002", "B-S01-030", "B-S01-031", "B-S01-053", "B-S03-008", "B-S03-011", "B-S03-014", "B-S04-007", "B-S04-010", "B-S04-016", "B-S04-025", "B-S05-021", "B-S06-012", "B-S06-021", "B-S07-036", "B-S08-006", "B-S08-018", "B-S08-020", "B-S08-027", "B-S10-011", "B-S10-013", "B-S11-009", "B-S13-018", "B-S14-006"]
+
+[[criteria]]
+id = "DATA-03"
+profile = "data_integration"
+iso_category = "reliability"
+title = "Consistencia de operaciones y reintentos"
+check = "Probar atomicidad, rollback e idempotencia cuando el contrato lo exija; no imponer append-only a toda operación mutable."
+validation = "propuesto_con_candidatos_asociados_pendientes_de_validacion"
+evidence_candidate_ids = ["B-S01-005", "B-S01-034", "B-S02-002", "B-S02-003", "B-S02-004", "B-S02-005", "B-S02-012", "B-S02-026", "B-S02-027", "B-S02-029", "B-S02-032", "B-S02-033", "B-S02-042", "B-S02-047", "B-S02-048", "B-S02-052", "B-S02-053", "B-S02-054", "B-S06-001", "B-S06-021", "B-S08-012", "B-S10-013", "B-S11-004", "B-S11-014"]
+
+[profiles.api_route]
+extends = "generic"
+[profiles.frontend_component]
+extends = "generic"
+[profiles.data_integration]
+extends = "generic"
+
+[cross_cutting]
+dates = "API-03 applies to any story that produces or formats dates, including UI and data stories."

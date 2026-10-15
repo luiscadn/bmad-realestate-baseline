@@ -1,0 +1,9 @@
+{
+  "phase": "red",
+  "timestamp": 1792024797.4267678,
+  "command": "python3 -m unittest -v test_agreement",
+  "returncode": 1,
+  "source_sha256": "509b3fd54a1fbb3f5e111756feb2fbd93cbcf89b3f7ab4836c9154b608ba7c25",
+  "test_sha256": "1dcb0f3e54ed72698a6cac199f33666684c59d7f956d64437c1c0c5205060770",
+  "expected_reason": "Behavior is intentionally absent in an importable scaffold; assertions require real agreement and pending-state handling."
+}

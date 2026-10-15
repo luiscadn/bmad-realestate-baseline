@@ -1,0 +1,6 @@
+{
+  "command": "npm test -- --reporter=default",
+  "returncode": 0,
+  "duration_s": 3.47,
+  "commit": "4c9f927685f4e0ef7a9b0093b6818d696edaa2b9"
+}

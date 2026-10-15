@@ -1,0 +1,58 @@
+
+> bmad-real-estate@0.1.0 test
+> vitest run --reporter=default
+
+
+ RUN  v3.2.7 /private/tmp/pdg-baseline-control
+
+ ✓ src/lib/listings.test.ts (6 tests) 3ms
+ ✓ src/lib/agent-listings.test.ts (51 tests) 6ms
+ ✓ src/app/api/agent/listings/route.test.ts (18 tests) 14ms
+ ✓ src/app/api/agent/listings/[id]/route.test.ts (14 tests) 16ms
+ ✓ src/components/SearchFilters.test.tsx (8 tests) 100ms
+ ✓ src/app/[locale]/listings/[slug]/page.test.tsx (8 tests) 124ms
+ ✓ src/components/Home.test.tsx (8 tests) 136ms
+ ✓ src/components/ContactForm.test.tsx (7 tests) 187ms
+ ✓ src/app/[locale]/search/page.test.tsx (7 tests) 167ms
+ ✓ src/components/SearchMapView.test.tsx (6 tests) 183ms
+ ✓ src/components/HomeEditorial.test.tsx (10 tests) 269ms
+ ✓ src/lib/leads.test.ts (24 tests) 6ms
+ ✓ src/lib/listing-images.test.ts (9 tests) 13ms
+ ✓ src/components/ListingForm.test.tsx (8 tests) 390ms
+ ✓ src/app/api/leads/route.test.ts (9 tests) 10ms
+ ✓ src/app/api/newsletter/route.test.ts (17 tests) 10ms
+ ✓ src/components/DashboardClient.test.tsx (13 tests) 467ms
+ ✓ src/lib/agent-auth.test.ts (12 tests) 5ms
+ ✓ src/lib/dashboard.test.ts (9 tests) 2ms
+ ✓ src/lib/listing-by-slug.test.ts (13 tests) 6ms
+ ✓ src/lib/map-view.test.ts (8 tests) 3ms
+ ✓ src/components/SearchResults.test.tsx (6 tests) 79ms
+ ✓ src/lib/listings-query.test.ts (21 tests) 4ms
+ ✓ src/components/ListingCard.test.tsx (3 tests) 73ms
+ ✓ src/components/ListingsTable.test.tsx (4 tests) 72ms
+ ✓ src/components/LoginForm.test.tsx (7 tests) 205ms
+ ✓ src/lib/newsletter.test.ts (12 tests) 2ms
+ ✓ src/components/Header.test.tsx (5 tests) 94ms
+ ✓ src/components/OpenHouseBanner.test.tsx (6 tests) 48ms
+ ✓ src/components/ListingGallery.test.tsx (4 tests) 33ms
+ ✓ src/lib/listing-detail.test.ts (17 tests) 4ms
+ ✓ src/app/api/listings/route.test.ts (3 tests) 7ms
+ ✓ src/lib/featured-listings.test.ts (2 tests) 2ms
+ ✓ src/app/[locale]/login/page.test.tsx (2 tests) 67ms
+ ✓ src/components/Footer.test.tsx (3 tests) 143ms
+ ✓ src/app/api/listings/[slug]/route.test.ts (3 tests) 5ms
+ ✓ src/app/[locale]/dashboard/page.test.tsx (2 tests) 7ms
+ ✓ src/lib/image-hosts.test.ts (3 tests) 2ms
+ ✓ src/app/locale-layout.test.tsx (2 tests) 24ms
+ ✓ src/i18n/i18n.test.ts (2 tests) 2ms
+ ✓ src/components/LanguageSwitch.test.tsx (3 tests) 43ms
+ ✓ src/i18n/map-messages.test.ts (1 test) 2ms
+ ✓ src/components/ViewToggle.test.tsx (2 tests) 43ms
+ ✓ src/middleware.test.ts (2 tests) 1ms
+ ✓ src/app/sanity.test.ts (1 test) 1ms
+
+ Test Files  45 passed (45)
+      Tests  381 passed (381)
+   Start at  19:21:41
+   Duration  2.46s (transform 919ms, setup 638ms, collect 3.56s, tests 3.08s, environment 10.99s, prepare 1.87s)
+

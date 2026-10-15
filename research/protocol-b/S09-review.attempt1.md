@@ -1,0 +1,92 @@
+## RAISED
+
+Blind Hunter (11):
+1. Blind | n/a | src/app/[locale]/search/page.tsx:n/a | An invalid `page` param is silently dropped, and the notice doesn't say which filter was ignored.
+2. Blind | n/a | src/app/[locale]/search/page.tsx:n/a | If the cleaned retry parse still fails, the page shows the generic "could not load" alert and the branch is untested.
+3. Blind | n/a | src/app/[locale]/search/page.tsx:n/a | A valid `page` past the last page returns empty data and shows "no properties match".
+4. Blind | n/a | src/components/SearchFilters.tsx:n/a | The no-JS GET form uses `action="/search"` with no locale prefix and submits empty fields and `sort=newest`.
+5. Blind | n/a | src/app/[locale]/search/page.tsx:n/a | The filter key list is duplicated across the page, the `SearchFilterValues` type and the tests.
+6. Blind | n/a | src/components/SearchResults.tsx:n/a | Nested `aria-live` regions announce twice, with no collapsible filters on mobile and unhidden arrow glyphs in the pagination text.
+7. Blind | n/a | src/components/SearchFilters.tsx:n/a | The blur push races with Apply, Clear and Enter, giving duplicate pushes and history entries.
+8. Blind | n/a | src/components/SearchFilters.tsx:n/a | There is no client-side check for `min_price` greater than `max_price`, and no `max` or NaN guard on the price inputs.
+9. Blind | n/a | src/components/ListingCard.tsx:n/a | NaN, zero and null handling is missing for price, area and bedrooms, the filters have no "0 beds" option, and `priority` on the first 3 cards is questionable on mobile.
+10. Blind | n/a | next.config.ts:n/a | An unset `NEXT_PUBLIC_SUPABASE_URL` gives empty `remotePatterns` and `next/image` throws, local 127.0.0.1 images are unverified, and there is a stray blank line.
+11. Blind | n/a | spec/tests:n/a | The i18n parity test isn't extended, there is no page test for `page` parsing, the card link is tested only in the default locale, the card links to the not-yet-built S10 page, and the verification claims have no recorded output.
+
+Edge Case Hunter (13):
+12. Edge | n/a | src/app/[locale]/search/page.tsx:403-411 | A valid page beyond the last page gives empty data with `total` above 0, so the empty state hides the pagination.
+13. Edge | n/a | src/components/ListingCard.tsx:530-537 | If the `image.url` host isn't in `remotePatterns` or the URL is empty, `next/image` throws during render and the page 500s.
+14. Edge | n/a | src/components/SearchFilters.tsx:757-778 | A valid `bedrooms` or `bathrooms` URL value of 0 or above 5 isn't among the select options, so the select shows "Any" while the filter is active.
+15. Edge | n/a | src/components/SearchFilters.tsx:693-715 | Enter followed by blur in a price input pushes twice and adds duplicate history entries.
+16. Edge | n/a | src/components/SearchFilters.tsx:693-715 | Editing a price and then clicking "Clear filters" lets the blur push race the reset navigation.
+17. Edge | n/a | src/components/SearchFilters.tsx:624-640 | `min_price` greater than `max_price` makes the server drop `min_price` and show the invalid notice, while the panel shows only `max`.
+18. Edge | n/a | src/components/SearchFilters.tsx:705-707 | The hardcoded `/search` action can lose the locale prefix with JS off.
+19. Edge | n/a | src/components/ListingCard.tsx:519-565 | A null or non-numeric `price_cop`, `area_m2` of 0, or null bedrooms renders "NaN COP", hides the area or shows "0 bedrooms".
+20. Edge | n/a | src/components/SearchResults.tsx:916-918 | The count paragraph's `aria-live` sits inside a `<section aria-live>`, so the count is announced twice.
+21. Edge | n/a | src/app/[locale]/search/page.tsx:359-365 | For a repeated param with an empty first value (`?operation=&operation=rent`), only the first value is used and the later valid one is ignored.
+22. Edge (claim) | n/a | src/lib/image-hosts.ts:994-1000 | The task checklist says "allow local IPs only for a local host", but the code has no local-IP handling.
+23. Edge (claim) | n/a | spec:76 | "Local Supabase images work without it" is not exercised by any test or run.
+24. Edge (claim) | n/a | src/components/SearchFilters.tsx:705-707 | "Empty params are never put in the URL" and "works as a plain GET form without JS" fail on a native GET submit.
+
+Verification Gap (3):
+25. VerifGap | n/a | src/app/[locale]/search/page.test.tsx:n/a | No page test sends `page` (for example `page=2`) or checks it reaches `fetchListings`, and an invalid `page` is also untested.
+26. VerifGap (other) | n/a | next.config.ts:247 | An unset `NEXT_PUBLIC_SUPABASE_URL` gives empty `remotePatterns`, and only the helper is tested, not the config wiring.
+27. VerifGap (other) | n/a | next.config.ts:243 | A stray blank line was added.
+
+Acceptance Auditor (12):
+28. Auditor | n/a | src/app/[locale]/search/page.tsx:n/a | Claimed: invalid `sort` and `page` are dropped without showing the notice.
+29. Auditor | n/a | src/app/[locale]/search/page.tsx:n/a | A failed second parse is reported as a fetch failure (the "could not load" alert) instead of falling back to defaults, and it isn't logged.
+30. Auditor | n/a | src/components/SearchFilters.tsx:n/a | The no-JS GET form sends empty params and has an unprefixed action, against the "never empty params" and "works without JS" rules.
+31. Auditor | n/a | src/components/SearchFilters.test.tsx:n/a | The AC1 "page is reset" rule is only implicit and has no test, for example starting from `?page=3`.
+32. Auditor | n/a | src/components/SearchFilters.test.tsx:n/a | The AC1 tests cover only the operation, bedrooms, sort and price controls, not neighborhood, property_type or bathrooms.
+33. Auditor | n/a | src/components/SearchFilters.tsx:n/a | The price inputs push on blur or Enter rather than on change, which differs from the literal AC1 wording but is documented in the notes.
+34. Auditor | n/a | messages/*.json:n/a | The i18n parity test isn't extended (AC4), and whether one exists can't be confirmed.
+35. Auditor | n/a | n/a | `FeaturedListings` keeps its own card, which is consistent with the "do not refactor" constraint (the auditor itself says this violates nothing).
+36. Auditor | n/a | next.config.ts:n/a | A stray blank line was added.
+37. Auditor | n/a | src/lib/image-hosts.ts:n/a | There is no local-IP handling, contrary to Task 1 (the notes say Next 15.5.27 has no such option).
+38. Auditor | n/a | spec:n/a | AC5 verification claims ("230/230 tests, build pass") can't be checked from the diff, and the `remotePatterns` check wasn't run against live Supabase.
+39. Auditor | n/a | src/components/ListingCard.tsx:n/a | Prices use `format.number` with COP and the monthly suffix only for rent (the auditor notes this meets the requirement).
+
+## TRIAGE
+
+1. reject. `page` errors are in `errors`, so the notice does fire and `page` falls back to 1. Naming the ignored filter is a nicety that needs added complexity.
+2. reject. `cleaned` is always parseable once the erroring keys are removed, so the branch is effectively unreachable.
+3. patch. A real UX bug: 30 matches look like zero. Fix by passing `total` and `page` to the empty state, or by clamping.
+4. reject. It duplicates 18 and 24. Empty strings count as "not provided" in `parseListingsQuery`, so there is no invalid notice.
+5. reject. A duplicated key list is a maintainability nit with no concrete harm.
+6. reject. The `aria-live` part is covered by 20. The disclosure and arrow-glyph points are design preferences outside the spec.
+7. defer. The blur race is minor history noise. Covered in more detail by 15 and 16.
+8. reject. The server already handles `min` greater than `max` by dropping `min_price` and showing the notice, so the claim is partly false. The remainder is a nicety.
+9. reject. This duplicates 19. The `priority` and "0 beds" points are speculative.
+10. defer. This is a real config fragility, but the environment variable is required elsewhere and no live check was done. It duplicates 13 and 26.
+11. reject. A bundle of spec and process remarks. The `page` test gap is tracked in 25, and the other points aren't defects.
+12. patch. This duplicates 3. Same fix.
+13. defer. A bad host or empty URL is unlikely when the data comes from Supabase storage. Hardening against it needs a guard, so it's low priority, not a patch.
+14. patch. An active filter shows as "Any" and the next change silently drops it. Fix by adding the current value to the options, as is done for neighborhood.
+15. defer. Duplicate history entries are minor. Dedupe or `replace` needs a design choice.
+16. defer. A narrow race with no demonstrated data loss, and it duplicates 7.
+17. reject. The server handles it (see 8). The panel and notice behave consistently enough.
+18. patch. `action="/search"` drops the locale. Derive it from the locale-aware pathname. This is a small, direct fix.
+19. reject. The DB columns are likely NOT NULL and the `?` check covers `area_m2`. No demonstrated reachable harm.
+20. patch. Duplicate announcements from nested `aria-live`. The fix is to remove one of them.
+21. reject. Edge input from a hand-edited URL, and keeping the first value is documented behavior.
+22. defer. The notes document that Next 15.5.27 has no such option, so the checklist item is unmet but not fixable. The fix would edit the spec.
+23. defer. A spec claim that is unverified without a live Supabase. A manual check is needed.
+24. patch. Duplicate of 4, 18 and 30. The `action` fix covers the locale, and empties are tolerated by the parser. Treat the two together as one patch with 18.
+25. patch. Add a page test with `page: "2"` and one with an invalid `page`. Both are missing.
+26. defer. This duplicates 10. It would need a config-wiring test and the environment variable.
+27. reject. Cosmetic, and prettier or lint would catch it.
+28. reject. False. Each key in `errors` is deleted from `cleaned` and `invalid` is set, so the notice shows.
+29. reject. This duplicates 2 and is unreachable.
+30. patch. This duplicates 18 and 24. Same fix.
+31. defer. The behavior is correct and only the test is missing. Low value, though a cheap test could be added alongside 25.
+32. defer. Partial test coverage, since all controls share the same handler.
+33. reject. Documented, intentional deviation.
+34. defer. It can't be confirmed that a parity test exists, so the finding is unverified.
+35. reject. The reviewer itself says it violates nothing.
+36. reject. Duplicate of 27 and cosmetic.
+37. defer. Duplicate of 22. The notes document it.
+38. reject. A process remark. Fixing it would mean editing the spec.
+39. reject. The reviewer reports it meets the requirement, so there is no defect.
+
+FINDINGS_TOTAL: 39

@@ -1,0 +1,24 @@
+{
+  "command": "npm run dev -- --port 3347",
+  "custom_hostname": false,
+  "locale": "es-CO",
+  "results": [
+    {
+      "path": "/",
+      "status": 200,
+      "url": "http://localhost:3347/",
+      "h1": [
+        "Encuentra el espacio que te mueve"
+      ]
+    },
+    {
+      "path": "/en",
+      "status": 200,
+      "url": "http://localhost:3347/en",
+      "h1": [
+        "Find the space that moves you"
+      ]
+    }
+  ],
+  "backend": "not started; local placeholder keys; no mutation or RLS integration verified"
+}

@@ -1,0 +1,7 @@
+﻿Dimensión,A. LangChain / LangSmith,B. MetaGPT,C. AutoGen,D. SWE-agent / OpenHands,E. Compuertas CI/CD,F. BMAD TEA 2.0.2,G. Governance Layer (objetivo)
+D1 ATDD mandatorio antes del código,No,No,No,Parcial,No,Parcial,Sí
+D2 Perfiles de DoD por tipología,No,No,No,No,Parcial,Parcial,Sí
+D3 Consulta verificada del diseño UI/UX,No,No,No,No,No,No,Sí
+D4 Extensión sin modificar el núcleo,No,No,Parcial,No,Sí,Sí,Sí
+D5 Bloqueo de la transición de historia,No,No,No,Parcial,Parcial,Parcial,Sí
+D6 Evidencia auditable por historia,Parcial,No,No,Parcial,Parcial,Sí,Sí

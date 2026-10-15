@@ -1,0 +1,100 @@
+test_complete_disagreement (test_agreement.AgreementAcceptance.test_complete_disagreement) ... FAIL
+test_empty_ratings_are_pending_not_perfect (test_agreement.AgreementAcceptance.test_empty_ratings_are_pending_not_perfect) ... FAIL
+test_initial_draft_cannot_be_presented_as_validated (test_agreement.AgreementAcceptance.test_initial_draft_cannot_be_presented_as_validated) ... FAIL
+test_mismatched_sample_ids_rejected (test_agreement.AgreementAcceptance.test_mismatched_sample_ids_rejected) ... FAIL
+test_partial_input_never_returns_final_coefficient (test_agreement.AgreementAcceptance.test_partial_input_never_returns_final_coefficient) ... FAIL
+test_perfect_balanced_ratings (test_agreement.AgreementAcceptance.test_perfect_balanced_ratings) ... FAIL
+test_single_category_is_undefined (test_agreement.AgreementAcceptance.test_single_category_is_undefined) ... FAIL
+test_unknown_categories_rejected (test_agreement.AgreementAcceptance.test_unknown_categories_rejected) ... FAIL
+
+======================================================================
+FAIL: test_complete_disagreement (test_agreement.AgreementAcceptance.test_complete_disagreement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 16, in test_complete_disagreement
+    self.assertEqual(result["kappa"],-1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+AssertionError: None != -1
+
+======================================================================
+FAIL: test_empty_ratings_are_pending_not_perfect (test_agreement.AgreementAcceptance.test_empty_ratings_are_pending_not_perfect)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 7, in test_empty_ratings_are_pending_not_perfect
+    self.assertEqual(result["status"],"pending");self.assertIsNone(result["kappa"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'not_implemented' != 'pending'
+- not_implemented
++ pending
+
+
+======================================================================
+FAIL: test_initial_draft_cannot_be_presented_as_validated (test_agreement.AgreementAcceptance.test_initial_draft_cannot_be_presented_as_validated)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 10, in test_initial_draft_cannot_be_presented_as_validated
+    self.assertEqual(result["status"],"needs_first_validation");self.assertIsNone(result["kappa"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'not_implemented' != 'needs_first_validation'
+- not_implemented
++ needs_first_validation
+
+
+======================================================================
+FAIL: test_mismatched_sample_ids_rejected (test_agreement.AgreementAcceptance.test_mismatched_sample_ids_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 21, in test_mismatched_sample_ids_rejected
+    with self.assertRaisesRegex(ValueError,"sample IDs"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+======================================================================
+FAIL: test_partial_input_never_returns_final_coefficient (test_agreement.AgreementAcceptance.test_partial_input_never_returns_final_coefficient)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 28, in test_partial_input_never_returns_final_coefficient
+    self.assertEqual(result["status"],"pending");self.assertEqual(result["complete_pairs"],1);self.assertIsNone(result["kappa"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'not_implemented' != 'pending'
+- not_implemented
++ pending
+
+
+======================================================================
+FAIL: test_perfect_balanced_ratings (test_agreement.AgreementAcceptance.test_perfect_balanced_ratings)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 13, in test_perfect_balanced_ratings
+    self.assertEqual(result["status"],"complete");self.assertEqual(result["kappa"],1)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'not_implemented' != 'complete'
+- not_implemented
++ complete
+
+
+======================================================================
+FAIL: test_single_category_is_undefined (test_agreement.AgreementAcceptance.test_single_category_is_undefined)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 19, in test_single_category_is_undefined
+    self.assertEqual(result["status"],"undefined");self.assertIsNone(result["kappa"])
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 'not_implemented' != 'undefined'
+- not_implemented
++ undefined
+
+
+======================================================================
+FAIL: test_unknown_categories_rejected (test_agreement.AgreementAcceptance.test_unknown_categories_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/santiagoespinosa/Documents/espinosacodes/bmad-realestate-baseline/research/avance2/test_agreement.py", line 24, in test_unknown_categories_rejected
+    with self.assertRaisesRegex(ValueError,"category"):
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: ValueError not raised
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.001s
+
+FAILED (failures=8)

@@ -1,0 +1,51 @@
+
+> bmad-real-estate@0.1.0 dev
+> next dev --port 3347
+
+   ▲ Next.js 15.5.27
+   - Local:        http://localhost:3347
+   - Network:      http://192.168.40.68:3347
+
+ ✓ Starting...
+ ✓ Ready in 1664ms
+ ✓ Compiled /middleware in 92ms (151 modules)
+ ○ Compiling /[locale] ...
+ ✓ Compiled /[locale] in 1551ms (922 modules)
+Home: could not load featured listings Error: TypeError: fetch failed
+    at fetchFeaturedListings (src/lib/featured-listings.ts:33:20)
+    at async loadFeatured (src/app/[locale]/page.tsx:15:12)
+    at async Home (src/app/[locale]/page.tsx:26:20)
+  31 |     .order("id", { ascending: true })
+  32 |     .limit(limit);
+> 33 |   if (error) throw new Error(error.message);
+     |                    ^
+  34 |   return (data ?? []).map((row) => ({
+  35 |     ...(row as unknown as FeaturedListing),
+  36 |     images: orderImages(((row as { images?: ListingImage[] }).images ?? []) as ListingImage[]),
+ GET /en 200 in 9243ms
+Home: could not load featured listings Error: TypeError: fetch failed
+    at fetchFeaturedListings (src/lib/featured-listings.ts:33:20)
+    at async loadFeatured (src/app/[locale]/page.tsx:15:12)
+    at async Home (src/app/[locale]/page.tsx:26:20)
+  31 |     .order("id", { ascending: true })
+  32 |     .limit(limit);
+> 33 |   if (error) throw new Error(error.message);
+     |                    ^
+  34 |   return (data ?? []).map((row) => ({
+  35 |     ...(row as unknown as FeaturedListing),
+  36 |     images: orderImages(((row as { images?: ListingImage[] }).images ?? []) as ListingImage[]),
+ GET / 200 in 7099ms
+ ✓ Compiled /favicon.ico in 165ms (624 modules)
+ GET /favicon.ico 200 in 226ms
+Home: could not load featured listings Error: TypeError: fetch failed
+    at fetchFeaturedListings (src/lib/featured-listings.ts:33:20)
+    at async loadFeatured (src/app/[locale]/page.tsx:15:12)
+    at async Home (src/app/[locale]/page.tsx:26:20)
+  31 |     .order("id", { ascending: true })
+  32 |     .limit(limit);
+> 33 |   if (error) throw new Error(error.message);
+     |                    ^
+  34 |   return (data ?? []).map((row) => ({
+  35 |     ...(row as unknown as FeaturedListing),
+  36 |     images: orderImages(((row as { images?: ListingImage[] }).images ?? []) as ListingImage[]),
+ GET /en 200 in 7082ms

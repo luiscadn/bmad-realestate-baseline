@@ -1,0 +1,497 @@
+{
+  "generated_at": "2026-10-14T19:34:31.996396-05:00",
+  "baseline_commit": "4c9f927685f4e0ef7a9b0093b6818d696edaa2b9",
+  "protocol_b_source_commit": "f8977b63d0dec5285eb444667a7234418979ced8",
+  "stories": 14,
+  "B_candidate_occurrences": 517,
+  "B_reported_totals": 516,
+  "A_summary_statements": 175,
+  "candidate_triage_mapped": 517,
+  "triage_counts": {
+    "defer": 132,
+    "decision-needed": 21,
+    "reject": 243,
+    "patch": 121
+  },
+  "severity_counts": {
+    "medium": 62,
+    "low": 218,
+    "n/a": 199,
+    "migration:18-66": 2,
+    "migration:24-66": 2,
+    "migration:70": 1,
+    "migration:31": 2,
+    "migration:36-54": 1,
+    "migration:2": 2,
+    "src/lib/listing-images.ts:128": 1,
+    "src/lib/listing-images.ts:126-130": 2,
+    "src/lib/listing-images.ts:134": 1,
+    "src/lib/listing-images.ts:137": 2,
+    "src/lib/listing-images.ts:105": 1,
+    "src/lib/listing-images.ts:139-140": 2,
+    "src/lib/listing-images.ts:90,101": 2,
+    "src/lib/listing-images.ts:117-130": 1,
+    "src/lib/listing-images.ts:69": 2,
+    "src/lib/listing-images.ts (validateimagefile)": 2,
+    "src/lib/listing-images.ts:buildimagepath": 1,
+    "src/lib/listing-images.ts:56-62": 1,
+    "src/lib/listing-images.ts:46": 1,
+    "src/lib/listing-images.ts:52": 1,
+    "migration:18-21": 1,
+    "spec:34": 1,
+    "migration": 1,
+    "src/lib/listing-images.ts:83-141": 1,
+    "src/lib/listing-images.ts:134-137": 1,
+    "spec / sprint-status.yaml": 1,
+    "spec": 1,
+    "high": 1
+  },
+  "uniform_claude_subset_stories": [
+    "S01",
+    "S02",
+    "S03",
+    "S04",
+    "S05",
+    "S06",
+    "S07",
+    "S08",
+    "S09",
+    "S10",
+    "S11",
+    "S12",
+    "S13"
+  ],
+  "uniform_claude_subset_candidate_occurrences": 483,
+  "alternate_model_stories": [
+    "S14"
+  ],
+  "raw_reports_unchanged": true,
+  "all_git_tags_match": true,
+  "classification": "assisted_initial_requires_reviewer_validation",
+  "sample_seed": 20261014,
+  "sample_population": 258,
+  "sample_size": 30,
+  "kappa": {
+    "n": 0,
+    "kappa": null,
+    "reason": "Sin pares de clasificación independientes."
+  },
+  "audit": [
+    {
+      "story": "S01",
+      "attempt": 1,
+      "raised_rows": 56,
+      "reported_total": 56,
+      "difference": 0,
+      "triage_rows": 56,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "be0ee153c7f7e149a4c72e1a03877a6809c1f1a1",
+      "target_commit": "8dca43bb3ecb61e41247d790191325bad30ecfed",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S01-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 29,
+        "edge_case_hunter": 17,
+        "verification_gap": 4,
+        "acceptance_auditor": 6
+      }
+    },
+    {
+      "story": "S02",
+      "attempt": 1,
+      "raised_rows": 56,
+      "reported_total": 56,
+      "difference": 0,
+      "triage_rows": 56,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "5a919a34c80b042fc13c6b1fdf54200e3a3adbb5",
+      "target_commit": "6a8d724a77df59d3787b8092749297fefeb14bf3",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S02-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 25,
+        "edge_case_hunter": 20,
+        "verification_gap": 5,
+        "acceptance_auditor": 6
+      }
+    },
+    {
+      "story": "S03",
+      "attempt": 1,
+      "raised_rows": 27,
+      "reported_total": 27,
+      "difference": 0,
+      "triage_rows": 27,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "54c542f3480aabc53604c70212b0e14b94ac2103",
+      "target_commit": "5116e38752d7ae0cc55444549db4a99e16bcd5ed",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S03-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 10,
+        "edge_case_hunter": 6,
+        "verification_gap": 4,
+        "acceptance_auditor": 7
+      }
+    },
+    {
+      "story": "S04",
+      "attempt": 1,
+      "raised_rows": 26,
+      "reported_total": 26,
+      "difference": 0,
+      "triage_rows": 26,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "2b65f35fb86123c9ccd65f18bf14eab1764cb0e0",
+      "target_commit": "9e84c78a02849eb0766688da06c74c47493b6060",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S04-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 15,
+        "edge_case_hunter": 5,
+        "verification_gap": 3,
+        "acceptance_auditor": 3
+      }
+    },
+    {
+      "story": "S05",
+      "attempt": 1,
+      "raised_rows": 27,
+      "reported_total": 27,
+      "difference": 0,
+      "triage_rows": 27,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "092e2e8d09f35799924d421ac716194a8ccefb62",
+      "target_commit": "6f523f04e561036b78c0acec2c32811e115de67f",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S05-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 13,
+        "edge_case_hunter": 6,
+        "verification_gap": 4,
+        "acceptance_auditor": 4
+      }
+    },
+    {
+      "story": "S06",
+      "attempt": 1,
+      "raised_rows": 36,
+      "reported_total": 36,
+      "difference": 0,
+      "triage_rows": 36,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "ed367162a8f8f7de6314622cd8ae3766aa6adc16",
+      "target_commit": "3f01c43ccd26e5ab1e8670824b72db216e8bc798",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S06-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 11,
+        "edge_case_hunter": 15,
+        "verification_gap": 5,
+        "acceptance_auditor": 5
+      }
+    },
+    {
+      "story": "S07",
+      "attempt": 1,
+      "raised_rows": 40,
+      "reported_total": 40,
+      "difference": 0,
+      "triage_rows": 40,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "fc575752937055a395bdfb0dcc6ef61f0feae71e",
+      "target_commit": "80dd46db8c4f1b573c42ab2af30254c2184d1f16",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S07-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 13,
+        "ec": 14,
+        "verification_gap": 4,
+        "acceptance_auditor": 9
+      }
+    },
+    {
+      "story": "S08",
+      "attempt": 1,
+      "raised_rows": 33,
+      "reported_total": 33,
+      "difference": 0,
+      "triage_rows": 33,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "629f8dd041c53bccb08f5c7bb15c3af3deda9087",
+      "target_commit": "61f0f9502bfe9d0bad56068fabba0fca97acce2e",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S08-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 13,
+        "edge_case_hunter": 7,
+        "verification_gap": 4,
+        "acceptance_auditor": 9
+      }
+    },
+    {
+      "story": "S09",
+      "attempt": 1,
+      "raised_rows": 39,
+      "reported_total": 39,
+      "difference": 0,
+      "triage_rows": 39,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "846c20ca2e7814d9c67412b9a1131fcb25e36612",
+      "target_commit": "1cd37307d2eada9b01c51d6db946242046cfb4cf",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S09-review.attempt1.md",
+      "layer_counts": {
+        "blind": 11,
+        "edge": 10,
+        "edgeclaim": 3,
+        "verifgap": 1,
+        "verifgapother": 2,
+        "auditor": 12
+      }
+    },
+    {
+      "story": "S10",
+      "attempt": 1,
+      "raised_rows": 44,
+      "reported_total": 44,
+      "difference": 0,
+      "triage_rows": 44,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "0dcbaac81794c8c5242c18a9339a25bfdc6075ca",
+      "target_commit": "27a521615499c6fe48027c709d789ed152957d9e",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S10-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 18,
+        "edge_case_hunter": 14,
+        "verification_gap": 2,
+        "acceptance_auditor": 10
+      }
+    },
+    {
+      "story": "S11",
+      "attempt": 1,
+      "raised_rows": 28,
+      "reported_total": 28,
+      "difference": 0,
+      "triage_rows": 28,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "290f8039d0ba24d17a0a3c091c1d8189e2b7d700",
+      "target_commit": "be965e7e8d8ea68c5425dcbc67c103190bdc5c7b",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S11-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 11,
+        "edge_case_hunter": 9,
+        "verification_gap": 4,
+        "acceptance_auditor": 4
+      }
+    },
+    {
+      "story": "S12",
+      "attempt": 1,
+      "raised_rows": 41,
+      "reported_total": 40,
+      "difference": 1,
+      "triage_rows": 41,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "1b87f856c1f88ddbbe9fdd2d9323158c8116b913",
+      "target_commit": "75d550b1fa75ae06144d6adbf4f5b80aa58de236",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S12-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 17,
+        "edge_case_hunter": 11,
+        "verification_gap": 6,
+        "acceptance_auditor": 7
+      }
+    },
+    {
+      "story": "S13",
+      "attempt": 1,
+      "raised_rows": 30,
+      "reported_total": 30,
+      "difference": 0,
+      "triage_rows": 30,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "f7196724cb90bbca5195d2aad4fb2987c55f4d7c",
+      "target_commit": "1d773d61e26e362aaa0c55202976f868d51f82c1",
+      "worktree_clean_recorded": true,
+      "model_usage": [
+        "claude-sonnet-5-5"
+      ],
+      "execution_label": "2.1.296 (Claude Code)",
+      "source": "research/protocol-b/S13-review.attempt1.md",
+      "layer_counts": {
+        "blind_hunter": 10,
+        "edge_case_hunter": 7,
+        "verification_gap": 5,
+        "acceptance_auditor": 8
+      }
+    },
+    {
+      "story": "S14",
+      "attempt": 2,
+      "raised_rows": 34,
+      "reported_total": 34,
+      "difference": 0,
+      "triage_rows": 34,
+      "unmapped_candidates": [],
+      "orphan_triage_indices": [],
+      "start_matches_tag": true,
+      "target_matches_tag": true,
+      "start_commit": "02ea8a35a83e0046a2ded71ed2da7278c9d4c3a9",
+      "target_commit": "351106beb6969874fc47cce2aed51cf7cb216b5a",
+      "worktree_clean_recorded": true,
+      "model_usage": [],
+      "execution_label": "gemini-2.5-pro (Antigravity)",
+      "source": "research/protocol-b/S14-review.attempt2.md",
+      "layer_counts": {
+        "blind_hunter": 12,
+        "edge_case_hunter": 9,
+        "verification_gap": 7,
+        "acceptance_auditor": 6
+      }
+    }
+  ],
+  "limitations": [
+    "B counts include rejections, cross-layer duplicates and some acceptance confirmations. They are not verified defect counts.",
+    "A reports are summaries with different granularity; their row counts must not be pooled with B or treated as exhaustive pre-triage findings.",
+    "S12 has 41 explicit rows while FINDINGS_TOTAL reports 40. The original files are preserved.",
+    "S14 attempt 2 is labeled Gemini and has no modelUsage identity. It is reported separately from the 13-story Claude subset.",
+    "ISO classifications are an initial rule-based aid; evaluator validation and a genuinely independent second rating remain pending.",
+    "Kappa is not calculated without paired independent ratings. Empty ratings are not agreement."
+  ],
+  "source_sha256": {
+    "research/protocol-b/S01-review.attempt1.md": "cb00f5cf17c78510076099654f7faa9913395e91fda2d954145f093ceb3e5713",
+    "research/protocol-b/S01-review.attempt1.raw.json": "af192bba282566d6f7b2280bdf3a7fff7bd1e693c3626425176fb2f7b4f0fbd9",
+    "research/reviews/S01-review.md": "f36082bcef342cb2a8a70eb45fe418eee5a65217ca2f793176eb0eb53b244a61",
+    "research/protocol-b/S02-review.attempt1.md": "adbc0a8b4eec14514baab4baf4f538d202996bf2d00455409357a4287dde5b11",
+    "research/protocol-b/S02-review.attempt1.raw.json": "a9f57b1bac869dc407797650c4aa59cb589a930b8cdaa4393136ecc590a37e06",
+    "research/reviews/S02-review.md": "ee7f269acaf4e3952b1756b2cd1397356012de70d6785d5748effc618a3cef57",
+    "research/protocol-b/S03-review.attempt1.md": "4c77ec58c2f5a11b1e5a0e81d76b1768e1c2c8f9965bc995f22e9dfaafd6be69",
+    "research/protocol-b/S03-review.attempt1.raw.json": "9b487fdf4842a7720e1c6daffa58608a3f0ffd92d6a4565e523df5cb6df7964b",
+    "research/reviews/S03-review.md": "2dd4fc9fb9fb02b79b03177c677cb0210190645a22856a516e4e39097ecd52d9",
+    "research/protocol-b/S04-review.attempt1.md": "904de3a036ce22816c1c27600babd7c39bcb5e36400b403fe6a0d6bb186808a5",
+    "research/protocol-b/S04-review.attempt1.raw.json": "3e35b2757d81d7107cf163b8975f0e7d8b9f3d75d17cb2974e1ec5859748bde8",
+    "research/reviews/S04-review.md": "e38db727e7a72888e734200877bb9dad98aa8c5b6ab8f5ed15eb3c15ca48ce15",
+    "research/protocol-b/S05-review.attempt1.md": "8a6a174332dd003412419db59d17a115776549130120f722158ba2991a8c2db2",
+    "research/protocol-b/S05-review.attempt1.raw.json": "00ace9815e36d352189ddb042b99f6da1320e82a8140aef6db0ea55ea6f080ee",
+    "research/reviews/S05-review.md": "2668d088c52a54f4ee23cc5ed89386e8969c7c2f339c1a33e4e3d44bfb05c8fd",
+    "research/protocol-b/S06-review.attempt1.md": "44e2629fde3d297a806002aca7b0879228570041830de194ad1193837f5b77fa",
+    "research/protocol-b/S06-review.attempt1.raw.json": "f7df299212a1ddbee1de8c7102983a62fbe52f596bae4382d4959b836a4812e4",
+    "research/reviews/S06-review.md": "6f3479decd00d2bdf00f92c36a01c068ea7f2ec6ed6060e4d096357b2ae0d57a",
+    "research/protocol-b/S07-review.attempt1.md": "9b86a85b68d27f6850a746827b7d04c923c71ad02c528eaf63cf33efc7ebf7ba",
+    "research/protocol-b/S07-review.attempt1.raw.json": "3253943464fc0136c40deffaf27e9ae3afef315e51bd7ffe5492e19688d915f5",
+    "research/reviews/S07-review.md": "5ec7eee78292adbb50dd1914453ceb275f18b911c6babb5b190f4aa3232871b3",
+    "research/protocol-b/S08-review.attempt1.md": "8108110f51b410244fc351878ddab0d0d1411f88fd48000cdc524b2b2593f5f0",
+    "research/protocol-b/S08-review.attempt1.raw.json": "55bc488d0ac8102dcb91b29758c2912fd3c4ec66a91cc37e4425b33dc5c85303",
+    "research/reviews/S08-review.md": "2e69bd07fe797f813b7e21622506a80834b0c31f2d9109e30c3257db66d5bc22",
+    "research/protocol-b/S09-review.attempt1.md": "bbbb278322d1fb108a536668f227326942b467470cd8f7b6e0c46e8157e677b2",
+    "research/protocol-b/S09-review.attempt1.raw.json": "83f4ce9adf90d9abffef3e098bdc7228f3b8a17dc832d4ebb3d0cb4678e16a6b",
+    "research/reviews/S09-review.md": "1c17168c90d61e6cc04378e91f5cc22eaad03159abb889a475dbf6117e9eac10",
+    "research/protocol-b/S10-review.attempt1.md": "94e677252f99a51ca4a608d783e839c9a63310d9e208159776bcd1108274e3d2",
+    "research/protocol-b/S10-review.attempt1.raw.json": "61121be5621ad13262797a0f7c3603cd1ca51d9257c0417165519895a8a02b67",
+    "research/reviews/S10-review.md": "4bc4a1522b0754072de1c6124be3d6a3ef6a30a6745d3e2d47596dac78810f9f",
+    "research/protocol-b/S11-review.attempt1.md": "d8a4cc60dde9e36b52abeb438af5f55fa3648ec212262bbe8faa5db9bba135b3",
+    "research/protocol-b/S11-review.attempt1.raw.json": "d74426c65309702f0600dd2448dfedfed1a3b4c5a272a5ee0775452488488b1a",
+    "research/reviews/S11-review.md": "6fb26d63dbb0079d91c241a678239b0296a5e89b0ba059a69621a7c25fa1da15",
+    "research/protocol-b/S12-review.attempt1.md": "67a45f9403f704975a34b776472bbd0916281aa6eeb43afd3a9ff0b44377a6f3",
+    "research/protocol-b/S12-review.attempt1.raw.json": "477ec2f8fa1f641d98616dd317e91c6baf0a411699824c9b15aa84f58030c85a",
+    "research/reviews/S12-review.md": "c370130f3f37cf4190953d1c207ce3f3bb0af484d2cbce2e9add0e4e62a8ca5f",
+    "research/protocol-b/S13-review.attempt1.md": "7c7aaa939684353b960cbcf79e1b4c6f4e0f6e47bdeb46cd68f6045237db3c12",
+    "research/protocol-b/S13-review.attempt1.raw.json": "33c7e6248e12d42f8411cd3e4366cbdb768acc2f5b0526e2fceb72d59d046054",
+    "research/reviews/S13-review.md": "cc55d2aa07b78b38047efa13ed63479cd9126144a483056736302b68c278faf2",
+    "research/protocol-b/S14-review.attempt2.md": "ef03be8f2dc91f1a0e7b2b7839862af7f105ed554ac4b22cb33be6a7c65cb9a3",
+    "research/protocol-b/S14-review.attempt2.raw.json": "58a9fc10520a85e9720cc26faa8f76b3884bcbbdf13c13d54c9593d109f308be",
+    "research/reviews/S14-review.md": "025e67a4f539ee7918c17835ba2660ebfc8041ae683f6ce5d5268c80d82c0959"
+  }
+}

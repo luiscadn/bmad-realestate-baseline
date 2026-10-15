@@ -1,0 +1,13 @@
+test_complete_disagreement (test_agreement.AgreementAcceptance.test_complete_disagreement) ... ok
+test_empty_ratings_are_pending_not_perfect (test_agreement.AgreementAcceptance.test_empty_ratings_are_pending_not_perfect) ... ok
+test_initial_draft_cannot_be_presented_as_validated (test_agreement.AgreementAcceptance.test_initial_draft_cannot_be_presented_as_validated) ... ok
+test_mismatched_sample_ids_rejected (test_agreement.AgreementAcceptance.test_mismatched_sample_ids_rejected) ... ok
+test_partial_input_never_returns_final_coefficient (test_agreement.AgreementAcceptance.test_partial_input_never_returns_final_coefficient) ... ok
+test_perfect_balanced_ratings (test_agreement.AgreementAcceptance.test_perfect_balanced_ratings) ... ok
+test_single_category_is_undefined (test_agreement.AgreementAcceptance.test_single_category_is_undefined) ... ok
+test_unknown_categories_rejected (test_agreement.AgreementAcceptance.test_unknown_categories_rejected) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 0.000s
+
+OK

@@ -1,0 +1,7 @@
+{
+  "phase": "post_green_input_validation",
+  "implementation_sha256": "049cdd841e0a9e7c6b1046a20d3c027b1f88c3a4044aa0a054a981623f94c071",
+  "test_sha256": "1dcb0f3e54ed72698a6cac199f33666684c59d7f956d64437c1c0c5205060770",
+  "red_commit": "6c2d238",
+  "notes": "Eight original acceptance tests remain unchanged. The final implementation also rejects duplicate CSV columns and output/input path collisions; missing cells remain pending."
+}

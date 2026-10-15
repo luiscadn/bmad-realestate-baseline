@@ -1,0 +1,26 @@
+{
+  "results": [
+    {
+      "path": "/",
+      "status": 307,
+      "location": "http://localhost:3347/"
+    },
+    {
+      "path": "/es",
+      "status": 307,
+      "location": "http://localhost:3347/"
+    },
+    {
+      "path": "/en",
+      "status": 500,
+      "location": null
+    },
+    {
+      "path": "/es/login",
+      "status": 307,
+      "location": "http://localhost:3347/login"
+    }
+  ],
+  "conclusion": "Redirect loop observed for / and /es; actual browser also returned ERR_TOO_MANY_REDIRECTS. Unit tests and build passed.",
+  "backend": "not started; local placeholder keys"
+}
